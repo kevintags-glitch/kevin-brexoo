@@ -15,5 +15,6 @@ export function PageHeader({ title, description, actions, eyebrow, className }: 
 }
 
 export function Page({ children, className, wide }: { children: ReactNode; className?: string; wide?: boolean }) {
-  return <div className={cn("mx-auto w-full px-4 py-6 sm:px-8 sm:py-8", wide ? "max-w-[1400px]" : "max-w-[1120px]", className)}>{children}</div>;
+  // When a page lays itself out as a grid, keep its single column from growing to fit wide tables.
+  return <div className={cn("mx-auto w-full px-4 py-6 sm:px-8 sm:py-8 [&.grid]:grid-cols-[minmax(0,1fr)]", wide ? "max-w-[1400px]" : "max-w-[1120px]", className)}>{children}</div>;
 }

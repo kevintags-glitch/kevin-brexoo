@@ -6,7 +6,9 @@ This repository implements the **"Build this first" journey** from the Brexoo pr
 
 > sign up → configure business and services → approve landing page → receive enquiry → manage CRM record → assign follow-up → book appointment → record outcome
 
-plus the marketing site, Xoo AI (read-only, grounded) and the visitor chat assistant.
+plus the marketing site, Discover Projects (approved sources with provenance and match scores), a bookings calendar, Xoo AI (read-only, grounded, with next best action) and the visitor chat assistant.
+
+See [docs/roadmap.md](docs/roadmap.md) for the 20-step roadmap with status and [docs/architecture.md](docs/architecture.md) for the system design.
 
 ## Stack
 
@@ -31,7 +33,7 @@ Sign-up sends a real confirmation email; open it in the mail catcher at http://1
 
 | Command | What it checks |
 | --- | --- |
-| `npm run db:test` | 51 database assertions: tenant isolation (cross-tenant reads, writes, ID substitution, composite-key references), anonymous access, onboarding and page state machines, publish-needs-approval, enquiry validation, dedupe, rate limits, activity history |
+| `npm run db:test` | 62 database assertions: tenant isolation (cross-tenant reads, writes, ID substitution, composite-key references), anonymous access, onboarding and page state machines, publish-needs-approval, enquiry validation, dedupe, rate limits, activity history |
 | `npm test` | Unit tests: fit and confidence scoring, time zones across daylight saving, money, visitor assistant guardrails, Xoo AI writers (do-not-contact refusal, prompt-injection text treated as data) |
 | `npm run test:e2e` | The full builder journey in a browser against a production build and the local stack, plus access-control checks |
 | `npm run lint` / `npm run typecheck` / `npm run build` | Static checks |
@@ -78,4 +80,4 @@ See `.env.example`. Only `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PU
 
 ## Not built yet (deliberately)
 
-Per the blueprint's phasing, these have seams but no implementation: sourced project discovery and the credit ledger, the Brexoo operations workspace and admin console, Stripe checkout and webhooks, Gmail/Microsoft mailbox sync, calendar provider sync, and a model-backed Xoo AI (the provider adapter is ready; adding a paid AI key needs founder approval). See `docs/known-limitations.md`.
+Per the blueprint's phasing, these have seams but no implementation: external discovery feeds and the credit ledger, the Brexoo operations workspace and admin console, Stripe checkout and webhooks, Gmail/Microsoft mailbox sync, calendar provider sync, and a model-backed Xoo AI (the provider adapter is ready; adding a paid AI key needs founder approval). See `docs/known-limitations.md`.

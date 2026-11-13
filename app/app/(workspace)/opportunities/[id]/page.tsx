@@ -30,6 +30,7 @@ export default async function OpportunityPage({ params }: { params: Promise<{ id
   const apptSettings = ((ctx.org.settings ?? {}) as { appointments?: { meeting_types?: string[]; meeting_minutes?: number } }).appointments ?? {};
   const stage = STAGE_BY_ID[opp.stage];
   const questions = questionsForCategory(fc.questions, project?.category_code);
+  const provenance = (project?.details as { provenance?: { source_name?: string; source_type?: string; external_id?: string; source_url?: string; observed_at?: string; imported_at?: string; permitted_use?: string; contact_permission?: string; project_stage?: string } } | null)?.provenance;
 
   return (
     <Page wide>
@@ -84,8 +85,40 @@ export default async function OpportunityPage({ params }: { params: Promise<{ id
       <div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
         <div className="grid min-w-0 content-start gap-6">
           <Card>
-            <CardHeader title="Enquiry" description={enquiry ? `Reference ${enquiry.reference} · ${enquiry.source === "visitor_chat" ? "Website chat" : enquiry.source === "manual" ? "Added manually" : "Landing page form"}` : "Added manually"} />
+            <CardHeader
+              title={enquiry ? "Enquiry" : provenance ? "Discovered project" : "Opportunity"}
+              description={enquiry ? `Reference ${enquiry.reference} · ${enquiry.source === "visitor_chat" ? "Website chat" : enquiry.source === "manual" ? "Added manually" : "Landing page form"}` : provenance ? `From ${provenance.source_name}` : "Added manually"}
+            />
             <div className="grid gap-5 px-5 pb-5 pt-4">
+              {provenance ? (
+                <dl className="grid gap-x-6 gap-y-2 rounded-xl border border-line bg-surface-2/50 p-4 text-[13px] sm:grid-cols-2">
+                  <div>
+                    <dt className="text-ink-3">Source</dt>
+                    <dd>
+                      {provenance.source_name} · {provenance.source_type?.replace("_", "-")}
+                      {provenance.source_url ? (
+                        <a href={provenance.source_url} target="_blank" rel="noreferrer noopener" className="ml-1.5 text-blue hover:underline">
+                          View
+                        </a>
+                      ) : null}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-ink-3">Observed / imported</dt>
+                    <dd>
+                      {provenance.observed_at ?? "Unknown"} / {provenance.imported_at ? formatDateTime(provenance.imported_at, tz) : "—"}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-ink-3">Permitted use</dt>
+                    <dd>{provenance.permitted_use}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-ink-3">Contact permission</dt>
+                    <dd className={provenance.contact_permission === "permitted" ? "text-green-ink" : "text-amber-ink"}>{provenance.contact_permission === "permitted" ? "Permitted by source" : "Not confirmed — check before contacting"}</dd>
+                  </div>
+                </dl>
+              ) : null}
               {project?.description ?? enquiry?.message ? (
                 <blockquote className="whitespace-pre-line rounded-xl bg-surface-2/70 px-4 py-3 text-[15px] leading-relaxed text-ink-2">{project?.description ?? enquiry?.message}</blockquote>
               ) : null}

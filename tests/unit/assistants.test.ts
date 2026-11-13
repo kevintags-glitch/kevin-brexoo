@@ -87,6 +87,13 @@ describe("Xoo AI writers", () => {
     expect(d.draft).toBeUndefined();
     expect(d.refusal).toMatch(/do not contact/);
   });
+  it("ends a summary with a rule-based next best action", () => {
+    const last = summarizeRecord(record).at(-1)!;
+    expect(last.text).toBe("Next best action: Email Sarah to fill the gaps: start timing, “Do you own the land?”");
+    expect(summarizeRecord({ ...record, stage: "qualified", fit: { ...record.fit, missing: [] } }).at(-1)!.text).toMatch(/Book a site visit in Merewether/);
+    expect(summarizeRecord({ ...record, doNotContact: true }).at(-1)!.text).toMatch(/Don't reach out/);
+    expect(summarizeRecord({ ...record, upcomingAppointment: true }).at(-1)!.text).toMatch(/site-visit brief/);
+  });
   it("offers a call plan when there is no email", () => {
     expect(draftFollowUp({ ...record, email: null, phone: "0411 222 333" }, { name: "Coastline Homes", sender: "Jordan" }).draft?.channel).toBe("phone");
   });

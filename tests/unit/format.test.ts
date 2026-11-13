@@ -45,3 +45,35 @@ describe("display helpers", () => {
     expect(slugify("Ünïcode Bätch")).toBe("unicode-batch");
   });
 });
+
+import { parseCsv, validateCsv } from "@/features/discovery/csv";
+import { budgetBucket, freshness } from "@/features/discovery/match";
+
+describe("discovery import", () => {
+  it("parses quoted CSV fields with commas, quotes and newlines", () => {
+    expect(parseCsv('a,b\n"x, y","say ""hi""\nthere"\n')).toEqual([
+      ["a", "b"],
+      ["x, y", 'say "hi"\nthere'],
+    ]);
+  });
+  it("validates rows and reports line-numbered errors", () => {
+    const { records, errors } = validateCsv(
+      "external_id,title,category,estimated_value,contact_email,contact_permission\nA,Duplex build,Home builders,650000,pat@example.com,permitted\nB,X,plumber,,bad-email,\nA,Dup,plumber,,,\n",
+    );
+    expect(records).toHaveLength(1);
+    expect(records[0]).toMatchObject({ category: "home_builder", estimated_value: 65_000_000, contact_permission: "permitted" });
+    expect(errors[0]).toMatch(/Line 3/);
+    expect(errors[1]).toMatch(/duplicate external_id A/);
+  });
+  it("requires the identifying columns", () => {
+    expect(validateCsv("name\nx").errors[0]).toMatch(/external_id, title/);
+  });
+  it("buckets stated values and labels freshness honestly", () => {
+    expect(budgetBucket(null)).toBeNull();
+    expect(budgetBucket(65_000_000)).toBe("$500k+");
+    const now = new Date("2026-11-13T00:00:00Z").getTime();
+    expect(freshness("2026-11-10", now).tone).toBe("green");
+    expect(freshness("2026-06-01", now).label).toMatch(/may be stale/);
+    expect(freshness(null, now).label).toBe("Observed date unknown");
+  });
+});

@@ -1,4 +1,4 @@
-import { ArrowRight, Database, Eye, Lock, ShieldCheck, Sparkles, Waypoints } from "lucide-react";
+import { ArrowRight, CalendarDays, ChartColumn, Database, Eye, Funnel, Lock, Search, ShieldCheck, Sparkles, Users, Waypoints } from "lucide-react";
 import { INDUSTRY_TEMPLATES } from "@/config/industry-templates";
 import { PLANS } from "@/config/plans";
 import { ButtonLink } from "@/components/ui";
@@ -105,7 +105,7 @@ export default function HomePage() {
               <p className="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-ink-2 sm:text-[18px]">
                 Project enquiries, AI-assisted qualification and follow-up for builders, trades and home service businesses.
               </p>
-              <p className="mt-3 text-[16px] font-medium text-ink">Find project leads. Qualify opportunities. Book more jobs.</p>
+              <p className="mt-3 text-[16px] font-medium text-ink">Find project leads. Qualify opportunities. Book more jobs. Grow your business.</p>
             </Reveal>
             <Reveal delay={0.15} className="mt-8 flex flex-col gap-3 sm:flex-row">
               <ButtonLink href="/demo" size="lg" className="px-6 font-semibold">
@@ -114,6 +114,22 @@ export default function HomePage() {
               <ButtonLink href="/how-it-works" size="lg" variant="outline" className="px-6 font-semibold text-ink">
                 See How It Works
               </ButtonLink>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <ul className="mt-10 grid grid-cols-5 divide-x divide-line">
+                {[
+                  { icon: Search, label: "Discover Projects" },
+                  { icon: Funnel, label: "Qualify with AI" },
+                  { icon: Users, label: "Manage Leads (CRM)" },
+                  { icon: CalendarDays, label: "Book Appointments" },
+                  { icon: ChartColumn, label: "Grow Revenue" },
+                ].map(({ icon: Icon, label }) => (
+                  <li key={label} className="flex flex-col items-center gap-2 px-1 text-center">
+                    <Icon className="size-7 text-blue" strokeWidth={1.6} aria-hidden />
+                    <span className="text-[11px] font-semibold leading-tight text-ink sm:text-[13px]">{label}</span>
+                  </li>
+                ))}
+              </ul>
             </Reveal>
           </div>
           <div className="relative">

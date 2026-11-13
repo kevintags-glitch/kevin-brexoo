@@ -1,0 +1,3 @@
+external_id,title,description,category,location,postcode,stage,estimated_value,timeline,observed_at,source_url,contact_name,contact_email,contact_phone,contact_permission
+REF-001,Two-lot duplex,Client referral: duplex on a cleared block,home_builder,"Lambton, Newcastle NSW",2299,Concept,650000,1–3 months,2026-11-10,,Pat Lee,pat@example.com,,permitted
+REF-002,Kitchen renovation,Repeat client asked for a quote next year,renovation,Charlestown,2290,Planning,48000,3–6 months,2026-11-02,,Sam Ray,,0400 111 222,unknown

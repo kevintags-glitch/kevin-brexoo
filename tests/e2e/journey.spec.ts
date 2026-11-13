@@ -223,4 +223,42 @@ test.describe.serial("builder journey", () => {
     await expect(page.getByText("published a page")).toBeVisible();
     await expect(page.getByText("approved a page version")).toBeVisible();
   });
+
+  test("discover: register a source, import projects, save a match", async () => {
+    await page.goto("/app/discover");
+    await expect(page.getByRole("heading", { name: "Add your first project source" })).toBeVisible();
+    await page.goto("/app/discover/import");
+    await page.getByLabel("Source name").fill("Client referral list");
+    await page.getByLabel("Permitted use").fill("Our own past clients; contact permitted for project follow-up.");
+    await page.getByRole("checkbox").check();
+    await page.getByRole("button", { name: "Add source" }).click();
+    await expect(page.getByText("Source saved.")).toBeVisible();
+
+    const csv = [
+      "external_id,title,description,category,location,postcode,stage,estimated_value,timeline,observed_at,contact_name,contact_email,contact_permission",
+      `R-1,Two-lot duplex,Repeat client duplex,home_builder,"Lambton, Newcastle NSW",2299,Concept,650000,1–3 months,${new Date().toISOString().slice(0, 10)},Pat Lee,pat-${stamp}@example.com,permitted`,
+      "R-2,Office fit-out,Not our trade,electrician,Sydney,2000,,,,,,,",
+      "bad row without title",
+    ].join("\n");
+    await page.getByLabel("CSV file").setInputFiles({ name: "projects.csv", mimeType: "text/csv", buffer: Buffer.from(csv) });
+    await page.getByRole("button", { name: "Import" }).click();
+    await expect(page.getByText("Imported 2 records.")).toBeVisible();
+    await expect(page.getByText(/Line 4/)).toBeVisible();
+
+    await page.goto("/app/discover");
+    const card = page.locator("li").filter({ hasText: "Two-lot duplex" });
+    await expect(card.getByText(/\d+% Match/)).toBeVisible();
+    await expect(card.getByText("Client referral list · Customer-provided")).toBeVisible();
+    await card.getByRole("button", { name: /Save Two-lot duplex/ }).click();
+    await card.getByRole("link", { name: /Saved · Open/ }).click();
+    await expect(page.getByText("Discovered project")).toBeVisible();
+    await expect(page.getByText("Permitted by source")).toBeVisible();
+  });
+
+  test("bookings calendar shows the site visit on its day", async () => {
+    const day = new Date(Date.now() + 2 * 86_400_000).toISOString().slice(0, 10);
+    await page.goto(`/app/appointments?m=${day.slice(0, 7)}&d=${day}`);
+    await expect(page.getByRole("heading", { name: "Bookings & Calendar" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Sarah Mitchell" })).toBeVisible();
+  });
 });

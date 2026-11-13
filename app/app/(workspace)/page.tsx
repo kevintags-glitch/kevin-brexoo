@@ -12,7 +12,7 @@ import { APPT_TYPE_LABEL, STAGE_BY_ID } from "@/features/crm/stages";
 import { requireOrg } from "@/lib/auth/session";
 import { formatDateTime, formatMoney, formatRelative, plural } from "@/lib/format";
 
-export const metadata: Metadata = { title: "Overview" };
+export const metadata: Metadata = { title: "Dashboard" };
 
 const DAY = 86_400_000;
 const PERIOD = 30;
@@ -130,11 +130,11 @@ export default async function OverviewPage() {
     <Page wide className="grid gap-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-[26px] font-semibold tracking-[-0.02em] sm:text-[28px]">Overview</h1>
+          <h1 className="text-[26px] font-semibold tracking-[-0.02em] sm:text-[28px]">Dashboard</h1>
           <p className="text-[14px] text-ink-3">Last {PERIOD} days, compared with the {PERIOD} before.</p>
         </div>
         <ButtonLink href="/app/enquiries?status=all" variant="secondary" size="sm">
-          <Inbox className="size-4" aria-hidden /> All enquiries
+          <Inbox className="size-4" aria-hidden /> All leads
         </ButtonLink>
       </div>
 

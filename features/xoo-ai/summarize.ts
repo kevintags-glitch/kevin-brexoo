@@ -19,6 +19,8 @@ export type RecordInput = {
   budget?: string | null;
   answers: { label: string; value: string }[];
   stage: string;
+  /** A scheduled or confirmed appointment in the future. */
+  upcomingAppointment?: boolean;
   receivedAt?: string | null;
   source?: string | null;
   fit: FitResult;
@@ -57,7 +59,31 @@ export function summarizeRecord(r: RecordInput): Segment[] {
   });
   out.push({ text: r.fit.missing.length ? `Not recorded yet: ${r.fit.missing.join(", ").toLowerCase()}.` : "No required details are missing.", cite: r.fit.missing.length ? "Fit factors" : undefined });
   if (r.doNotContact) out.push({ text: "This contact is marked do not contact. Don't reach out unless they contact you first.", cite: "Contact restrictions" });
+  out.push(nextBestAction(r));
   return out;
+}
+
+/**
+ * One concrete next step, chosen by rules over the record (not a guess): restrictions first, then
+ * missing information, then the stage of the deal.
+ */
+export function nextBestAction(r: RecordInput): Segment {
+  const first = r.contactName.trim().split(/\s+/)[0] ?? r.contactName;
+  const how = r.preferredContact === "phone" || (!r.email && r.phone) ? "Call" : "Email";
+  let text: string;
+  if (r.doNotContact) text = "Don't reach out. Keep the record for reference and close it if there's no further contact.";
+  else if (r.stage === "won") text = "Record the job details and ask for a review once the work is under way.";
+  else if (r.stage === "lost") text = "No action needed. Revisit in a few months if the timing was the reason.";
+  else if (r.upcomingAppointment) text = "Prepare the site-visit brief and confirm the time with " + first + " the day before.";
+  else if (r.stage === "proposal") text = `Follow up on the estimate with ${first} and ask if anything needs adjusting.`;
+  else if (r.fit.missing.length && ["new", "reviewing", "contact_attempted"].includes(r.stage))
+    text = `${how} ${first} to fill the gaps: ${r.fit.missing
+      .slice(0, 2)
+      .map((m) => (m.endsWith("?") ? `“${m}”` : m.toLowerCase()))
+      .join(", ")}`;
+  else if (r.stage === "qualified" || r.stage === "connected") text = `Book a site visit${r.location ? ` in ${r.location}` : ""} or a call with ${first}.`;
+  else text = `${how} ${first} to introduce yourself and confirm the scope.`;
+  return { text: `Next best action: ${text}`, cite: "Next step" };
 }
 
 export type Draft = { channel: "email" | "phone"; subject?: string; body: string };

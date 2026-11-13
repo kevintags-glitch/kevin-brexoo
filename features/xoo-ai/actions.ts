@@ -43,6 +43,7 @@ function toRecordInput(d: Awaited<ReturnType<typeof getOpportunity>> & object): 
     budget: opp.project?.budget_label,
     answers: labelled,
     stage: opp.stage,
+    upcomingAppointment: d.appointments.some((a) => ["scheduled", "confirmed", "rescheduled"].includes(a.status) && new Date(a.starts_at).getTime() > Date.now()),
     receivedAt: opp.enquiry?.received_at,
     source: opp.enquiry?.source,
     fit,

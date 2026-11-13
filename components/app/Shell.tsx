@@ -8,6 +8,7 @@ import {
   ChartColumn,
   ChevronsUpDown,
   CircleQuestionMark,
+  Compass,
   FileText,
   Inbox,
   LayoutDashboard,
@@ -83,8 +84,9 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
     {
       label: "Main menu",
       items: [
-        { href: "/app", label: "Overview", icon: LayoutDashboard, exact: true },
-        { href: "/app/enquiries", label: "Enquiries", icon: Inbox, badge: counts.unreviewed },
+        { href: "/app", label: "Dashboard", icon: LayoutDashboard, exact: true },
+        { href: "/app/discover", label: "Discover", icon: Compass },
+        { href: "/app/enquiries", label: "Leads", icon: Inbox, badge: counts.unreviewed },
         { href: "/app/pipeline", label: "Pipeline", icon: SquareKanban },
         { href: "/app/tasks", label: "Tasks", icon: ListTodo, badge: counts.overdue },
         { href: "/app/appointments", label: "Appointments", icon: CalendarDays },
@@ -96,7 +98,7 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
       items: [
         { href: "/app/landing-pages", label: "Landing pages", icon: FileText },
         { href: "/app/reports", label: "Reports", icon: ChartColumn },
-        { href: "/app/xoo", label: "Xoo AI", icon: Sparkles },
+        { href: "/app/xoo", label: "AI Xoo", icon: Sparkles },
       ],
     },
     { label: "Account", items: [{ href: "/app/settings", label: "Settings", icon: Settings }] },

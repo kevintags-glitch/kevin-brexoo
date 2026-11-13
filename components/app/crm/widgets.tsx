@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { Ban, Check, Copy, PhoneCall, Sparkles } from "lucide-react";
+import { Ban, Check, Copy, PhoneCall, Plus, Sparkles } from "lucide-react";
 import {
   addNote,
   addTask,
@@ -495,7 +495,7 @@ export function AppointmentItem({ a, timezone, showContact, now }: { a: ApptRow;
   );
 }
 
-function BookDialog({
+export function BookDialog({
   open,
   onClose,
   oppId,
@@ -646,5 +646,55 @@ export function RecordLink({ href, children }: { href: string; children: React.R
     <Link href={href} className="font-medium text-ink hover:text-blue hover:underline">
       {children}
     </Link>
+  );
+}
+
+/** "New appointment" from the calendar: pick an open opportunity, then book. */
+export function NewAppointment({
+  opps,
+  timezone,
+  defaults,
+}: {
+  opps: { id: string; contactId: string; label: string; location: string | null }[];
+  timezone: string;
+  defaults: { types: string[]; minutes: number };
+}) {
+  const [pick, setPick] = useState(false);
+  const [chosen, setChosen] = useState<string>("");
+  const [book, setBook] = useState(false);
+  const opp = opps.find((o) => o.id === chosen);
+  return (
+    <>
+      <Button onClick={() => setPick(true)} disabled={!opps.length} title={opps.length ? undefined : "Add a lead first"}>
+        <Plus className="size-4" aria-hidden /> New appointment
+      </Button>
+      <Dialog open={pick} onClose={() => setPick(false)} title="Who is the appointment with?">
+        <Field label="Opportunity" htmlFor="na_opp">
+          <Select id="na_opp" value={chosen} onChange={(e) => setChosen(e.target.value)}>
+            <option value="">Choose an open opportunity</option>
+            {opps.map((o) => (
+              <option key={o.id} value={o.id}>
+                {o.label}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <div className="mt-5 flex justify-end gap-2">
+          <Button variant="ghost" onClick={() => setPick(false)}>
+            Cancel
+          </Button>
+          <Button
+            disabled={!opp}
+            onClick={() => {
+              setPick(false);
+              setBook(true);
+            }}
+          >
+            Continue
+          </Button>
+        </div>
+      </Dialog>
+      {opp ? <BookDialog open={book} onClose={() => setBook(false)} oppId={opp.id} contactId={opp.contactId} timezone={timezone} defaults={defaults} location={opp.location} /> : null}
+    </>
   );
 }

@@ -13,7 +13,7 @@ import { QUAL_LABEL, STAGE_BY_ID } from "@/features/crm/stages";
 import { requireOrg } from "@/lib/auth/session";
 import { formatRelative } from "@/lib/format";
 
-export const metadata: Metadata = { title: "Enquiries" };
+export const metadata: Metadata = { title: "Leads" };
 
 const PAGE_SIZE = 20;
 
@@ -48,8 +48,8 @@ export default async function EnquiriesPage({ searchParams }: { searchParams: Pr
     <Page wide className="grid gap-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-[26px] font-semibold tracking-[-0.02em] sm:text-[28px]">Enquiries</h1>
-          <p className="text-[14px] text-ink-3">Every enquiry from your pages and chat, plus anything you add yourself.</p>
+          <h1 className="text-[26px] font-semibold tracking-[-0.02em] sm:text-[28px]">Leads</h1>
+          <p className="text-[14px] text-ink-3">Enquiries from your pages and chat, plus leads you add or save from Discover.</p>
         </div>
         <div className="flex gap-2">
             <>

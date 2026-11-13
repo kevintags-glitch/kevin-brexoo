@@ -165,6 +165,32 @@ isOneToOne: false
       referencedColumns: ["code"]
     }
                   ]
+                },"discovery_sources": {
+                  Row: {
+                    "attribution_url": string | null,"created_at": string,"created_by": string | null,"id": string,"limitations": string | null,"name": string,"organization_id": string,"permitted_use": string,"provider": string | null,"refresh_note": string | null,"source_type": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "attribution_url"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"limitations"?: string | null,"name": string,"organization_id": string,"permitted_use": string,"provider"?: string | null,"refresh_note"?: string | null,"source_type": string
+                  }
+                  Update: {
+                    "attribution_url"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"limitations"?: string | null,"name"?: string,"organization_id"?: string,"permitted_use"?: string,"provider"?: string | null,"refresh_note"?: string | null,"source_type"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "discovery_sources_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "discovery_sources_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"enquiries": {
                   Row: {
                     "answers": NonNullable<Json>,"consent_at": string | null,"consent_text": string | null,"contact_id": string,"created_at": string,"dedupe_hash": string | null,"duplicate_count": number,"first_response_at": string | null,"id": string,"landing_page_id": string | null,"message": string | null,"organization_id": string,"project_id": string | null,"received_at": string,"reference": string,"source": string,"status": Database["public"]['Enums']["qual_status"]
@@ -613,6 +639,38 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"project_records": {
+                  Row: {
+                    "category_code": string | null,"contact_email": string | null,"contact_name": string | null,"contact_permission": string,"contact_phone": string | null,"currency": string | null,"description": string | null,"estimated_value_minor": number | null,"external_id": string,"id": string,"imported_at": string,"last_verified_at": string | null,"location_text": string | null,"observed_at": string | null,"organization_id": string,"postcode": string | null,"project_stage": string | null,"saved_at": string | null,"saved_opportunity_id": string | null,"saved_project_id": string | null,"source_id": string,"source_url": string | null,"status": string,"timeline": string | null,"title": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "category_code"?: string | null,"contact_email"?: string | null,"contact_name"?: string | null,"contact_permission"?: string,"contact_phone"?: string | null,"currency"?: string | null,"description"?: string | null,"estimated_value_minor"?: number | null,"external_id": string,"id"?: string,"imported_at"?: string,"last_verified_at"?: string | null,"location_text"?: string | null,"observed_at"?: string | null,"organization_id": string,"postcode"?: string | null,"project_stage"?: string | null,"saved_at"?: string | null,"saved_opportunity_id"?: string | null,"saved_project_id"?: string | null,"source_id": string,"source_url"?: string | null,"status"?: string,"timeline"?: string | null,"title": string
+                  }
+                  Update: {
+                    "category_code"?: string | null,"contact_email"?: string | null,"contact_name"?: string | null,"contact_permission"?: string,"contact_phone"?: string | null,"currency"?: string | null,"description"?: string | null,"estimated_value_minor"?: number | null,"external_id"?: string,"id"?: string,"imported_at"?: string,"last_verified_at"?: string | null,"location_text"?: string | null,"observed_at"?: string | null,"organization_id"?: string,"postcode"?: string | null,"project_stage"?: string | null,"saved_at"?: string | null,"saved_opportunity_id"?: string | null,"saved_project_id"?: string | null,"source_id"?: string,"source_url"?: string | null,"status"?: string,"timeline"?: string | null,"title"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "project_records_category_code_fkey"
+      columns: ["category_code"]
+isOneToOne: false
+      referencedRelation: "service_categories"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "project_records_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_records_source_id_organization_id_fkey"
+      columns: ["source_id","organization_id"]
+isOneToOne: false
+      referencedRelation: "discovery_sources"
+      referencedColumns: ["id","organization_id"]
+    }
+                  ]
                 },"projects": {
                   Row: {
                     "budget_label": string | null,"budget_max_minor": number | null,"budget_min_minor": number | null,"category_code": string | null,"contact_id": string | null,"created_at": string,"currency": string | null,"description": string | null,"details": NonNullable<Json>,"id": string,"location_text": string | null,"organization_id": string,"postcode": string | null,"start_timing": string | null,"template_version": number | null,"title": string,"updated_at": string
@@ -872,11 +930,17 @@ isOneToOne: false
 "review_onboarding":
 { Args: { "p_org": string }; Returns: Database["public"]['Enums']["onboarding_status"]
                            },
+"save_project_record":
+{ Args: { "p_record": string }; Returns: Json
+                           },
 "set_active_organization":
 { Args: { "p_org": string }; Returns: undefined
                            },
 "set_landing_page_paused":
 { Args: { "p_page": string,"p_paused": boolean }; Returns: undefined
+                           },
+"set_project_record_status":
+{ Args: { "p_record": string,"p_status": string }; Returns: undefined
                            },
 "stage_label":
 { Args: { "s": Database["public"]['Enums']["opp_stage"] }; Returns: string
