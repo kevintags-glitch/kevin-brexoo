@@ -89,7 +89,7 @@ export default function HomePage() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute inset-x-0 top-0 h-[720px] bg-[radial-gradient(50%_60%_at_50%_0%,color-mix(in_oklab,var(--blue)_14%,transparent),transparent_75%)]" />
+          <div className="absolute inset-x-0 top-0 h-[720px] bg-[radial-gradient(50%_60%_at_50%_0%,color-mix(in_oklab,var(--sky)_14%,transparent),transparent_75%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--line)_1px,transparent_1px),linear-gradient(to_bottom,var(--line)_1px,transparent_1px)] bg-[size:64px_64px] opacity-50 [mask-image:radial-gradient(60%_50%_at_50%_0%,black,transparent_80%)]" />
         </div>
         <Container className="pb-10 pt-16 text-center sm:pt-24">
@@ -212,7 +212,7 @@ export default function HomePage() {
             </Reveal>
           </div>
           <Reveal className="relative">
-            <div aria-hidden className="absolute inset-0 -z-10 m-auto size-[420px] rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--blue)_22%,transparent),transparent_65%)]" />
+            <div aria-hidden className="absolute inset-0 -z-10 m-auto size-[420px] rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--sky)_22%,transparent),transparent_65%)]" />
             <PhonePageMock />
           </Reveal>
         </Container>

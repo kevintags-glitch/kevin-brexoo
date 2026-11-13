@@ -18,7 +18,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </div>
       <aside aria-hidden className="relative hidden overflow-hidden bg-[#0b2347] lg:block">
         <div className="grain absolute inset-0 opacity-[0.06] mix-blend-overlay" />
-        <div className="absolute -right-32 -top-32 size-[640px] rounded-full bg-[radial-gradient(circle,rgba(37,99,235,0.5),transparent_65%)]" />
+        <div className="absolute -right-32 -top-32 size-[640px] rounded-full bg-[radial-gradient(circle,rgba(61,120,214,0.5),transparent_65%)]" />
         <div className="absolute -bottom-48 -left-24 size-[560px] rounded-full bg-[radial-gradient(circle,rgba(33,182,168,0.3),transparent_65%)]" />
         <div className="relative flex h-full flex-col justify-center px-16">
           <p className="max-w-md font-display text-[40px] font-medium leading-[1.08] tracking-[-0.03em] text-white">Know why it fits, and what's still missing.</p>

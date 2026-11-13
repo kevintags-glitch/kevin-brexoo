@@ -186,7 +186,7 @@ export function VisitorChat({ data, preview }: { data: PublicPageData; preview?:
         <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4" aria-live="polite">
           {msgs.map((m, i) => (
             <div key={i} className={cn("flex", m.from === "me" ? "justify-end" : "justify-start")}>
-              <div className={cn("max-w-[85%] rounded-2xl px-3.5 py-2.5 text-[14px] leading-relaxed", m.from === "me" ? "rounded-br-md bg-blue text-white" : "rounded-bl-md bg-surface-2 text-ink")}>
+              <div className={cn("max-w-[85%] rounded-2xl px-3.5 py-2.5 text-[14px] leading-relaxed", m.from === "me" ? "rounded-br-md bg-blue text-on-blue" : "rounded-bl-md bg-surface-2 text-ink")}>
                 {m.text}
                 {m.source ? <p className="mt-1 text-[11px] text-ink-3">Source: {m.source}</p> : null}
               </div>
@@ -199,7 +199,7 @@ export function VisitorChat({ data, preview }: { data: PublicPageData; preview?:
                   {q}
                 </button>
               ))}
-              <button type="button" onClick={startEnquiry} className="pressable rounded-full bg-blue px-3 py-1.5 text-[13px] font-medium text-white">
+              <button type="button" onClick={startEnquiry} className="pressable rounded-full bg-blue px-3 py-1.5 text-[13px] font-medium text-on-blue">
                 Start an enquiry
               </button>
             </div>
@@ -262,7 +262,7 @@ export function VisitorChat({ data, preview }: { data: PublicPageData; preview?:
             autoComplete="off"
             maxLength={500}
           />
-          <button type="submit" className="pressable grid size-11 place-items-center rounded-xl bg-blue text-white disabled:opacity-50" aria-label="Send" disabled={!input.trim()}>
+          <button type="submit" className="pressable grid size-11 place-items-center rounded-xl bg-blue text-on-blue disabled:opacity-50" aria-label="Send" disabled={!input.trim()}>
             <Send className="size-4" />
           </button>
         </form>

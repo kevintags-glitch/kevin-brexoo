@@ -7,7 +7,7 @@ import type { PublicPageData } from "./types";
 import { VisitorChat } from "./VisitorChat";
 
 const ACCENTS = {
-  blue: "bg-[linear-gradient(160deg,#0f2d5c_0%,#1e4fc4_120%)]",
+  blue: "bg-[linear-gradient(160deg,#06264f_0%,#0f4598_120%)]",
   teal: "bg-[linear-gradient(160deg,#0b2f3a_0%,#138a80_120%)]",
   navy: "bg-[linear-gradient(160deg,#081a33_0%,#102c50_100%)]",
 };
@@ -35,7 +35,7 @@ export function PublicLanding({ data, preview }: { data: PublicPageData; preview
                 <span className="max-sm:sr-only">{b.phone}</span>
               </a>
             ) : null}
-            <a href="#enquire" className="pressable inline-flex h-10 shrink-0 items-center whitespace-nowrap rounded-[10px] bg-blue px-4 text-[14px] font-medium text-white hover:bg-blue-hover">
+            <a href="#enquire" className="pressable inline-flex h-10 shrink-0 items-center whitespace-nowrap rounded-[10px] bg-blue px-4 text-[14px] font-medium text-on-blue hover:bg-blue-hover">
               {c.cta}
             </a>
           </div>

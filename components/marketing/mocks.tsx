@@ -70,7 +70,7 @@ export function OverviewMock({ className }: { className?: string }) {
               <li key={label} className={cn("flex h-8 items-center gap-2.5 rounded-lg px-2 text-[13px]", active ? "bg-surface text-ink shadow-xs" : "text-ink-3")}>
                 <Icon className="size-4" />
                 <span className="flex-1">{label}</span>
-                {count ? <span className="rounded-full bg-blue px-1.5 text-[10px] font-semibold text-white tabular">{count}</span> : null}
+                {count ? <span className="rounded-full bg-blue px-1.5 text-[10px] font-semibold text-on-blue tabular">{count}</span> : null}
               </li>
             ))}
           </ul>
@@ -198,7 +198,7 @@ export function XooMock({ className }: { className?: string }) {
           Read-only
         </Badge>
       </div>
-      <div className="mt-4 ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-blue px-3.5 py-2 text-[13px] text-white">Draft a reply to Sarah asking what we still need.</div>
+      <div className="mt-4 ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-blue px-3.5 py-2 text-[13px] text-on-blue">Draft a reply to Sarah asking what we still need.</div>
       <div className="mt-3 rounded-2xl rounded-bl-md border border-line bg-surface-2/60 p-3.5 text-[13px] leading-relaxed text-ink-2">
         <p>
           Sarah wants a <strong className="font-medium text-ink">double-storey new build in Merewether</strong>, starting in 1–3 months{" "}
@@ -212,7 +212,7 @@ export function XooMock({ className }: { className?: string }) {
       </div>
       <div className="mt-3 flex items-center justify-between gap-3">
         <p className="text-[12px] text-ink-3">Nothing is sent without your approval.</p>
-        <span className="h-8 shrink-0 rounded-lg bg-blue px-3 text-[12px] font-medium leading-8 text-white">Copy draft</span>
+        <span className="h-8 shrink-0 rounded-lg bg-blue px-3 text-[12px] font-medium leading-8 text-on-blue">Copy draft</span>
       </div>
     </div>
   );
@@ -276,7 +276,7 @@ export function BookingMock({ className }: { className?: string }) {
                   key={s}
                   className={cn(
                     "grid h-8 place-items-center rounded-lg text-[11px] tabular",
-                    picked ? "bg-blue font-semibold text-white" : taken ? "bg-surface-2 text-ink-3 line-through" : "border border-line text-ink-2",
+                    picked ? "bg-blue font-semibold text-on-blue" : taken ? "bg-surface-2 text-ink-3 line-through" : "border border-line text-ink-2",
                   )}
                 >
                   {s}
@@ -354,12 +354,12 @@ export function PhonePageMock({ className }: { className?: string }) {
           ))}
           <div className="flex gap-1.5">
             {["Own the land", "Buying", "Not sure"].map((c, i) => (
-              <span key={c} className={cn("rounded-full border px-2.5 py-1 text-[10px]", i === 0 ? "border-[#2563eb] bg-[#e8efff] text-[#2563eb]" : "border-[#cbd5e1] text-[#33445e]")}>
+              <span key={c} className={cn("rounded-full border px-2.5 py-1 text-[10px]", i === 0 ? "border-[#0b3a7e] bg-[#e8eef8] text-[#0b3a7e]" : "border-[#cbd5e1] text-[#33445e]")}>
                 {c}
               </span>
             ))}
           </div>
-          <div className="mt-1 h-10 rounded-lg bg-[#2563eb] text-center text-[12px] font-semibold leading-10 text-white">Request a quote</div>
+          <div className="mt-1 h-10 rounded-lg bg-[#0b3a7e] text-center text-[12px] font-semibold leading-10 text-white">Request a quote</div>
           <p className="text-center text-[9px] text-[#5f6e85]">Your details go only to Coastline Homes.</p>
         </div>
       </div>

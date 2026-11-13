@@ -15,7 +15,7 @@ export function HeroProduct() {
 
   return (
     <div ref={ref} className="relative mx-auto max-w-[1080px] [perspective:1600px]">
-      <div aria-hidden className="absolute inset-x-[8%] -bottom-6 top-[20%] -z-10 rounded-[40px] bg-[radial-gradient(60%_60%_at_50%_40%,color-mix(in_oklab,var(--blue)_28%,transparent),transparent_70%)] blur-2xl" />
+      <div aria-hidden className="absolute inset-x-[8%] -bottom-6 top-[20%] -z-10 rounded-[40px] bg-[radial-gradient(60%_60%_at_50%_40%,color-mix(in_oklab,var(--sky)_28%,transparent),transparent_70%)] blur-2xl" />
       <motion.div style={reduce ? undefined : { rotateX, scale, y, transformOrigin: "50% 0%" }} className="will-change-transform">
         <OverviewMock />
       </motion.div>

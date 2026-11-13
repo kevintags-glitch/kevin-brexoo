@@ -93,7 +93,7 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, counts,
                       <item.icon className={cn("size-[18px] shrink-0", active ? "text-blue" : "text-ink-3 group-hover:text-ink-2")} aria-hidden />
                       <span className="flex-1 truncate">{item.label}</span>
                       {item.badge ? (
-                        <span className="min-w-5 rounded-full bg-blue px-1.5 text-center text-[11px] font-semibold leading-5 text-white tabular">
+                        <span className="min-w-5 rounded-full bg-blue px-1.5 text-center text-[11px] font-semibold leading-5 text-on-blue tabular">
                           {item.badge > 99 ? "99+" : item.badge}
                           <span className="sr-only"> needing attention</span>
                         </span>

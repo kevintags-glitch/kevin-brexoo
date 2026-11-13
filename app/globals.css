@@ -18,10 +18,12 @@
   --brand-ink: #022049;
   --brand-mark: #06326a;
   --navy: #102c50;
-  --blue: #2563eb;
-  --blue-hover: #1d4fd8;
-  --blue-soft: #e8efff;
+  /* Primary comes from the logo: the mark's navy, a touch lifted for interactive states. */
+  --blue: #0b3a7e;
+  --blue-hover: #06326a;
+  --blue-soft: #e8eef8;
   --on-blue: #ffffff;
+  --sky: #3d78d6;
   --teal: #21b6a8;
   --teal-ink: #0b7a70;
   --teal-soft: #e3f7f4;
@@ -33,7 +35,7 @@
   --green-soft: #e4f6ee;
   --violet-ink: #5b3fc4;
   --violet-soft: #efebff;
-  --focus: #2563eb;
+  --focus: #0b3a7e;
   --shadow-color: 215 45% 20%;
   color-scheme: light;
 }
@@ -50,12 +52,13 @@
     --line: #1a2a44;
     --line-strong: #263a5a;
     --brand-ink: #e9eff8;
-    --brand-mark: #7fa8ff;
+    --brand-mark: #8db0f5;
     --navy: #0e2142;
-    --blue: #4f86f7;
-    --blue-hover: #6b99f8;
+    --blue: #8db0f5;
+    --blue-hover: #a9c3f8;
     --blue-soft: #14264a;
-    --on-blue: #ffffff;
+    --on-blue: #06142b;
+    --sky: #3d78d6;
     --teal: #3ccfc0;
     --teal-ink: #5edccd;
     --teal-soft: #0d2b2d;
@@ -67,7 +70,7 @@
     --green-soft: #0e2a22;
     --violet-ink: #b6a5ff;
     --violet-soft: #221a45;
-    --focus: #7fa8ff;
+    --focus: #8db0f5;
     --shadow-color: 220 60% 2%;
     color-scheme: dark;
   }
@@ -84,11 +87,13 @@
   --line: #1a2a44;
   --line-strong: #263a5a;
   --brand-ink: #e9eff8;
-  --brand-mark: #7fa8ff;
+  --brand-mark: #8db0f5;
   --navy: #0e2142;
-  --blue: #4f86f7;
-  --blue-hover: #6b99f8;
+  --blue: #8db0f5;
+  --blue-hover: #a9c3f8;
   --blue-soft: #14264a;
+  --on-blue: #06142b;
+  --sky: #3d78d6;
   --teal: #3ccfc0;
   --teal-ink: #5edccd;
   --teal-soft: #0d2b2d;
@@ -100,7 +105,7 @@
   --green-soft: #0e2a22;
   --violet-ink: #b6a5ff;
   --violet-soft: #221a45;
-  --focus: #7fa8ff;
+  --focus: #8db0f5;
   --shadow-color: 220 60% 2%;
   color-scheme: dark;
 }
@@ -122,6 +127,7 @@
   --color-blue-hover: var(--blue-hover);
   --color-blue-soft: var(--blue-soft);
   --color-on-blue: var(--on-blue);
+  --color-sky: var(--sky);
   --color-teal: var(--teal);
   --color-teal-ink: var(--teal-ink);
   --color-teal-soft: var(--teal-soft);

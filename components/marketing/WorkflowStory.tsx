@@ -54,7 +54,7 @@ export function WorkflowStory({ steps }: { steps: StoryStep[] }) {
                 aria-hidden
                 className={cn(
                   "relative z-10 mt-1 grid size-8 shrink-0 place-items-center rounded-full border text-[12px] font-semibold tabular transition-colors duration-300 max-lg:hidden",
-                  i <= active ? "border-blue bg-blue text-white" : "border-line-strong bg-canvas text-ink-3",
+                  i <= active ? "border-blue bg-blue text-on-blue" : "border-line-strong bg-canvas text-ink-3",
                 )}
               >
                 {i + 1}
@@ -80,7 +80,7 @@ export function WorkflowStory({ steps }: { steps: StoryStep[] }) {
       </ol>
       <div className="max-lg:hidden">
         <div className="sticky top-[calc(50vh-230px)] grid min-h-[460px] place-items-center">
-          <div aria-hidden className="absolute inset-0 -z-10 rounded-[32px] bg-[radial-gradient(70%_60%_at_60%_40%,color-mix(in_oklab,var(--teal)_16%,transparent),transparent_70%),radial-gradient(60%_50%_at_30%_70%,color-mix(in_oklab,var(--blue)_14%,transparent),transparent_70%)]" />
+          <div aria-hidden className="absolute inset-0 -z-10 rounded-[32px] bg-[radial-gradient(70%_60%_at_60%_40%,color-mix(in_oklab,var(--teal)_16%,transparent),transparent_70%),radial-gradient(60%_50%_at_30%_70%,color-mix(in_oklab,var(--sky)_14%,transparent),transparent_70%)]" />
           <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
               key={steps[active]!.id}

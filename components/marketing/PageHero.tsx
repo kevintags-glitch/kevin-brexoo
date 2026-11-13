@@ -5,7 +5,7 @@ import { Container, Eyebrow } from "./Section";
 export function PageHero({ eyebrow, title, body, children }: { eyebrow: string; title: ReactNode; body: ReactNode; children?: ReactNode }) {
   return (
     <section className="relative overflow-hidden border-b border-line">
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(45%_70%_at_15%_0%,color-mix(in_oklab,var(--blue)_12%,transparent),transparent_70%),radial-gradient(35%_60%_at_90%_10%,color-mix(in_oklab,var(--teal)_10%,transparent),transparent_70%)]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(45%_70%_at_15%_0%,color-mix(in_oklab,var(--sky)_12%,transparent),transparent_70%),radial-gradient(35%_60%_at_90%_10%,color-mix(in_oklab,var(--teal)_10%,transparent),transparent_70%)]" />
       <Container className="py-16 sm:py-24">
         <Reveal>
           <Eyebrow>{eyebrow}</Eyebrow>

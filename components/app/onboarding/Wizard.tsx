@@ -72,7 +72,7 @@ export function Wizard({ data, step }: { data: WizardData; step: StepId | "revie
                   <span
                     className={cn(
                       "grid size-6 shrink-0 place-items-center rounded-full text-[11px] font-semibold tabular",
-                      done ? "bg-teal text-white" : current ? "bg-blue text-white" : "border border-line-strong text-ink-3",
+                      done ? "bg-teal text-white" : current ? "bg-blue text-on-blue" : "border border-line-strong text-ink-3",
                     )}
                   >
                     {done ? <Check className="size-3.5" strokeWidth={3} aria-label="Done" /> : i + 1}

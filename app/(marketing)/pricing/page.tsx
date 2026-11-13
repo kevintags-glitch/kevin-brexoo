@@ -43,7 +43,7 @@ export default function PricingPage() {
                   delay={i * 0.05}
                   className={cn("relative flex flex-col rounded-[22px] border bg-surface p-7", featured ? "border-blue shadow-lg ring-4 ring-blue/10" : "border-line shadow-xs")}
                 >
-                  {featured ? <span className="absolute -top-3 left-7 rounded-full bg-blue px-2.5 py-1 text-[12px] font-semibold text-white">Most teams</span> : null}
+                  {featured ? <span className="absolute -top-3 left-7 rounded-full bg-blue px-2.5 py-1 text-[12px] font-semibold text-on-blue">Most teams</span> : null}
                   <h2 className="font-sans text-[18px] font-semibold tracking-normal">{p.name}</h2>
                   <p className="mt-2 min-h-12 text-[14px] leading-relaxed text-ink-3">{p.positioning}</p>
                   <p className="mt-6 flex items-baseline gap-1.5">

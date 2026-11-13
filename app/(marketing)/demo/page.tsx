@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Request a demo", description: "See B
 export default function DemoPage() {
   return (
     <section className="relative overflow-hidden">
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(45%_60%_at_10%_0%,color-mix(in_oklab,var(--blue)_12%,transparent),transparent_70%)]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(45%_60%_at_10%_0%,color-mix(in_oklab,var(--sky)_12%,transparent),transparent_70%)]" />
       <Container className="grid gap-12 py-16 sm:py-24 lg:grid-cols-[1fr_1.15fr]">
         <div>
           <Eyebrow>Request a demo</Eyebrow>

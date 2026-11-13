@@ -53,7 +53,7 @@ export function XooChat() {
         ) : null}
         {turns.map((t, i) => (
           <div key={i} className="grid gap-3">
-            <div className="ml-auto max-w-[80%] rounded-2xl rounded-br-md bg-blue px-4 py-2.5 text-[14px] text-white">{t.q}</div>
+            <div className="ml-auto max-w-[80%] rounded-2xl rounded-br-md bg-blue px-4 py-2.5 text-[14px] text-on-blue">{t.q}</div>
             <div className="max-w-[90%] rounded-2xl rounded-bl-md border border-line bg-surface p-4 text-[14px] leading-relaxed text-ink-2 shadow-xs">
               {!t.r ? (
                 <p className="flex items-center gap-2 text-ink-3">
@@ -95,7 +95,7 @@ export function XooChat() {
           Ask Xoo
         </label>
         <input id="xoo-input" value={input} onChange={(e) => setInput(e.target.value)} maxLength={500} placeholder="Ask about overdue tasks, your pipeline, missing details…" className="h-11 min-w-0 flex-1 bg-transparent px-3 text-[15px] outline-none placeholder:text-ink-3" autoComplete="off" />
-        <button type="submit" disabled={!input.trim() || pending} className={cn("pressable grid size-10 place-items-center rounded-xl bg-blue text-white disabled:opacity-40")} aria-label="Ask">
+        <button type="submit" disabled={!input.trim() || pending} className={cn("pressable grid size-10 place-items-center rounded-xl bg-blue text-on-blue disabled:opacity-40")} aria-label="Ask">
           <ArrowUp className="size-5" />
         </button>
       </form>
