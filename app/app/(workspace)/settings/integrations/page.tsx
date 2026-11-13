@@ -22,7 +22,7 @@ export default async function IntegrationsPage() {
     <div className="grid gap-6">
       <MakeIntegration integration={data} isOwner={ctx.isOwner} lastDelivery={data?.last_delivery_at ? formatDateTime(data.last_delivery_at, ctx.org.timezone) : null} />
       <Card className="p-5">
-        <p className="text-[15px] font-semibold">Coming next</p>
+        <p className="text-[15px] font-medium">Coming next</p>
         <ul className="mt-4 grid gap-3 sm:grid-cols-3">
           {COMING.map(({ icon: Icon, name, body }) => (
             <li key={name} className="rounded-xl border border-line p-4">

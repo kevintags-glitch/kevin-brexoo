@@ -13,8 +13,8 @@ export function DemoForm() {
     return (
       <div className="flex flex-col items-start gap-3 rounded-2xl border border-line bg-surface p-8 shadow-sm" role="status">
         <CircleCheck className="size-7 text-green-ink" aria-hidden />
-        <h2 className="text-2xl">Thanks, we've got your request.</h2>
-        <p className="text-[15px] text-ink-2">We'll email you to arrange a time. Nothing else is needed from you right now.</p>
+        <h2 className="type-subhead">Thanks, we've got your request.</h2>
+        <p className="type-body text-ink-2">We'll email you to arrange a time. Nothing else is needed from you right now.</p>
       </div>
     );
   }

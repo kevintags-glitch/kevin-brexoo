@@ -84,14 +84,14 @@ export function Wizard({ data, step }: { data: WizardData; step: StepId | "revie
                 >
                   <span
                     className={cn(
-                      "grid size-6 shrink-0 place-items-center rounded-full text-[11px] font-semibold tabular",
+                      "grid size-6 shrink-0 place-items-center rounded-full text-[11px] font-medium tabular",
                       done ? "bg-teal text-white" : current ? "bg-blue text-on-blue" : "border border-line-strong text-ink-3",
                     )}
                   >
                     {done ? <Check className="size-3.5" strokeWidth={3} aria-label="Done" /> : i + 1}
                   </span>
                   <span className="min-w-0">
-                    <span className={cn("block text-[14px]", current ? "font-semibold text-ink" : "text-ink-2")}>{st.title}</span>
+                    <span className={cn("block text-[14px]", current ? "font-medium text-ink" : "text-ink-2")}>{st.title}</span>
                     <span className="hidden text-[12px] text-ink-3 lg:block">{st.description}</span>
                   </span>
                 </Link>
@@ -134,7 +134,7 @@ export function Wizard({ data, step }: { data: WizardData; step: StepId | "revie
 function StepHeader({ title, body }: { title: string; body: string }) {
   return (
     <div className="border-b border-line px-6 py-5 sm:px-8">
-      <h2 className="text-[22px] font-semibold tracking-[-0.015em]">{title}</h2>
+      <h2 className="type-subhead">{title}</h2>
       <p className="mt-1 text-[14px] text-ink-3">{body}</p>
     </div>
   );
@@ -563,7 +563,7 @@ function ReviewStep({ data }: { data: WizardData }) {
         {status === "approved" || status === "active" ? (
           <div className="flex flex-col items-start gap-3 rounded-xl bg-green-soft p-5 text-green-ink" role="status">
             <CircleCheck className="size-6" aria-hidden />
-            <p className="text-[16px] font-semibold">Your setup is approved.</p>
+            <p className="text-[16px] font-medium">Your setup is approved.</p>
             <p className="text-[14px] opacity-90">Next, review the landing page we drafted from your answers and approve it to go live.</p>
             <ButtonLink href="/app/landing-pages" className="mt-1">
               Go to landing pages

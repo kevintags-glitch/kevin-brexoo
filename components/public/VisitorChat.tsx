@@ -176,7 +176,7 @@ export function VisitorChat({ data, preview }: { data: PublicPageData; preview?:
       >
         <div className="flex items-center gap-3 border-b border-line px-5 py-4">
           <div className="min-w-0 flex-1">
-            <p className="truncate text-[15px] font-semibold">{data.business.name}</p>
+            <p className="truncate text-[15px] font-medium">{data.business.name}</p>
             <p className="text-[12px] text-ink-3">Automated assistant · answers from this page</p>
           </div>
           <button type="button" onClick={() => setOpen(false)} className="grid size-9 place-items-center rounded-lg text-ink-3 hover:bg-surface-2" aria-label="Close chat">
@@ -258,7 +258,7 @@ export function VisitorChat({ data, preview }: { data: PublicPageData; preview?:
             onChange={(e) => setInput(e.target.value)}
             disabled={flow === "confirm" || flow === "done" || flow === "category"}
             placeholder={flow && flow !== "done" && flow !== "confirm" ? "Type your answer" : "Ask a question"}
-            className="h-11 min-w-0 flex-1 rounded-xl bg-surface-2 px-3.5 text-[15px] outline-none placeholder:text-ink-3 focus:ring-2 focus:ring-blue/30 disabled:opacity-60"
+            className="type-body h-11 min-w-0 flex-1 rounded-xl bg-surface-2 px-3.5 outline-none placeholder:text-ink-3 focus:ring-2 focus:ring-blue/30 disabled:opacity-60"
             autoComplete="off"
             maxLength={500}
           />

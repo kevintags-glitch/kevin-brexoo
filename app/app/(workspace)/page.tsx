@@ -179,7 +179,7 @@ export default async function OverviewPage() {
     <Page wide className="grid gap-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-[26px] font-semibold tracking-[-0.02em] sm:text-[28px]">Dashboard</h1>
+          <h1 className="type-subhead">Dashboard</h1>
           <p className="text-[14px] text-ink-3">Last {PERIOD} days, compared with the {PERIOD} before.</p>
         </div>
         <ButtonLink href="/app/enquiries?status=all" variant="secondary" size="sm">
@@ -198,12 +198,12 @@ export default async function OverviewPage() {
                 <circle cx="18" cy="18" r="15" fill="none" stroke="var(--surface-2)" strokeWidth="4" />
                 <circle cx="18" cy="18" r="15" fill="none" stroke="var(--teal)" strokeWidth="4" strokeLinecap="round" strokeDasharray={`${((checklist.length - todo.length) / checklist.length) * 94.2} 94.2`} />
               </svg>
-              <span className="absolute text-[11px] font-semibold tabular">
+              <span className="absolute text-[11px] font-medium tabular">
                 {checklist.length - todo.length}/{checklist.length}
               </span>
             </span>
             <div>
-              <p className="text-[14px] font-semibold">Finish setting up</p>
+              <p className="text-[14px] font-medium">Finish setting up</p>
               <p className="text-[13px] text-ink-3">Next: {todo[0]!.label.toLowerCase()}</p>
             </div>
           </div>
@@ -271,7 +271,7 @@ export default async function OverviewPage() {
                 <li key={f.label} className="px-4 py-3.5">
                   <div className="flex items-baseline justify-between gap-3">
                     <p className="text-[14px] font-medium">{f.label}</p>
-                    <p className="text-[15px] font-semibold tabular">{f.n.toLocaleString("en-AU")}</p>
+                    <p className="text-[15px] font-medium tabular">{f.n.toLocaleString("en-AU")}</p>
                   </div>
                   <div className="mt-2 flex items-center gap-3">
                     <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-2">
@@ -331,7 +331,7 @@ export default async function OverviewPage() {
                   <span className="size-2.5 rounded-sm" style={{ background: c.color }} aria-hidden />
                   {c.label}
                 </span>
-                <span className="text-[14px] font-semibold tabular">
+                <span className="text-[14px] font-medium tabular">
                   {c.n}
                   <span className="ml-2 text-[12px] font-normal text-ink-3">{captureTotal ? `${Math.round((c.n / captureTotal) * 100)}%` : "0%"}</span>
                 </span>
@@ -348,8 +348,8 @@ export default async function OverviewPage() {
         <Panel inner="flex flex-col">
           <div className="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-ink-3">Your plan</p>
-              <p className="mt-1 font-display text-[22px] font-semibold tracking-tight">{planInfo?.name ?? org.plan_code}</p>
+              <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-ink-3">Your plan</p>
+              <p className="type-subhead mt-1">{planInfo?.name ?? org.plan_code}</p>
             </div>
             <ButtonLink href="/app/settings/plan" size="sm" className="bg-midnight text-white hover:bg-midnight-hover dark:bg-blue dark:text-on-blue">
               Manage
@@ -360,7 +360,7 @@ export default async function OverviewPage() {
             {meters.map((m) => (
               <div key={m.label} className="px-3 py-3 text-center">
                 <p className="text-[11px] text-ink-3">{m.label}</p>
-                <p className="mt-1 text-[16px] font-semibold tabular">
+                <p className="mt-1 text-[16px] font-medium tabular">
                   {m.used}
                   <span className="text-[12px] font-normal text-ink-3">{m.limit === null ? "" : ` / ${m.limit}`}</span>
                 </p>
@@ -373,7 +373,7 @@ export default async function OverviewPage() {
           <PanelHeader
             eyebrow="Newest enquiries"
             title={E.length ? cur.length : 0}
-            badge={cur.length ? <span className="rounded-full border border-green-ink/20 bg-green-soft px-1.5 py-0.5 text-[11px] font-semibold text-green-ink">+{E.filter((e) => +new Date(e.received_at) > now - 7 * DAY).length} this week</span> : null}
+            badge={cur.length ? <span className="rounded-full border border-green-ink/20 bg-green-soft px-1.5 py-0.5 text-[11px] font-medium text-green-ink">+{E.filter((e) => +new Date(e.received_at) > now - 7 * DAY).length} this week</span> : null}
             action={
               <Link href="/app/enquiries?status=all" className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-line px-3 text-[13px] font-medium text-ink-2 hover:bg-surface-2">
                 View all <ArrowRight className="size-3.5" aria-hidden />

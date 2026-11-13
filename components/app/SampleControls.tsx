@@ -14,7 +14,7 @@ export function ExploreSamples({ businessName, industry, isOwner }: { businessNa
         <Sparkles className="size-5" aria-hidden />
       </span>
       <div className="flex-1">
-        <p className="text-[15px] font-semibold">Explore Brexoo with sample data</p>
+        <p className="text-[15px] font-medium">Explore Brexoo with sample data</p>
         <p className="text-[13px] text-ink-3">
           Load the {industry.toLowerCase()} example from our website ({businessName}): leads, a booked visit, a won client and projects to discover. Remove it any time.
         </p>
@@ -39,7 +39,7 @@ export function SampleBanner({ count, isOwner }: { count: number; isOwner: boole
     <div className="flex flex-wrap items-center gap-3 rounded-xl border border-amber-ink/20 bg-amber-soft px-4 py-2.5 text-[13px] text-amber-ink" role="status">
       <FlaskConical className="size-4 shrink-0" aria-hidden />
       <span className="flex-1">
-        You&apos;re viewing <strong className="font-semibold">{count} sample leads</strong>. They&apos;re examples, not real customers, and are never sent to integrations.
+        You&apos;re viewing <strong className="font-medium">{count} sample leads</strong>. They&apos;re examples, not real customers, and are never sent to integrations.
       </span>
       {state.error ? <span className="text-red-ink">{state.error}</span> : null}
       {isOwner ? (

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Building2, CircleQuestionMark, FileText, Inbox, LifeBuoy, Radar, ShieldCheck, Sparkles, Store } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { ButtonLink } from "@/components/ui";
+import { BrandIcon, type BrandIconName } from "@/components/marketing/brand-icons";
 import { SlideIn, SnapCarousel, WordsReveal } from "@/components/marketing/motion";
 import { PageHero } from "@/components/marketing/PageHero";
 import { Reveal } from "@/components/marketing/Reveal";
@@ -10,19 +11,19 @@ import { Container, CtaBand, Eyebrow } from "@/components/marketing/Section";
 export const metadata: Metadata = { alternates: { canonical: "/resources" }, title: "Resources", description: "Guides to how Brexoo works, its AI, record types, managed services, pricing and policies." };
 
 const START = [
-  { icon: BookOpen, title: "How Brexoo works", body: "The workflow from first enquiry to won work, step by step.", href: "/how-it-works" },
-  { icon: Sparkles, title: "Brex AI", body: "What Brex AI and the visitor assistant can and can't do, and the safety controls.", href: "/ai" },
-  { icon: LifeBuoy, title: "Managed services", body: "Optional human qualification and follow-up, scoped in writing.", href: "/managed-services" },
-  { icon: FileText, title: "Pricing and billing terms", body: "Plan limits, setup fees and the fine print.", href: "/pricing" },
-  { icon: ShieldCheck, title: "Privacy", body: "What data we handle, why, and your choices.", href: "/legal/privacy" },
-  { icon: CircleQuestionMark, title: "Acceptable use", body: "The rules that keep Brexoo trustworthy for businesses and their customers.", href: "/legal/acceptable-use" },
+  { icon: "pipeline" as BrandIconName, title: "How Brexoo works", body: "The workflow from first enquiry to won work, step by step.", href: "/how-it-works" },
+  { icon: "spark" as BrandIconName, title: "Brex AI", body: "What Brex AI and the visitor assistant can and can't do, and the safety controls.", href: "/ai" },
+  { icon: "team" as BrandIconName, title: "Managed services", body: "Optional human qualification and follow-up, scoped in writing.", href: "/managed-services" },
+  { icon: "quote" as BrandIconName, title: "Pricing and billing terms", body: "Plan limits, setup fees and the fine print.", href: "/pricing" },
+  { icon: "shield" as BrandIconName, title: "Privacy", body: "What data we handle, why, and your choices.", href: "/legal/privacy" },
+  { icon: "consent" as BrandIconName, title: "Acceptable use", body: "The rules that keep Brexoo trustworthy for businesses and their customers.", href: "/legal/acceptable-use" },
 ];
 
 const RECORD_TYPES = [
-  { icon: Building2, name: "Verified project opportunity", body: "A real project seen in a source you're permitted to use, such as a planning register or tender feed. It shows the source, the date it was observed and what you may do with the contact details." },
-  { icon: Inbox, name: "Direct enquiry", body: "Someone contacted you through your page, chat or by phone. This is the only kind of record that represents a confirmed request for your services." },
-  { icon: Store, name: "Business prospect", body: "A business that might buy from you, like a developer or property manager. It isn't a project and isn't asking for anything yet." },
-  { icon: Radar, name: "Inferred intent signal", body: "A prediction drawn from evidence, such as repeat visits or a near start date. Brexoo always labels it as inferred and shows the evidence. It's never presented as a confirmed request." },
+  { icon: "home" as BrandIconName, name: "Verified project opportunity", body: "A real project seen in a source you're permitted to use, such as a planning register or tender feed. It shows the source, the date it was observed and what you may do with the contact details." },
+  { icon: "inbox" as BrandIconName, name: "Direct enquiry", body: "Someone contacted you through your page, chat or by phone. This is the only kind of record that represents a confirmed request for your services." },
+  { icon: "city" as BrandIconName, name: "Business prospect", body: "A business that might buy from you, like a developer or property manager. It isn't a project and isn't asking for anything yet." },
+  { icon: "intent" as BrandIconName, name: "Inferred intent signal", body: "A prediction drawn from evidence, such as repeat visits or a near start date. Brexoo always labels it as inferred and shows the evidence. It's never presented as a confirmed request." },
 ];
 
 const GUIDES = [
@@ -42,13 +43,11 @@ export default function ResourcesPage() {
         <Container>
           <Eyebrow>Start here</Eyebrow>
           <SnapCarousel label="guides" className="-mt-4">
-            {START.map(({ icon: Icon, title, body, href }) => (
+            {START.map(({ icon, title, body, href }) => (
               <Link key={href} href={href} className="group flex h-full min-h-[260px] flex-col rounded-[26px] border border-line bg-white p-7 shadow-xs transition-shadow hover:shadow-lg">
-                <span className="grid size-12 place-items-center rounded-2xl bg-blue-soft text-blue transition-colors group-hover:bg-blue group-hover:text-white">
-                  <Icon className="size-5" aria-hidden />
-                </span>
-                <span className="mt-8 text-[26px] font-semibold tracking-[-0.02em]">{title}</span>
-                <span className="mt-2 flex-1 text-[15px] leading-relaxed text-ink-3">{body}</span>
+                <BrandIcon name={icon} className="size-14 transition-transform duration-300 group-hover:-translate-y-1" />
+                <span className="type-subhead mt-8">{title}</span>
+                <span className="type-body mt-2 flex-1 text-ink-3">{body}</span>
                 <span className="mt-6 inline-flex items-center gap-1.5 text-[14px] font-medium text-blue">
                   Read <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden />
                 </span>
@@ -61,13 +60,13 @@ export default function ResourcesPage() {
       <section id="record-types" className="scroll-mt-24 bg-[#0f2742] py-24 text-white sm:py-32">
         <Container>
           <p className="text-[13px] font-medium uppercase tracking-[0.24em] text-[#5fd4ea]">Know your records</p>
-          <WordsReveal text="Four kinds of record. Never mixed up." className="mt-4 max-w-[18ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.025em] sm:text-[60px]" />
+          <WordsReveal text="Four kinds of record. Never mixed up." className="type-section mt-4 max-w-[18ch]" />
           <div className="mt-14 grid gap-px overflow-hidden rounded-[28px] bg-white/10 md:grid-cols-2">
-            {RECORD_TYPES.map(({ icon: Icon, name, body }, i) => (
+            {RECORD_TYPES.map(({ icon, name, body }, i) => (
               <SlideIn key={name} from={i % 2 === 0 ? "left" : "right"} delay={Math.floor(i / 2) * 0.1} className="bg-[#0f2742] p-8 sm:p-10">
-                <Icon className="size-7 text-[#5fd4ea]" strokeWidth={1.4} aria-hidden />
-                <h3 className="mt-6 text-[26px] font-semibold tracking-[-0.02em]">{name}</h3>
-                <p className="mt-3 text-[16px] leading-relaxed text-white/70">{body}</p>
+                <span className="inline-grid rounded-2xl bg-white p-2"><BrandIcon name={icon} className="size-10" /></span>
+                <h3 className="type-subhead mt-6">{name}</h3>
+                <p className="type-body mt-3 text-white/70">{body}</p>
               </SlideIn>
             ))}
           </div>
@@ -78,10 +77,10 @@ export default function ResourcesPage() {
         <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
           <div className="lg:sticky lg:top-28 lg:h-fit">
             <Eyebrow>Guides</Eyebrow>
-            <h2 className="mt-4 text-[38px] font-semibold leading-[1.05] tracking-[-0.025em] sm:text-[48px]">Practical habits that win work.</h2>
+            <h2 className="type-section mt-4">Practical habits that win work.</h2>
             <nav aria-label="Guides" className="mt-8 grid gap-2">
               {GUIDES.map((g) => (
-                <a key={g.id} href={`#${g.id}`} className="text-[15px] text-ink-3 hover:text-blue">
+                <a key={g.id} href={`#${g.id}`} className="type-body text-ink-3 hover:text-blue">
                   {g.title}
                 </a>
               ))}
@@ -92,8 +91,8 @@ export default function ResourcesPage() {
               <Reveal key={g.id} delay={0.04 * i}>
                 <article id={g.id} className="scroll-mt-28 rounded-[24px] border border-line p-7 sm:p-9">
                   <p className="text-[12px] text-ink-3 tabular">Guide {String(i + 1).padStart(2, "0")}</p>
-                  <h3 className="mt-2 text-[24px] font-semibold tracking-[-0.02em]">{g.title}</h3>
-                  <p className="mt-3 text-[16px] leading-relaxed text-ink-2">{g.body}</p>
+                  <h3 className="type-subhead mt-2">{g.title}</h3>
+                  <p className="type-body mt-3 text-ink-2">{g.body}</p>
                 </article>
               </Reveal>
             ))}

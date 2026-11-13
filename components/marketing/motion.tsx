@@ -4,7 +4,7 @@
  * no two pages scroll the same way. Everything respects prefers-reduced-motion and animates only
  * transform/opacity (plus SVG stroke for the drawn timeline).
  */
-import { motion, useInView, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
+import { motion, useInView, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
 import { Children, useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
@@ -75,7 +75,7 @@ export function SlideIn({ children, from = "left", className, delay = 0 }: { chi
   if (reduce) return <div className={className}>{children}</div>;
   const initial = from === "bottom" ? { y: 60, opacity: 0 } : { x: from === "left" ? -80 : 80, opacity: 0 };
   return (
-    <motion.div className={className} initial={initial} whileInView={{ x: 0, y: 0, opacity: 1 }} viewport={{ once: true, margin: "0px 0px -15% 0px" }} transition={{ duration: 0.9, ease: EASE, delay }}>
+    <motion.div className={className} initial={initial} whileInView={{ x: 0, y: 0, opacity: 1 }} viewport={{ once: true, margin: "0px 0px -15% 0px" }} transition={{ duration: 0.7, ease: EASE, delay }}>
       {children}
     </motion.div>
   );
@@ -92,7 +92,7 @@ export function TiltIn({ children, className, delay = 0 }: { children: ReactNode
       initial={{ rotateX: 28, y: 50, opacity: 0, scale: 0.96 }}
       whileInView={{ rotateX: 0, y: 0, opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: "0px 0px -10% 0px" }}
-      transition={{ type: "spring", duration: 1, bounce: 0.18, delay }}
+      transition={{ type: "spring", duration: 0.8, bounce: 0.15, delay }}
     >
       {children}
     </motion.div>
@@ -162,7 +162,7 @@ export function ScrollMarquee({ text, className }: { text: string; className?: s
   const x = useTransform(scrollYProgress, [0, 1], ["5%", "-45%"]);
   return (
     <div ref={ref} className={cn("overflow-hidden", className)} aria-hidden>
-      <motion.p style={reduce ? undefined : { x }} className="whitespace-nowrap text-[13vw] font-semibold leading-none tracking-[-0.035em] text-ink/[0.06]">
+      <motion.p style={reduce ? undefined : { x }} className="whitespace-nowrap text-[13vw] font-medium leading-none tracking-[-0.035em] text-ink/[0.06]">
         {text} {text}
       </motion.p>
     </div>
@@ -195,42 +195,6 @@ export function CountUp({ to, suffix = "", className, duration = 1.6 }: { to: nu
   );
 }
 
-/** Cards that pin and stack on top of each other, earlier ones shrinking back. */
-export function StackCards({ items, className }: { items: { title: string; body: string; tone: string; icon: ReactNode }[]; className?: string }) {
-  return (
-    <div className={cn("relative", className)}>
-      {items.map((it, i) => (
-        <StackCard key={it.title} index={i} total={items.length} {...it} />
-      ))}
-    </div>
-  );
-}
-
-function StackCard({ index, total, title, body, tone, icon }: { index: number; total: number; title: string; body: string; tone: string; icon: ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1 - (total - index) * 0.04]);
-  const opacity = useTransform(scrollYProgress, [0, 0.9, 1], [1, 1, 0.6]);
-  return (
-    <div ref={ref} className="h-[62vh]">
-      <motion.div
-        style={reduce ? { top: `${96 + index * 22}px` } : { scale, opacity, top: `${96 + index * 22}px` }}
-        className={cn("sticky flex min-h-[320px] origin-top flex-col justify-between rounded-[28px] border border-line p-8 shadow-lg sm:p-12", tone)}
-      >
-        <div className="flex items-center justify-between">
-          <span className="text-[13px] font-medium uppercase tracking-[0.2em] opacity-70">{String(index + 1).padStart(2, "0")}</span>
-          <span className="[&_svg]:size-8">{icon}</span>
-        </div>
-        <div>
-          <h3 className="max-w-[18ch] text-[32px] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[48px]">{title}</h3>
-          <p className="mt-4 max-w-xl text-[16px] leading-relaxed opacity-80 sm:text-[18px]">{body}</p>
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
 /** An SVG line that draws down the page as you scroll (vertical timeline). */
 export function DrawLine({ className }: { className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -249,33 +213,6 @@ export function DrawLine({ className }: { className?: string }) {
           </linearGradient>
         </defs>
       </svg>
-    </div>
-  );
-}
-
-/** A chat that plays out as the section scrolls through the viewport. */
-export function ScrollChat({ messages, className }: { messages: { from: "user" | "ai"; text: string; meta?: string }[]; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end center"] });
-  const [shown, setShown] = useState(reduce ? messages.length : 1);
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    if (!reduce) setShown(Math.max(1, Math.min(messages.length, Math.ceil(v * (messages.length + 0.5)))));
-  });
-  return (
-    <div ref={ref} className={cn("grid gap-3", className)} aria-live="polite">
-      {messages.map((m, i) => (
-        <motion.div
-          key={i}
-          initial={false}
-          animate={i < shown ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 16, scale: 0.98 }}
-          transition={{ duration: 0.45, ease: EASE }}
-          className={cn("max-w-[86%] rounded-2xl px-4 py-3 text-[15px] leading-relaxed", m.from === "user" ? "ml-auto rounded-br-md bg-blue text-white" : "rounded-bl-md border border-line bg-surface text-ink-2 shadow-sm")}
-        >
-          {m.text}
-          {m.meta ? <span className="mt-1.5 block text-[11px] font-medium text-teal-ink">{m.meta}</span> : null}
-        </motion.div>
-      ))}
     </div>
   );
 }
@@ -367,7 +304,7 @@ export function StickySteps({ steps, className }: { steps: { title: string; body
               <motion.p
                 key={i}
                 aria-hidden
-                className="absolute inset-0 text-[180px] font-semibold leading-none tracking-[-0.025em] text-blue tabular"
+                className="absolute inset-0 text-[180px] leading-none tracking-[-0.025em] text-blue tabular font-light"
                 initial={false}
                 animate={{ y: i === active ? "0%" : i < active ? "-100%" : "100%", opacity: i === active ? 1 : 0 }}
                 transition={{ duration: 0.6, ease: EASE }}
@@ -399,8 +336,8 @@ function StickyStep({ index, title, body, active, onActive }: { index: number; t
   return (
     <li ref={ref} className={cn("rounded-[24px] border p-7 transition-colors duration-500 sm:p-9", active ? "border-blue/40 bg-white shadow-lg" : "border-line bg-surface-2/50")}>
       <p className="text-[13px] font-medium text-ink-3 md:hidden">Step {index + 1}</p>
-      <p className="text-[24px] font-semibold leading-snug tracking-[-0.02em] sm:text-[28px]">{title}</p>
-      <p className="mt-3 text-[16px] leading-relaxed text-ink-2">{body}</p>
+      <p className="type-subhead">{title}</p>
+      <p className="type-body mt-3 text-ink-2">{body}</p>
     </li>
   );
 }
@@ -415,7 +352,7 @@ export function WipeIn({ children, className, delay = 0 }: { children: ReactNode
       initial={{ clipPath: "inset(100% 0% 0% 0% round 28px)" }}
       whileInView={{ clipPath: "inset(0% 0% 0% 0% round 28px)" }}
       viewport={{ once: true, margin: "0px 0px -10% 0px" }}
-      transition={{ duration: 1.1, ease: EASE, delay }}
+      transition={{ duration: 0.8, ease: EASE, delay }}
     >
       {children}
     </motion.div>

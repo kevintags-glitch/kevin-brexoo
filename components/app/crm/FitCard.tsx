@@ -12,7 +12,7 @@ export function FitCard({ fit, confidence }: { fit: FitResult; confidence: Confi
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-[12px] text-ink-3">Fit</p>
-          <p className="font-display text-[22px] font-semibold tracking-tight">
+          <p className="type-subhead">
             {fit.label}
             {fit.score !== null ? <span className="text-ink-3 tabular"> · {fit.score}</span> : null}
           </p>
@@ -37,7 +37,7 @@ export function FitCard({ fit, confidence }: { fit: FitResult; confidence: Confi
       </ul>
       {fit.missing.length ? (
         <p className="mt-4 rounded-xl bg-amber-soft px-3 py-2.5 text-[13px] text-amber-ink">
-          <span className="font-semibold">Missing:</span> {fit.missing.join(", ").replace(/[?.]$/, "")}
+          <span className="font-medium">Missing:</span> {fit.missing.join(", ").replace(/[?.]$/, "")}
         </p>
       ) : null}
       <details className="mt-3 text-[12px] text-ink-3">

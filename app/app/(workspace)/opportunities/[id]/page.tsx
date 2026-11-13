@@ -45,10 +45,10 @@ export default async function OpportunityPage({ params }: { params: Promise<{ id
 
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex min-w-0 items-start gap-4">
-          <Avatar name={contact.full_name} className="size-12 text-[15px]" />
+          <Avatar name={contact.full_name} className="type-body size-12" />
           <div className="min-w-0">
-            <h1 className="text-[26px] font-semibold leading-tight tracking-[-0.02em] sm:text-[30px]">{contact.full_name}</h1>
-            <p className="mt-1 text-[15px] text-ink-2">
+            <h1 className="type-section">{contact.full_name}</h1>
+            <p className="type-body mt-1 text-ink-2">
               {service?.name ?? project?.title ?? opp.title}
               {project?.location_text ? ` · ${project.location_text}` : ""}
             </p>
@@ -123,7 +123,7 @@ export default async function OpportunityPage({ params }: { params: Promise<{ id
                 </dl>
               ) : null}
               {project?.description ?? enquiry?.message ? (
-                <blockquote className="whitespace-pre-line rounded-xl bg-surface-2/70 px-4 py-3 text-[15px] leading-relaxed text-ink-2">{project?.description ?? enquiry?.message}</blockquote>
+                <blockquote className="type-body whitespace-pre-line rounded-xl bg-surface-2/70 px-4 py-3 text-ink-2">{project?.description ?? enquiry?.message}</blockquote>
               ) : null}
               <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
                 {questions.map((q) => (

@@ -48,7 +48,7 @@ export default async function EnquiriesPage({ searchParams }: { searchParams: Pr
     <Page wide className="grid gap-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-[26px] font-semibold tracking-[-0.02em] sm:text-[28px]">Leads</h1>
+          <h1 className="type-subhead">Leads</h1>
           <p className="text-[14px] text-ink-3">Enquiries from your pages and chat, plus leads you add or save from Discover.</p>
         </div>
         <div className="flex gap-2">
@@ -71,7 +71,7 @@ export default async function EnquiriesPage({ searchParams }: { searchParams: Pr
               <IconTile tone="dark">{s.icon}</IconTile>
               <span className="min-w-0">
                 <span className="block truncate text-[13px] text-ink-3">{s.label}</span>
-                <span className="block font-display text-[22px] font-semibold leading-tight tabular">{s.n.toLocaleString("en-AU")}</span>
+                <span className="type-subhead block tabular">{s.n.toLocaleString("en-AU")}</span>
               </span>
             </Link>
           );
@@ -106,10 +106,10 @@ export default async function EnquiriesPage({ searchParams }: { searchParams: Pr
                         <Link href={href} className="flex items-center gap-3">
                           <Avatar name={r.contact.full_name} className="size-9" />
                           <span className="min-w-0">
-                            <span className="flex items-center gap-1.5 font-semibold">
+                            <span className="flex items-center gap-1.5 font-medium">
                               {r.status === "unreviewed" ? <span className="size-1.5 shrink-0 rounded-full bg-blue" aria-label="Unreviewed" /> : null}
                               <span className="truncate group-hover:text-blue">{r.contact.full_name}</span>
-                              {r.contact.is_sample ? <span className="shrink-0 rounded-md bg-amber-soft px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-ink">Sample</span> : null}
+                              {r.contact.is_sample ? <span className="shrink-0 rounded-md bg-amber-soft px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-ink">Sample</span> : null}
                             </span>
                             <span className="block text-[12px] tabular text-ink-3">#{r.reference}</span>
                           </span>

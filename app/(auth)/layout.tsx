@@ -21,8 +21,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="absolute -right-32 -top-32 size-[640px] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.5),transparent_65%)]" />
         <div className="absolute -bottom-48 -left-24 size-[560px] rounded-full bg-[radial-gradient(circle,rgba(33,182,168,0.3),transparent_65%)]" />
         <div className="relative flex h-full flex-col justify-center px-16">
-          <p className="max-w-md font-display text-[40px] font-semibold leading-[1.08] tracking-[-0.03em] text-white">Know why it fits, and what's still missing.</p>
-          <p className="mt-4 max-w-md text-[16px] leading-relaxed text-white/70">Every opportunity in Brexoo explains itself: the factors behind its fit, how fresh the evidence is, and what to ask next.</p>
+          <p className="type-section max-w-md text-white">Know why it fits, and what's still missing.</p>
+          <p className="type-body mt-4 max-w-md text-white/70">Every opportunity in Brexoo explains itself: the factors behind its fit, how fresh the evidence is, and what to ask next.</p>
           <FitCardMock className="mt-10 max-w-[420px] rotate-[-1.5deg] border-white/10" />
         </div>
       </aside>

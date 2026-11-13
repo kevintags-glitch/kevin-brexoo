@@ -73,7 +73,7 @@ export default async function ReportsPage() {
         {stats.map((s) => (
           <Card key={s.label} className="p-4">
             <p className="text-[13px] text-ink-3">{s.label}</p>
-            <p className="mt-2 font-display text-[30px] font-semibold leading-none tabular">{s.value}</p>
+            <p className="type-section mt-2 tabular">{s.value}</p>
             <p className="mt-1.5 text-[12px] text-ink-3">{s.sub}</p>
           </Card>
         ))}

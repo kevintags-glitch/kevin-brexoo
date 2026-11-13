@@ -10,7 +10,7 @@ type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "danger" | 
 type ButtonSize = "sm" | "md" | "lg";
 
 const buttonBase =
-  "pressable inline-flex items-center justify-center gap-2 rounded-[10px] font-medium whitespace-nowrap select-none disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2";
+  "type-button pressable inline-flex items-center justify-center gap-2 rounded-[10px] whitespace-nowrap select-none disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2";
 
 const buttonVariants: Record<ButtonVariant, string> = {
   primary: "bg-blue text-on-blue shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_1px_2px_rgb(10_26_51/0.2)] hover:bg-blue-hover",
@@ -22,9 +22,9 @@ const buttonVariants: Record<ButtonVariant, string> = {
 };
 
 const buttonSizes: Record<ButtonSize, string> = {
-  sm: "h-9 px-3 text-[13px]",
-  md: "h-10 px-4 text-sm",
-  lg: "h-12 px-5 text-[15px]",
+  sm: "h-9 px-3",
+  md: "h-10 px-4",
+  lg: "h-12 px-5",
 };
 
 export function buttonClass(variant: ButtonVariant = "primary", size: ButtonSize = "md", className?: string) {
@@ -74,17 +74,17 @@ const controlBase =
   "w-full rounded-[10px] border border-line-strong bg-surface text-ink placeholder:text-ink-3 shadow-xs transition-[border-color,box-shadow] duration-150 focus:border-blue focus:ring-4 focus:ring-blue/15 aria-[invalid=true]:border-red-ink aria-[invalid=true]:focus:ring-red-ink/15 disabled:opacity-60";
 
 export function Input({ className, ...props }: ComponentProps<"input">) {
-  return <input className={cn(controlBase, "h-11 px-3.5 text-[15px] sm:h-10 sm:text-sm", className)} {...props} />;
+  return <input className={cn(controlBase, "type-body h-11 px-3.5 sm:h-10 sm:text-sm", className)} {...props} />;
 }
 
 export function Textarea({ className, ...props }: ComponentProps<"textarea">) {
-  return <textarea className={cn(controlBase, "min-h-24 px-3.5 py-2.5 text-[15px] leading-relaxed sm:text-sm", className)} {...props} />;
+  return <textarea className={cn(controlBase, "type-body min-h-24 px-3.5 py-2.5 sm:text-sm", className)} {...props} />;
 }
 
 export function Select({ className, children, ...props }: ComponentProps<"select">) {
   return (
     <div className="relative">
-      <select className={cn(controlBase, "h-11 appearance-none pl-3.5 pr-9 text-[15px] sm:h-10 sm:text-sm", className)} {...props}>
+      <select className={cn(controlBase, "type-body h-11 appearance-none pl-3.5 pr-9 sm:h-10 sm:text-sm", className)} {...props}>
         {children}
       </select>
       <svg aria-hidden viewBox="0 0 16 16" className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-ink-3">
@@ -155,7 +155,7 @@ export function CardHeader({ title, description, action, className }: { title: R
   return (
     <div className={cn("flex items-start justify-between gap-4 px-5 pt-5", className)}>
       <div className="min-w-0">
-        <h2 className="font-sans text-[15px] font-semibold tracking-normal text-ink">{title}</h2>
+        <h2 className="font-sans type-card text-ink">{title}</h2>
         {description ? <p className="mt-0.5 text-[13px] text-ink-3">{description}</p> : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
@@ -188,7 +188,7 @@ export function EmptyState({ icon, title, description, action, className }: { ic
   return (
     <div className={cn("flex flex-col items-center px-6 py-14 text-center", className)}>
       {icon ? <div className="mb-4 grid size-11 place-items-center rounded-xl bg-surface-2 text-ink-3 [&_svg]:size-5">{icon}</div> : null}
-      <h3 className="font-sans text-[15px] font-semibold tracking-normal text-ink">{title}</h3>
+      <h3 className="font-sans type-card text-ink">{title}</h3>
       {description ? <p className="mt-1 max-w-sm text-sm text-ink-3">{description}</p> : null}
       {action ? <div className="mt-5">{action}</div> : null}
     </div>
@@ -198,7 +198,7 @@ export function EmptyState({ icon, title, description, action, className }: { ic
 export function Notice({ tone = "blue", title, children, className }: { tone?: Tone; title?: ReactNode; children?: ReactNode; className?: string }) {
   return (
     <div className={cn("rounded-xl px-4 py-3 text-sm", toneClasses[tone], className)} role={tone === "red" ? "alert" : "status"}>
-      {title ? <p className="font-semibold">{title}</p> : null}
+      {title ? <p className="font-medium">{title}</p> : null}
       {children ? <div className={cn(title && "mt-0.5", "opacity-90")}>{children}</div> : null}
     </div>
   );
@@ -217,7 +217,7 @@ export function Avatar({ name, className }: { name: string; className?: string }
   return (
     <span
       aria-hidden
-      className={cn("inline-grid size-7 shrink-0 place-items-center rounded-full text-[11px] font-semibold text-white", className)}
+      className={cn("inline-grid size-7 shrink-0 place-items-center rounded-full text-[11px] font-medium text-white", className)}
       style={{ background: `oklch(0.58 0.12 ${h})` }}
     >
       {initials || "?"}

@@ -86,7 +86,7 @@ export default async function AppointmentsPage({ searchParams }: { searchParams:
     <Page wide className="grid gap-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-[26px] font-semibold tracking-[-0.02em] sm:text-[28px]">Bookings &amp; Calendar</h1>
+          <h1 className="type-subhead">Bookings &amp; Calendar</h1>
           <p className="text-[14px] text-ink-3">Calls, video meetings and site visits. Times in {tz}.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -113,7 +113,7 @@ export default async function AppointmentsPage({ searchParams }: { searchParams:
               <Link href={`/app/appointments?m=${prevMonth}`} className="grid size-9 place-items-center rounded-lg text-ink-2 hover:bg-surface-2" aria-label="Previous month">
                 <ChevronLeft className="size-5" />
               </Link>
-              <h2 className="font-sans text-[16px] font-semibold tracking-normal">{monthLabel}</h2>
+              <h2 className="font-sans type-card">{monthLabel}</h2>
               <Link href={`/app/appointments?m=${nextMonth}`} className="grid size-9 place-items-center rounded-lg text-ink-2 hover:bg-surface-2" aria-label="Next month">
                 <ChevronRight className="size-5" />
               </Link>
@@ -138,7 +138,7 @@ export default async function AppointmentsPage({ searchParams }: { searchParams:
                     aria-label={`${day}${n ? `, ${n} appointment${n > 1 ? "s" : ""}` : ""}`}
                     className={cn(
                       "relative mx-auto grid aspect-square w-full max-w-14 place-items-center rounded-xl text-[14px] tabular transition-colors",
-                      isSel ? "bg-blue font-semibold text-on-blue" : isToday ? "font-semibold text-blue ring-1 ring-blue/40" : "text-ink hover:bg-surface-2",
+                      isSel ? "bg-blue font-medium text-on-blue" : isToday ? "font-medium text-blue ring-1 ring-blue/40" : "text-ink hover:bg-surface-2",
                     )}
                   >
                     {Number(day.slice(8))}
@@ -157,14 +157,14 @@ export default async function AppointmentsPage({ searchParams }: { searchParams:
 
           <section className="rounded-2xl border border-line bg-surface shadow-xs" aria-label={`Schedule for ${dayLabel}`}>
             <div className="flex items-center justify-between border-b border-line px-5 py-4">
-              <h2 className="font-sans text-[16px] font-semibold tracking-normal">{dayLabel}</h2>
+              <h2 className="font-sans type-card">{dayLabel}</h2>
               <span className="text-[13px] text-ink-3">{dayItems.length ? `${dayItems.length} booked` : "Free"}</span>
             </div>
             {dayItems.length ? (
               <ul className="grid gap-2 p-4">
                 {dayItems.map((a) => (
                   <li key={a.id} className="grid grid-cols-[64px_minmax(0,1fr)] gap-3">
-                    <span className="pt-3 text-[13px] font-semibold tabular text-ink-2">{utcToZonedInputs(a.starts_at, tz).time}</span>
+                    <span className="pt-3 text-[13px] font-medium tabular text-ink-2">{utcToZonedInputs(a.starts_at, tz).time}</span>
                     <ul>
                       <AppointmentItem
                         a={a}

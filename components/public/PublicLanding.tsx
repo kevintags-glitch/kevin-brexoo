@@ -27,7 +27,7 @@ export function PublicLanding({ data, preview, local }: { data: PublicPageData; 
             // eslint-disable-next-line @next/next/no-img-element
             <img src={b.logo_url} alt="" className="h-9 w-auto max-w-[120px] object-contain" />
           ) : null}
-          <span className="truncate text-[16px] font-semibold">{b.name}</span>
+          <span className="truncate text-[16px] font-medium">{b.name}</span>
           <div className="ml-auto flex items-center gap-2">
             {b.phone ? (
               <a href={`tel:${b.phone.replace(/[^0-9+]/g, "")}`} className="pressable inline-flex h-10 items-center gap-2 rounded-[10px] px-3 text-[14px] font-medium text-ink-2 hover:bg-surface-2">
@@ -59,12 +59,12 @@ export function PublicLanding({ data, preview, local }: { data: PublicPageData; 
                   ))}
                 </nav>
               ) : null}
-              <h1 className="max-w-[18ch] text-[38px] font-bold leading-[1.05] tracking-[-0.03em] sm:text-[54px]">{local?.heading ?? c.headline}</h1>
-              {local ? <p className="mt-5 max-w-[52ch] text-[17px] leading-relaxed text-white/80">{local.intro}</p> : c.subheadline ? <p className="mt-5 max-w-[52ch] text-[17px] leading-relaxed text-white/80">{c.subheadline}</p> : null}
+              <h1 className="type-section max-w-[18ch]">{local?.heading ?? c.headline}</h1>
+              {local ? <p className="type-body mt-5 max-w-[52ch] text-white/80">{local.intro}</p> : c.subheadline ? <p className="type-body mt-5 max-w-[52ch] text-white/80">{c.subheadline}</p> : null}
               {c.highlights.length ? (
                 <ul className="mt-8 grid gap-3">
                   {c.highlights.filter(Boolean).map((h) => (
-                    <li key={h} className="flex items-center gap-3 text-[15px] text-white/90">
+                    <li key={h} className="type-body flex items-center gap-3 text-white/90">
                       <span className="grid size-6 shrink-0 place-items-center rounded-full bg-white/15">
                         <Check className="size-3.5" strokeWidth={3} aria-hidden />
                       </span>
@@ -86,10 +86,10 @@ export function PublicLanding({ data, preview, local }: { data: PublicPageData; 
             <div className="mx-auto grid max-w-[1120px] gap-10 px-4 py-14 sm:px-6 md:grid-cols-2">
               {data.services.length ? (
                 <div>
-                  <h2 className="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink-3">Services</h2>
+                  <h2 className="text-[13px] font-medium uppercase tracking-[0.12em] text-ink-3">Services</h2>
                   <ul className="mt-4 flex flex-wrap gap-2">
                     {data.services.map((s) => (
-                      <li key={s.code} className="rounded-full border border-line-strong px-4 py-2 text-[15px]">
+                      <li key={s.code} className="type-body rounded-full border border-line-strong px-4 py-2">
                         {s.name}
                       </li>
                     ))}
@@ -98,17 +98,17 @@ export function PublicLanding({ data, preview, local }: { data: PublicPageData; 
               ) : null}
               {data.areas.length ? (
                 <div>
-                  <h2 className="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink-3">Areas we cover</h2>
+                  <h2 className="text-[13px] font-medium uppercase tracking-[0.12em] text-ink-3">Areas we cover</h2>
                   <ul className="mt-4 flex flex-wrap gap-2">
                     {(data.places.length ? data.places : data.areas.map((a) => ({ label: a, slug: null }))).map((a) => (
                       <li key={a.label}>
                         {a.slug && !preview ? (
-                          <a href={`/p/${data.slug}/${a.slug}`} className="inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-4 py-2 text-[15px] hover:bg-blue-soft hover:text-blue">
+                          <a href={`/p/${data.slug}/${a.slug}`} className="type-body inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-4 py-2 hover:bg-blue-soft hover:text-blue">
                             <MapPin className="size-4 text-ink-3" aria-hidden />
                             {a.label}
                           </a>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-4 py-2 text-[15px]">
+                          <span className="type-body inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-4 py-2">
                             <MapPin className="size-4 text-ink-3" aria-hidden />
                             {a.label}
                           </span>
@@ -124,14 +124,14 @@ export function PublicLanding({ data, preview, local }: { data: PublicPageData; 
 
         {c.about ? (
           <section className="mx-auto max-w-[1120px] px-4 py-16 sm:px-6">
-            <h2 className="text-[30px] font-bold tracking-[-0.02em]">About {b.name}</h2>
-            <p className="mt-4 max-w-[65ch] whitespace-pre-line text-[17px] leading-relaxed text-ink-2">{c.about}</p>
+            <h2 className="type-section">About {b.name}</h2>
+            <p className="type-body mt-4 max-w-[65ch] whitespace-pre-line text-ink-2">{c.about}</p>
           </section>
         ) : null}
 
         {c.gallery.length ? (
           <section className="mx-auto max-w-[1120px] px-4 pb-16 sm:px-6">
-            <h2 className="text-[30px] font-bold tracking-[-0.02em]">Recent work</h2>
+            <h2 className="type-section">Recent work</h2>
             <ul className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3">
               {c.gallery.map((g) => (
                 <li key={g.url} className="overflow-hidden rounded-2xl bg-surface-2">
@@ -147,13 +147,13 @@ export function PublicLanding({ data, preview, local }: { data: PublicPageData; 
         {c.process.length ? (
           <section className="border-y border-line bg-surface">
             <div className="mx-auto max-w-[1120px] px-4 py-16 sm:px-6">
-              <h2 className="text-[30px] font-bold tracking-[-0.02em]">How it works</h2>
+              <h2 className="type-section">How it works</h2>
               <ol className="mt-8 grid gap-6 md:grid-cols-3">
                 {c.process.map((p, i) => (
                   <li key={i}>
-                    <span className="text-[13px] font-semibold tabular text-blue">{String(i + 1).padStart(2, "0")}</span>
-                    <p className="mt-2 text-[17px] font-semibold">{p.title}</p>
-                    <p className="mt-1.5 text-[15px] leading-relaxed text-ink-3">{p.body}</p>
+                    <span className="text-[13px] font-medium tabular text-blue">{String(i + 1).padStart(2, "0")}</span>
+                    <p className="mt-2 type-card">{p.title}</p>
+                    <p className="type-body mt-1.5 text-ink-3">{p.body}</p>
                   </li>
                 ))}
               </ol>
@@ -163,7 +163,7 @@ export function PublicLanding({ data, preview, local }: { data: PublicPageData; 
 
         {c.faqs.length ? (
           <section className="mx-auto max-w-[800px] px-4 py-16 sm:px-6">
-            <h2 className="text-[30px] font-bold tracking-[-0.02em]">Questions</h2>
+            <h2 className="type-section">Questions</h2>
             <div className="mt-6 divide-y divide-line border-y border-line">
               {c.faqs.map((f) => (
                 <details key={f.q} className="group [&_summary::-webkit-details-marker]:hidden">
@@ -173,7 +173,7 @@ export function PublicLanding({ data, preview, local }: { data: PublicPageData; 
                       +
                     </span>
                   </summary>
-                  <p className="pb-5 text-[15px] leading-relaxed text-ink-2">{f.a}</p>
+                  <p className="type-body pb-5 text-ink-2">{f.a}</p>
                 </details>
               ))}
             </div>

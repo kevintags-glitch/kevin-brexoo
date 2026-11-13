@@ -238,7 +238,7 @@ function Section({ title, hint, action, children }: { title: string; hint?: stri
     <section className="rounded-2xl border border-line bg-surface p-5 shadow-xs">
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
-          <h2 className="font-sans text-[15px] font-semibold tracking-normal">{title}</h2>
+          <h2 className="font-sans type-card">{title}</h2>
           {hint ? <p className="mt-0.5 text-[12px] text-ink-3">{hint}</p> : null}
         </div>
         {action}

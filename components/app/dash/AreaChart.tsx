@@ -102,14 +102,14 @@ export function AreaChart({ labels, series, height = 240, format = (n: number) =
           style={{ left: `clamp(0px, calc(${(x(hover) / W) * 100}% + 12px), calc(100% - 170px))` }}
           aria-live="polite"
         >
-          <p className="mb-1 font-semibold text-ink">{labels[hover]}</p>
+          <p className="mb-1 font-medium text-ink">{labels[hover]}</p>
           {series.map((s) => (
             <p key={s.label} className="flex items-center justify-between gap-4 tabular">
               <span className="flex items-center gap-1.5 text-ink-3">
                 <span className="size-2 rounded-sm" style={{ background: s.color }} />
                 {s.label}
               </span>
-              <span className="font-semibold text-ink">{format(s.values[hover] ?? 0)}</span>
+              <span className="font-medium text-ink">{format(s.values[hover] ?? 0)}</span>
             </p>
           ))}
         </div>

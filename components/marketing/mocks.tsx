@@ -70,14 +70,14 @@ export function OverviewMock({ className, business = BUILDERS }: { className?: s
         <aside className="border-r border-line bg-surface-2/40 p-3 max-lg:hidden" aria-hidden>
           <div className="flex items-center gap-2 px-2 pb-4 pt-1">
             <LogoMark className="h-5 w-auto" knockout="var(--surface-2)" />
-            <span className="truncate text-[13px] font-semibold">{business.name}</span>
+            <span className="truncate text-[13px] font-medium">{business.name}</span>
           </div>
           <ul className="grid gap-0.5">
             {SIDEBAR.map(({ icon: Icon, label, active, count }) => (
               <li key={label} className={cn("flex h-8 items-center gap-2.5 rounded-lg px-2 text-[13px]", active ? "bg-surface text-ink shadow-xs" : "text-ink-3")}>
                 <Icon className="size-4" />
                 <span className="flex-1">{label}</span>
-                {count ? <span className="rounded-full bg-blue px-1.5 text-[10px] font-semibold text-on-blue tabular">{count}</span> : null}
+                {count ? <span className="rounded-full bg-blue px-1.5 text-[10px] font-medium text-on-blue tabular">{count}</span> : null}
               </li>
             ))}
           </ul>
@@ -86,7 +86,7 @@ export function OverviewMock({ className, business = BUILDERS }: { className?: s
           <div className="flex items-baseline justify-between">
             <div>
               <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-ink-3">Thursday</p>
-              <p className="mt-0.5 font-display text-lg font-semibold tracking-tight">Good morning, Jordan</p>
+              <p className="type-card mt-0.5">Good morning, Jordan</p>
             </div>
             <Badge tone="teal" dot>
               Page live
@@ -100,14 +100,14 @@ export function OverviewMock({ className, business = BUILDERS }: { className?: s
             ].map((s) => (
               <div key={s.k} className="rounded-xl border border-line p-3">
                 <p className="truncate text-[11px] text-ink-3">{s.k}</p>
-                <p className="mt-1 font-display text-2xl font-semibold tabular">{s.v}</p>
+                <p className="type-subhead mt-1 tabular">{s.v}</p>
                 <p className="text-[11px] text-ink-3">{s.d}</p>
               </div>
             ))}
           </div>
           <div className="mt-4 overflow-hidden rounded-xl border border-line">
             <div className="flex items-center justify-between border-b border-line px-3 py-2">
-              <p className="text-[12px] font-semibold">Newest enquiries</p>
+              <p className="text-[12px] font-medium">Newest enquiries</p>
               <p className="text-[11px] text-ink-3">Sorted by received</p>
             </div>
             <ul>
@@ -169,7 +169,7 @@ export function FitCardMock({ className }: { className?: string }) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-[12px] text-ink-3">Why it fits</p>
-          <p className="mt-0.5 font-display text-xl font-semibold tracking-tight">Strong fit · 82</p>
+          <p className="type-card mt-0.5">Strong fit · 82</p>
         </div>
         <div className="text-right">
           <p className="text-[12px] text-ink-3">Confidence</p>
@@ -201,7 +201,7 @@ export function BrexMock({ className }: { className?: string }) {
         <span className="grid size-7 place-items-center rounded-lg bg-gradient-to-br from-blue to-teal text-white">
           <Sparkles className="size-4" aria-hidden />
         </span>
-        <p className="text-[13px] font-semibold">Brex AI</p>
+        <p className="text-[13px] font-medium">Brex AI</p>
         <Badge tone="neutral" className="ml-auto">
           Read-only
         </Badge>
@@ -270,13 +270,13 @@ export function BookingMock({ className, business = BUILDERS }: { className?: st
   return (
     <div className={cn("rounded-2xl border border-line bg-surface p-5 shadow-md", className)}>
       <div className="flex items-center justify-between">
-        <p className="text-[13px] font-semibold">Site visit · {booked.appointment!.minutes} min</p>
+        <p className="text-[13px] font-medium">Site visit · {booked.appointment!.minutes} min</p>
         <p className="text-[11px] text-ink-3">Times in {business.timezone.replace("_", " ")}</p>
       </div>
       <div className="mt-4 grid grid-cols-5 gap-2">
         {days.map((d, i) => (
           <div key={d} className="grid gap-1.5">
-            <p className={cn("text-center text-[11px]", i === 1 ? "font-semibold text-ink" : "text-ink-3")}>{d}</p>
+            <p className={cn("text-center text-[11px]", i === 1 ? "font-medium text-ink" : "text-ink-3")}>{d}</p>
             {slots.map((s, j) => {
               const taken = (i + j) % 3 === 0;
               const picked = i === 1 && j === 1;
@@ -285,7 +285,7 @@ export function BookingMock({ className, business = BUILDERS }: { className?: st
                   key={s}
                   className={cn(
                     "grid h-8 place-items-center rounded-lg text-[11px] tabular",
-                    picked ? "bg-blue font-semibold text-on-blue" : taken ? "bg-surface-2 text-ink-3 line-through" : "border border-line text-ink-2",
+                    picked ? "bg-blue font-medium text-on-blue" : taken ? "bg-surface-2 text-ink-3 line-through" : "border border-line text-ink-2",
                   )}
                 >
                   {s}
@@ -316,7 +316,7 @@ export function PipelineMock({ className, business = BUILDERS }: { className?: s
       <div className="flex items-end justify-between px-1">
         <div>
           <p className="text-[12px] text-ink-3">Won this quarter</p>
-          <p className="font-display text-2xl font-semibold tabular">{money(wonTotal, business.currency)}</p>
+          <p className="type-subhead tabular">{money(wonTotal, business.currency)}</p>
         </div>
         <div className="flex h-12 items-end gap-1.5" aria-hidden>
           {[30, 42, 38, 55, 48, 70, 88].map((h, i) => (
@@ -348,14 +348,14 @@ export function PhonePageMock({ className, business = BUILDERS }: { className?: 
   return (
     <div className={cn("relative mx-auto w-[280px] rounded-[44px] border-[10px] border-[#0b1626] bg-[#0b1626] shadow-lg", className)}>
       <div className="overflow-hidden rounded-[34px] bg-white text-[#0f2742]">
-        <div className="flex items-center justify-between px-5 pb-2 pt-3 text-[10px] font-semibold">
+        <div className="flex items-center justify-between px-5 pb-2 pt-3 text-[10px] font-medium">
           <span>9:41</span>
           <span className="h-5 w-20 rounded-full bg-[#0b1626]" />
           <span>100%</span>
         </div>
         <div className="bg-[linear-gradient(160deg,#0f2742_0%,#1f5fd0_130%)] px-5 pb-6 pt-4 text-white">
           <p className="text-[10px] font-medium uppercase tracking-[0.14em] opacity-70">{business.name}</p>
-          <p className="mt-2 font-display text-[20px] font-semibold leading-[1.15] tracking-tight">{business.tagline}</p>
+          <p className="type-card mt-2">{business.tagline}</p>
           <p className="mt-2 text-[11px] leading-relaxed opacity-80">Tell us what you have in mind. We reply within 4 business hours.</p>
         </div>
         <div className="grid gap-2.5 p-4">
@@ -371,7 +371,7 @@ export function PhonePageMock({ className, business = BUILDERS }: { className?: 
               </span>
             ))}
           </div>
-          <div className="mt-1 h-10 rounded-lg bg-[#2f6fe4] text-center text-[12px] font-semibold leading-10 text-white">Request a quote</div>
+          <div className="mt-1 h-10 rounded-lg bg-[#2f6fe4] text-center text-[12px] font-medium leading-10 text-white">Request a quote</div>
           <p className="text-center text-[9px] text-[#5f6e85]">Your details go only to {business.name}.</p>
         </div>
       </div>
@@ -400,7 +400,7 @@ export function CalendarMock({ className }: { className?: string }) {
   return (
     <div className={cn("rounded-2xl border border-line bg-surface p-4 shadow-md", className)}>
       <div className="flex items-center justify-between px-1">
-        <p className="text-[13px] font-semibold">This week</p>
+        <p className="text-[13px] font-medium">This week</p>
         <span className="rounded-full bg-blue-soft px-2 py-0.5 text-[11px] font-medium text-blue">1 request to confirm</span>
       </div>
       <div className="mt-3 grid grid-cols-[32px_repeat(5,minmax(0,1fr))] gap-x-1.5 text-[10px]">
@@ -428,13 +428,13 @@ export function CalendarMock({ className }: { className?: string }) {
                 .filter((e) => e.day === di)
                 .map((e) => (
                   <span key={e.who} className={cn("absolute inset-x-0.5 overflow-hidden rounded-[5px] border-l-[3px] px-1 py-0.5 leading-tight", tone[e.tone as keyof typeof tone])} style={{ top: (e.start - 8) * 26 + 1, height: e.len * 26 - 2 }}>
-                    <span className="block truncate font-semibold">{e.what}</span>
+                    <span className="block truncate font-medium">{e.what}</span>
                     <span className="block truncate opacity-80">{e.who.split(" ")[0]}</span>
                   </span>
                 ))}
               {di === 2 ? (
                 <span className="absolute inset-x-0.5 overflow-hidden rounded-[5px] border border-dashed border-blue bg-white/80 px-1 py-0.5 leading-tight text-blue" style={{ top: (13 - 8) * 26 + 1, height: 26 * 1 - 2 }}>
-                  <span className="block truncate font-semibold">Requested</span>
+                  <span className="block truncate font-medium">Requested</span>
                   <span className="block truncate">{sarah.name.split(" ")[0]}</span>
                 </span>
               ) : null}

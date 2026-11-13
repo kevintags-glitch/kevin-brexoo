@@ -56,7 +56,7 @@ export function Dialog({ open, onClose, title, children }: { open: boolean; onCl
       className="m-auto w-[min(480px,calc(100vw-2rem))] rounded-2xl border border-line bg-surface p-0 text-ink shadow-lg backdrop:bg-black/30 backdrop:backdrop-blur-[2px] open:animate-[fade-up_200ms_var(--ease-out)]"
     >
       <div className="p-6">
-        <h2 className="font-sans text-[17px] font-semibold tracking-normal">{title}</h2>
+        <h2 className="font-sans type-card">{title}</h2>
         <div className="mt-4">{children}</div>
       </div>
     </dialog>
@@ -171,7 +171,7 @@ export function DoNotContact({ contactId, value, note }: { contactId: string; va
   if (value)
     return (
       <div className="rounded-xl bg-red-soft p-3 text-[13px] text-red-ink">
-        <p className="flex items-center gap-2 font-semibold">
+        <p className="flex items-center gap-2 font-medium">
           <Ban className="size-4" aria-hidden /> Do not contact
         </p>
         {note ? <p className="mt-1 opacity-90">{note}</p> : null}
@@ -613,7 +613,7 @@ export function BrexPanel({ oppId }: { oppId: string }) {
             {reply.draft ? (
               <div className="mt-1 rounded-xl border border-line bg-surface-2/60 p-3">
                 <div className="mb-2 flex items-center justify-between">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-3">{reply.draft.channel === "email" ? "Draft email" : "Call plan"}</p>
+                  <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-ink-3">{reply.draft.channel === "email" ? "Draft email" : "Call plan"}</p>
                   <Button
                     size="sm"
                     variant="ghost"

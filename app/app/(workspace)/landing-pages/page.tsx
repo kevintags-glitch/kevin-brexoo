@@ -42,7 +42,7 @@ export default async function LandingPagesPage() {
             return (
               <Card key={p.id} className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center">
                 <div className="min-w-0 flex-1">
-                  <Link href={`/app/landing-pages/${p.id}`} className="text-[16px] font-semibold hover:underline">
+                  <Link href={`/app/landing-pages/${p.id}`} className="text-[16px] font-medium hover:underline">
                     {p.title}
                   </Link>
                   <p className="mt-0.5 truncate text-[13px] text-ink-3">

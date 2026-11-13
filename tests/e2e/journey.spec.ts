@@ -149,15 +149,31 @@ test.describe.serial("builder journey", () => {
     await form.getByLabel("Postcode").fill("2291");
     await form.getByRole("button", { name: "Continue" }).click();
 
+    // Pick a free time from the business's calendar (a request, confirmed later by the business).
+    await expect(form.getByRole("heading", { name: "When suits you?" })).toBeVisible();
+    await form.getByRole("button", { name: /Site visit/ }).click();
+    await form.getByRole("group", { name: "Available times" }).getByRole("button").first().click();
+    await form.getByRole("button", { name: "Continue" }).click();
+
     await form.getByLabel("Your name").fill("Sarah Mitchell");
     await form.getByRole("textbox", { name: "Email" }).fill(`sarah-${stamp}@example.com`);
     await form.getByRole("checkbox").check();
     await form.getByRole("button", { name: "Request a quote" }).click();
 
     await expect(visitor.getByText("Thanks, your enquiry is in.")).toBeVisible();
+    await expect(visitor.getByText(/You asked for/)).toBeVisible();
     reference = (await visitor.locator("strong.tabular").textContent())!.trim();
     expect(reference).toMatch(/^[0-9A-F]{8}$/);
     await visitor.close();
+  });
+
+  test("the requested time waits for confirmation on the calendar", async () => {
+    await page.goto("/app/appointments");
+    const requests = page.getByRole("region", { name: /Booking requests/ });
+    await expect(requests.getByText("Sarah Mitchell")).toBeVisible();
+    await expect(requests.getByText(/Site visit/)).toBeVisible();
+    await page.goto("/app");
+    await expect(page.getByText(/1 requested/).first()).toBeVisible();
   });
 
   test("the enquiry is managed through to a won outcome", async () => {
@@ -172,7 +188,7 @@ test.describe.serial("builder journey", () => {
     await expect(page.getByText("Inside Newcastle NSW")).toBeVisible();
 
     // Follow-up task was created automatically.
-    await expect(page.getByText("Respond to Sarah Mitchell's enquiry", { exact: true })).toBeVisible();
+    await expect(page.getByText(/^Confirm requested site visit/)).toBeVisible();
 
     // Brex AI summary is grounded in the record.
     await page.getByRole("button", { name: "Summarise" }).click();

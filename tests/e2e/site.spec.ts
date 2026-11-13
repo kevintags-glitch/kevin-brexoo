@@ -49,22 +49,52 @@ test("each website page has its own title and headline", async ({ page }) => {
   }
 });
 
-test("the home page plays the logo film", async ({ page }) => {
+test("the first screen is wordless: the logo mark and a live CRM demo", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
-  const video = page.locator("video");
-  await expect(video).toHaveAttribute("poster", /brexoo-logo-intro-poster/);
-  const duration = await video.evaluate(async (v: HTMLVideoElement) => {
-    if (v.readyState < 1) await new Promise((r) => v.addEventListener("loadedmetadata", r, { once: true }));
-    return v.duration;
+  const hero = page.locator("section").first();
+  await expect(hero.locator("h1")).toHaveClass(/sr-only/);
+  await expect(hero.locator("h1")).toHaveText(/Brexoo/);
+  // Visible text in the hero comes only from the decorative product demo (aria-hidden).
+  await expect(hero.locator('[aria-hidden="true"]').getByText("Sarah Mitchell").first()).toBeVisible({ timeout: 8000 });
+  const visible = await hero.evaluate((el) => {
+    let text = "";
+    const walk = (n: Node) => {
+      if (n.nodeType === 3) {
+        const p = n.parentElement!;
+        if (!p.closest(".sr-only") && !p.closest('[aria-hidden="true"]') && getComputedStyle(p).visibility !== "hidden") text += n.textContent;
+      }
+      n.childNodes.forEach(walk);
+    };
+    walk(el);
+    return text.trim();
   });
-  expect(duration).toBeGreaterThanOrEqual(10);
-  expect(duration).toBeLessThanOrEqual(15);
+  expect(visible).toBe("");
 });
 
-test("Brex AI support chat answers from approved content and links onward", async ({ page }) => {
+test("the home page never mentions AI", async ({ page }) => {
+  await page.goto("/");
+  const text = await page.locator("main").innerText();
+  expect(text).not.toMatch(/\bAI\b/);
+});
+
+test("Inter is the only typeface and the type scale is applied", async ({ page }) => {
+  for (const [w, h1] of [[1440, "56px"], [390, "38px"]] as const) {
+    await page.setViewportSize({ width: w, height: 900 });
+    await page.goto("/pricing");
+    const css = await page.locator("h1").evaluate((el) => ({ size: getComputedStyle(el).fontSize, weight: getComputedStyle(el).fontWeight, family: getComputedStyle(el).fontFamily }));
+    expect(css.size).toBe(h1);
+    expect(css.weight).toBe("400");
+    expect(css.family).toMatch(/^"Inter Variable"/);
+  }
+  const body = await page.evaluate(() => getComputedStyle(document.body).fontFamily);
+  expect(body).toMatch(/^"Inter Variable"/);
+});
+
+test("support chat answers from approved content and links onward", async ({ page }) => {
   await page.goto("/pricing");
-  await page.getByRole("button", { name: "Chat with Brex AI" }).click();
-  const chat = page.getByRole("dialog", { name: "Brex AI support chat" });
+  await page.getByRole("button", { name: "Chat with Brexoo" }).click();
+  const chat = page.getByRole("dialog", { name: "Brexoo help chat" });
   await expect(chat).toBeVisible();
   await chat.getByLabel("Your question").fill("Do you work in New Zealand?");
   await chat.getByRole("button", { name: "Send" }).click();

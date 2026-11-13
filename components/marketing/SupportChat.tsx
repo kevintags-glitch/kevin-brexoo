@@ -10,7 +10,7 @@ type Msg = { from: "user" | "ai"; text: string; links?: SupportLink[] };
 
 const GREETING: Msg = {
   from: "ai",
-  text: "Hi, I'm Brex AI. Ask me anything about Brexoo: features, pricing, industries or where we launch.",
+  text: "Hi! Ask me anything about Brexoo: features, pricing, industries or where we launch.",
 };
 
 /** Floating support chat for the website. Answers come only from approved Brexoo content. */
@@ -68,7 +68,7 @@ export function SupportChat() {
         {open ? (
           <motion.div
             role="dialog"
-            aria-label="Brex AI support chat"
+            aria-label="Brexoo help chat"
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduce ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.97 }}
@@ -81,7 +81,7 @@ export function SupportChat() {
                 <Sparkles className="size-4 text-[#5fd4ea]" aria-hidden />
               </span>
               <div className="flex-1">
-                <p className="text-[15px] font-medium">Brex AI</p>
+                <p className="text-[15px] font-medium">Brexoo help</p>
                 <p className="text-[12px] text-white/60">Answers from Brexoo&apos;s own guides</p>
               </div>
               <button
@@ -112,7 +112,7 @@ export function SupportChat() {
                 </div>
               ))}
               {typing ? (
-                <div className="flex w-fit gap-1 rounded-2xl rounded-bl-md bg-surface-2 px-4 py-3" aria-label="Brex AI is typing">
+                <div className="flex w-fit gap-1 rounded-2xl rounded-bl-md bg-surface-2 px-4 py-3" aria-label="Typing">
                   {[0, 1, 2].map((d) => (
                     <span key={d} className="size-1.5 rounded-full bg-ink-3 motion-safe:animate-bounce" style={{ animationDelay: `${d * 120}ms` }} />
                   ))}
@@ -147,7 +147,7 @@ export function SupportChat() {
               </button>
             </form>
             <p className="px-4 pb-3 text-center text-[11px] text-ink-3">
-              Brex AI can be wrong. For anything important, <Link href="/demo" className="underline hover:text-blue" onClick={() => setOpen(false)}>talk to our team</Link>.
+              Answers come from our guides. For anything important, <Link href="/demo" className="underline hover:text-blue" onClick={() => setOpen(false)}>talk to our team</Link>.
             </p>
           </motion.div>
         ) : null}
@@ -157,7 +157,7 @@ export function SupportChat() {
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        aria-label={open ? "Close Brex AI chat" : "Chat with Brex AI"}
+        aria-label={open ? "Close help chat" : "Chat with Brexoo"}
         className="pressable fixed bottom-5 right-4 z-[70] grid size-14 place-items-center rounded-full bg-blue text-white shadow-[0_12px_30px_-6px_rgb(47_111_228/0.6)] transition-colors hover:bg-blue-hover sm:right-6"
       >
         <span aria-hidden className="absolute inset-0 rounded-full bg-blue/40 motion-safe:animate-ping [animation-duration:2.6s]" hidden={open} />

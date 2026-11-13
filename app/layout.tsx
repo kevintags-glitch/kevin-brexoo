@@ -1,12 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/bricolage-grotesque/opsz.css";
-import "@fontsource-variable/hanken-grotesk";
+import "@fontsource-variable/inter";
 import "./globals.css";
 import { SITE_URL } from "@/lib/env";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: "Brexoo — The AI Growth Platform for Builders & Home Services", template: "%s · Brexoo" },
+  title: { default: "Brexoo — Find, qualify and win local projects", template: "%s · Brexoo" },
   description:
     "Find project leads. Qualify opportunities. Book more jobs. Project enquiries, AI-assisted qualification and follow-up for builders, trades and home service businesses.",
   icons: { icon: "/icon.svg" },

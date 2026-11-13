@@ -30,7 +30,7 @@ export default function ManagedServicesPage() {
             { to: 0, label: "Guaranteed outcomes", sub: "We guarantee effort, not results" },
           ].map((s) => (
             <div key={s.label}>
-              <CountUp to={s.to} className="block text-[60px] font-semibold leading-none tracking-[-0.025em]" />
+              <CountUp to={s.to} className="block text-[60px] leading-none tracking-[-0.025em] font-light" />
               <p className="mt-3 text-[15px] font-medium">{s.label}</p>
               <p className="text-[14px] text-ink-3">{s.sub}</p>
             </div>
@@ -48,8 +48,8 @@ export default function ManagedServicesPage() {
               ["Service levels", "Response expectations, escalation rules and exclusions."],
             ].map(([t, b], i) => (
               <TiltIn key={t} delay={i * 0.08} className="rounded-[24px] border border-line bg-white p-7 shadow-xs">
-                <p className="text-[20px]">{t}</p>
-                <p className="mt-2 text-[15px] leading-relaxed text-ink-3">{b}</p>
+                <p className="type-body">{t}</p>
+                <p className="type-body mt-2 text-ink-3">{b}</p>
               </TiltIn>
             ))}
           </div>

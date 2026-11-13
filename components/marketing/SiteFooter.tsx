@@ -44,13 +44,13 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-[1200px] gap-12 px-4 py-16 sm:px-6 md:grid-cols-[1.2fr_2fr]">
         <div className="max-w-xs">
           <Logo knockout="var(--surface)" />
-          <p className="mt-4 text-[15px] font-semibold leading-snug text-ink">The AI Growth Platform for Builders &amp; Home Services.</p>
+          <p className="mt-4 text-[15px] font-medium leading-snug text-ink">The AI Growth Platform for Builders &amp; Home Services.</p>
           <p className="mt-2 text-sm leading-relaxed text-ink-3">Find project leads. Qualify opportunities. Book more jobs.</p>
         </div>
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
           {COLUMNS.map((col) => (
             <div key={col.title}>
-              <h2 className="font-sans text-[13px] font-semibold tracking-normal text-ink">{col.title}</h2>
+              <h2 className="font-sans text-[13px] font-medium tracking-normal text-ink">{col.title}</h2>
               <ul className="mt-3 grid gap-2">
                 {col.links.map((l) => (
                   <li key={l.href}>

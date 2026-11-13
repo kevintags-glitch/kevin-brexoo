@@ -48,7 +48,7 @@ export function TeamManager({ members, invites, isOwner, me, siteUrl }: { member
 
       {invites.length ? (
         <div>
-          <h3 className="mb-2 font-sans text-[14px] font-semibold tracking-normal">Pending invitations</h3>
+          <h3 className="mb-2 font-sans text-[14px] font-medium tracking-normal">Pending invitations</h3>
           <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
             {invites.map((i) => (
               <li key={i.id} className="flex flex-wrap items-center gap-3 px-5 py-3 text-[14px]">
@@ -72,7 +72,7 @@ export function TeamManager({ members, invites, isOwner, me, siteUrl }: { member
 
       {isOwner ? (
         <form action={action} className="rounded-2xl border border-line bg-surface p-5" noValidate>
-          <h3 className="font-sans text-[15px] font-semibold tracking-normal">Invite a teammate</h3>
+          <h3 className="font-sans type-card">Invite a teammate</h3>
           <p className="mt-0.5 text-[13px] text-ink-3">Members can work enquiries and pages. Owners can also approve, publish and manage the team.</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-[minmax(0,1fr)_160px_auto] sm:items-end">
             <Field label="Email" htmlFor="invite_email" error={state.fieldErrors?.email}>

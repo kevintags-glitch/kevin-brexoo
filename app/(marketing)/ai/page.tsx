@@ -36,8 +36,8 @@ export default function AiPage() {
         <Container className="grid items-start gap-14 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="lg:sticky lg:top-28">
             <Eyebrow>Watch it work</Eyebrow>
-            <WordsReveal text="Ask in plain words. Get answers from your records." className="mt-4 max-w-[16ch] text-[38px] font-semibold leading-[1.05] tracking-[-0.025em] sm:text-[52px]" />
-            <p className="mt-5 max-w-md text-[17px] leading-relaxed text-ink-2">An 18-second look at Brex AI on a real sample lead. Every answer cites the record it came from, and anything inferred says so.</p>
+            <WordsReveal text="Ask in plain words. Get answers from your records." className="type-section mt-4 max-w-[16ch]" />
+            <p className="type-body mt-5 max-w-md text-ink-2">An 18-second look at Brex AI on a real sample lead. Every answer cites the record it came from, and anything inferred says so.</p>
           </div>
           <ProductVideo {...BREX_AI_DEMO} />
         </Container>
@@ -49,7 +49,7 @@ export default function AiPage() {
             <SectionHeading eyebrow="Brex AI" title="Your assistant inside Brexoo." body="Brex AI reads your own records, read-only, through a short list of allowed tools. Every answer points back to the record it came from." />
             <div className="mt-10 grid gap-8 sm:grid-cols-2">
               <SlideIn from="left">
-                <p className="text-[14px] font-semibold">Brex AI can</p>
+                <p className="text-[14px] font-medium">Brex AI can</p>
                 <ul className="mt-3 grid gap-2.5">
                   {CAN.map((c) => (
                     <li key={c} className="flex gap-2.5 text-[14px] text-ink-2">
@@ -60,7 +60,7 @@ export default function AiPage() {
                 </ul>
               </SlideIn>
               <SlideIn from="right" delay={0.08}>
-                <p className="text-[14px] font-semibold">Brex AI cannot</p>
+                <p className="text-[14px] font-medium">Brex AI cannot</p>
                 <ul className="mt-3 grid gap-2.5">
                   {CANNOT.map((c) => (
                     <li key={c} className="flex gap-2.5 text-[14px] text-ink-2">
@@ -89,7 +89,7 @@ export default function AiPage() {
               title="Answers from your page, and nothing else."
               body="On your landing page, the assistant answers from your approved FAQs, services and areas, then collects project details a few questions at a time."
             />
-            <ul className="mt-8 grid gap-3 text-[15px] text-ink-2">
+            <ul className="type-body mt-8 grid gap-3 text-ink-2">
               {[
                 "Says when it doesn't know, and offers to pass the question to you",
                 "Shows a privacy notice and asks for consent before collecting details",
@@ -120,8 +120,8 @@ export default function AiPage() {
             ].map(([t, b], i) => (
               <WipeIn key={t} delay={(i % 3) * 0.1} className="rounded-[24px] border border-line bg-white p-7 shadow-xs">
                 <p className="text-[13px] text-ink-3 tabular">{String(i + 1).padStart(2, "0")}</p>
-                <p className="mt-4 text-[20px]">{t}</p>
-                <p className="mt-2 text-[15px] leading-relaxed text-ink-3">{b}</p>
+                <p className="type-body mt-4">{t}</p>
+                <p className="type-body mt-2 text-ink-3">{b}</p>
               </WipeIn>
             ))}
           </div>

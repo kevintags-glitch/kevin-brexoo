@@ -46,7 +46,7 @@ export default async function TradePage({ params }: { params: Promise<{ trade: s
             <Eyebrow>Typical opportunities</Eyebrow>
             <ul className="mt-4 flex flex-wrap gap-2">
               {tradeOpportunities(t).map((o) => (
-                <li key={o} className="rounded-full border border-line bg-white px-4 py-2 text-[15px]">
+                <li key={o} className="type-body rounded-full border border-line bg-white px-4 py-2">
                   {o}
                 </li>
               ))}
@@ -54,7 +54,7 @@ export default async function TradePage({ params }: { params: Promise<{ trade: s
           </div>
           <div>
             <Eyebrow>Your enquiry form asks</Eyebrow>
-            <ul className="mt-4 grid gap-1.5 text-[15px] text-ink-2">
+            <ul className="type-body mt-4 grid gap-1.5 text-ink-2">
               {tradeQuestions(t).map((q) => (
                 <li key={q.key}>{q.label}</li>
               ))}
@@ -65,7 +65,7 @@ export default async function TradePage({ params }: { params: Promise<{ trade: s
       <section className="bg-white py-16 sm:py-20">
         <Container>
           <Eyebrow>Cities</Eyebrow>
-          <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.025em] sm:text-[40px]">{t.name} across three countries</h2>
+          <h2 className="type-section mt-4">{t.name} across three countries</h2>
           <div className="mt-10">
             <MarketsGrid trade={t} countries={["US", "AU", "NZ"]} />
           </div>

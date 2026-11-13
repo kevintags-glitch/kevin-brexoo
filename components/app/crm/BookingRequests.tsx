@@ -21,7 +21,7 @@ export function BookingRequests({ requests }: { requests: BookingRequest[] }) {
     <section aria-labelledby="req-title" className="rounded-2xl border border-blue/30 bg-blue-soft/30 p-4">
       <div className="flex items-center gap-2">
         <CalendarClock className="size-5 text-blue" aria-hidden />
-        <h2 id="req-title" className="text-[16px] font-semibold">
+        <h2 id="req-title" className="text-[16px] font-medium">
           Booking requests <span className="text-ink-3">· {requests.length}</span>
         </h2>
       </div>
@@ -33,10 +33,10 @@ export function BookingRequests({ requests }: { requests: BookingRequest[] }) {
             <div className="min-w-0 flex-1">
               <p className="truncate text-[14px] font-medium">
                 {r.oppId ? <Link href={`/app/opportunities/${r.oppId}`} className="hover:text-blue">{r.name}</Link> : r.name}
-                {r.sample ? <span className="ml-2 rounded-md bg-amber-soft px-1.5 py-0.5 text-[10px] font-semibold uppercase text-amber-ink">Sample</span> : null}
+                {r.sample ? <span className="ml-2 rounded-md bg-amber-soft px-1.5 py-0.5 text-[10px] font-medium uppercase text-amber-ink">Sample</span> : null}
               </p>
               <p className="text-[13px] text-ink-2">
-                {r.type} · <strong className="font-semibold">{r.when}</strong>
+                {r.type} · <strong className="font-medium">{r.when}</strong>
                 {r.where ? <span className="text-ink-3"> · {r.where}</span> : null}
               </p>
             </div>

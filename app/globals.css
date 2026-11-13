@@ -15,8 +15,8 @@
   --ink-3: #5f6f86;
   --line: #e8edf4;
   --line-strong: #d2dbe7;
-  --brand-ink: #0f2742;
-  --brand-mark: #0f2742;
+  --brand-ink: #00214a; /* sampled from the final logo artwork (wordmark) */
+  --brand-mark: #02336a; /* sampled from the final logo artwork (mark) */
   --navy: #0f2742;
   --midnight: #0f2742;
   --midnight-hover: #183a60;
@@ -152,8 +152,8 @@
   --color-violet-ink: var(--violet-ink);
   --color-violet-soft: var(--violet-soft);
 
-  --font-sans: "Hanken Grotesk Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Bricolage Grotesque Variable", "Hanken Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
@@ -189,6 +189,85 @@
   }
 }
 
+
+/* ------------------------------------------------------------------------------------------------
+ * Official Brexoo typography (Inter only). Use these instead of ad-hoc sizes and weights.
+ * Weight 300 is reserved for large promotional headings (type-promo), never small text or data.
+ * ---------------------------------------------------------------------------------------------- */
+@utility type-hero {
+  font-size: 38px;
+  line-height: 1.08;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  @media (width >= 40rem) {
+    font-size: 56px;
+  }
+}
+@utility type-promo {
+  font-size: 44px;
+  line-height: 1.04;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  @media (width >= 40rem) {
+    font-size: 60px;
+  }
+  @media (width >= 64rem) {
+    font-size: 72px;
+  }
+}
+@utility type-section {
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  @media (width >= 40rem) {
+    font-size: 36px;
+  }
+}
+@utility type-subhead {
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+@utility type-card {
+  font-size: 18px;
+  line-height: 1.35;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+@utility type-body {
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+@utility type-nav {
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+@utility type-product {
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 400;
+}
+@utility type-sidebar {
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 400;
+}
+@utility type-button {
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 500;
+}
+@utility type-label {
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
@@ -201,11 +280,14 @@
     background: var(--canvas);
     color: var(--ink);
     font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+    font-size: 15px;
+    line-height: 1.6;
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    font-optical-sizing: auto;
-    letter-spacing: -0.025em;
+    font-weight: 400;
+    letter-spacing: -0.02em;
     text-wrap: balance;
   }
   p {

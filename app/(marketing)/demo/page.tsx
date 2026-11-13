@@ -18,8 +18,8 @@ export default function DemoPage() {
       <Container className="relative grid gap-14 py-16 sm:py-24 lg:grid-cols-[1fr_1.1fr]">
         <div>
           <Eyebrow>Request a demo</Eyebrow>
-          <WordsReveal as="h1" text="See Brexoo with your own work." className="mt-5 max-w-[14ch] text-[44px] font-semibold leading-[1.02] tracking-[-0.03em] sm:text-[68px]" />
-          <p className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-ink-2 sm:text-[19px]">
+          <WordsReveal as="h1" text="See Brexoo with your own work." className="type-hero mt-5 max-w-[16ch]" />
+          <p className="type-body mt-6 max-w-[46ch] text-ink-2">
             Tell us a little about your business. Available for builders and home-service businesses in the USA, Australia and New Zealand.
           </p>
           <ol className="relative mt-12 grid gap-8 border-l border-line pl-8">
@@ -27,8 +27,8 @@ export default function DemoPage() {
               <li key={t} className="relative">
                 <SlideIn from="left" delay={0.15 + i * 0.12}>
                   <span className="absolute -left-[45px] top-0 z-10 grid size-6 place-items-center rounded-full border border-blue bg-white text-[11px] font-medium text-blue tabular">{i + 1}</span>
-                  <p className="text-[19px]">{t}</p>
-                  <p className="mt-1 text-[15px] text-ink-3">{b}</p>
+                  <p className="type-body">{t}</p>
+                  <p className="type-body mt-1 text-ink-3">{b}</p>
                 </SlideIn>
               </li>
             ))}

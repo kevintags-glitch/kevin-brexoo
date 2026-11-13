@@ -55,7 +55,7 @@ export default async function EditLandingPage({ params }: { params: Promise<{ id
           {(versions.data ?? []).length === 0 ? <li className="px-5 py-4 text-[14px] text-ink-3">No versions yet. Submitting the draft creates version 1.</li> : null}
           {(versions.data ?? []).map((v) => (
             <li key={v.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3 text-[14px]">
-              <span className="w-10 font-semibold tabular">v{v.version}</span>
+              <span className="w-10 font-medium tabular">v{v.version}</span>
               <span className="text-ink-3">Submitted {formatDateTime(v.created_at, org.timezone)}{v.creator?.full_name ? ` by ${v.creator.full_name}` : ""}</span>
               <span className="text-ink-3">{v.approved_at ? `Approved ${formatDateTime(v.approved_at, org.timezone)}${v.approver?.full_name ? ` by ${v.approver.full_name}` : ""}` : "Not approved"}</span>
               {v.id === page.published_version_id ? <span className="font-medium text-green-ink">Live</span> : v.published_at ? <span className="text-ink-3">Was live</span> : null}

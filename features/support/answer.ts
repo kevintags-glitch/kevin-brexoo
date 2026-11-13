@@ -97,4 +97,4 @@ export function supportAnswer(question: string): SupportReply {
   };
 }
 
-export const SUPPORT_SUGGESTIONS = ["What is Brexoo?", "How much does it cost?", "Which countries?", "Will Brex AI email my customers?"];
+export const SUPPORT_SUGGESTIONS = ["What is Brexoo?", "How much does it cost?", "Which countries?", "Will you email my customers?"];

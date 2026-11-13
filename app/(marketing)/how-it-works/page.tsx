@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import { ButtonLink } from "@/components/ui";
 import { BrexMock, CalendarMock, DiscoverMock, FitCardMock, PipelineMock } from "@/components/marketing/mocks";
 import { DrawLine, ScrollMarquee, SlideIn, SnapCarousel } from "@/components/marketing/motion";
+import { BrandIcon, type BrandIconName } from "@/components/marketing/brand-icons";
 import { PageHero } from "@/components/marketing/PageHero";
 import { Container, CtaBand, Eyebrow } from "@/components/marketing/Section";
 import { cn } from "@/lib/cn";
@@ -19,6 +20,8 @@ const STEPS = [
   { id: "book", kicker: "Book", title: "Appointments that stay accurate.", body: "Visitors pick from your free times on your page; you confirm with one click. Phone, video or site visit, always in your business's time zone across the USA, Australia and New Zealand.", points: ["Scheduled, confirmed, attended, no-show, cancelled, rescheduled", "Booking advances the pipeline"], visual: <CalendarMock /> },
   { id: "grow", kicker: "Win & grow", title: "Outcomes, and what they teach you.", body: "Close opportunities as won or lost with a reason. Reports show response time, lead sources, win rate and pipeline by stage.", points: ["Measured on outcomes, not raw lead volume"], visual: <PipelineMock /> },
 ];
+
+const STEP_ICON: Record<string, BrandIconName> = { discover: "discover", qualify: "fit", win: "pipeline", book: "booking", grow: "won" };
 
 const LIFECYCLE = [
   ["Discover", "Enquiries from your page and records you add, each with source and freshness."],
@@ -57,15 +60,16 @@ export default function HowItWorksPage() {
             return (
               <article key={s.id} id={s.id} className="grid scroll-mt-28 items-center gap-10 max-md:pl-10 md:grid-cols-2 md:gap-24">
                 <SlideIn from={flip ? "right" : "left"} className={cn(flip && "md:order-last")}>
-                  <p className="flex items-center gap-3 text-[13px] font-medium uppercase tracking-[0.24em] text-blue">
+                  <BrandIcon name={STEP_ICON[s.id]!} className="mb-5 size-16" />
+                  <p className="type-label flex items-center gap-3 uppercase tracking-[0.2em] text-blue">
                     <span className="text-ink-3 tabular">{String(i + 1).padStart(2, "0")}</span>
                     {s.kicker}
                   </p>
-                  <h2 className="mt-4 text-[34px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[46px]">{s.title}</h2>
-                  <p className="mt-5 text-[17px] leading-relaxed text-ink-2">{s.body}</p>
+                  <h2 className="type-section mt-4">{s.title}</h2>
+                  <p className="type-body mt-5 text-ink-2">{s.body}</p>
                   <ul className="mt-6 grid gap-2.5">
                     {s.points.map((p) => (
-                      <li key={p} className="flex gap-2.5 text-[15px] text-ink-2">
+                      <li key={p} className="type-body flex gap-2.5 text-ink-2">
                         <Check className="mt-0.5 size-4 shrink-0 text-teal-ink" aria-hidden />
                         {p}
                       </li>
@@ -86,14 +90,14 @@ export default function HowItWorksPage() {
         <ScrollMarquee text="Discover · Identify · Score · Capture · Qualify · Engage · Book · Convert · Learn ·" />
         <Container className="-mt-6">
           <Eyebrow>The full lifecycle</Eyebrow>
-          <h2 className="mt-4 text-[38px] font-semibold tracking-[-0.025em] sm:text-[52px]">Nine stages, one record.</h2>
+          <h2 className="type-section mt-4">Nine stages, one record.</h2>
           <SnapCarousel label="lifecycle stages" className="mt-8">
             {LIFECYCLE.map(([t, b], i) => (
               <div key={t} className="flex h-full min-h-[220px] flex-col justify-between rounded-[24px] border border-line bg-white p-7 shadow-xs">
-                <p className="text-[56px] font-semibold leading-none tracking-[-0.035em] text-blue/30 tabular">{String(i + 1).padStart(2, "0")}</p>
+                <p className="text-[56px] leading-none tracking-[-0.035em] text-blue/30 tabular font-light">{String(i + 1).padStart(2, "0")}</p>
                 <div>
-                  <p className="text-[22px] font-semibold">{t}</p>
-                  <p className="mt-1.5 text-[15px] leading-relaxed text-ink-3">{b}</p>
+                  <p className="type-subhead">{t}</p>
+                  <p className="type-body mt-1.5 text-ink-3">{b}</p>
                 </div>
               </div>
             ))}

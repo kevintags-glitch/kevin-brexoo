@@ -53,19 +53,19 @@ export function WorkflowStory({ steps }: { steps: StoryStep[] }) {
               <span
                 aria-hidden
                 className={cn(
-                  "relative z-10 mt-1 grid size-8 shrink-0 place-items-center rounded-full border text-[12px] font-semibold tabular transition-colors duration-300 max-lg:hidden",
+                  "relative z-10 mt-1 grid size-8 shrink-0 place-items-center rounded-full border text-[12px] font-medium tabular transition-colors duration-300 max-lg:hidden",
                   i <= active ? "border-blue bg-blue text-on-blue" : "border-line-strong bg-canvas text-ink-3",
                 )}
               >
                 {i + 1}
               </span>
               <div className={cn("transition-opacity duration-500 lg:max-w-md", i === active ? "lg:opacity-100" : "lg:opacity-40")}>
-                <p className="text-[13px] font-semibold uppercase tracking-[0.12em] text-blue">{s.kicker}</p>
-                <h3 className="mt-2 text-[28px] font-medium leading-[1.12] sm:text-[34px]">{s.title}</h3>
-                <p className="mt-3 text-[16px] leading-relaxed text-ink-2">{s.body}</p>
+                <p className="text-[13px] font-medium uppercase tracking-[0.12em] text-blue">{s.kicker}</p>
+                <h3 className="type-section mt-2">{s.title}</h3>
+                <p className="type-body mt-3 text-ink-2">{s.body}</p>
                 <ul className="mt-5 grid gap-2">
                   {s.points.map((p) => (
-                    <li key={p} className="flex gap-2.5 text-[15px] text-ink-2">
+                    <li key={p} className="type-body flex gap-2.5 text-ink-2">
                       <span aria-hidden className="mt-[9px] size-1.5 shrink-0 rounded-full bg-teal" />
                       {p}
                     </li>

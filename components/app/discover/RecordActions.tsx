@@ -12,11 +12,11 @@ export function RecordActions({ id, status, opportunityId, title }: { id: string
   const [error, setError] = useState<string | null>(null);
   if (status === "saved") {
     return opportunityId ? (
-      <Link href={`/app/opportunities/${opportunityId}`} className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-green-soft px-3 text-[13px] font-semibold text-green-ink">
+      <Link href={`/app/opportunities/${opportunityId}`} className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-green-soft px-3 text-[13px] font-medium text-green-ink">
         <Heart className="size-4 fill-current" aria-hidden /> Saved · Open
       </Link>
     ) : (
-      <span className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-green-soft px-3 text-[13px] font-semibold text-green-ink">
+      <span className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-green-soft px-3 text-[13px] font-medium text-green-ink">
         <Heart className="size-4 fill-current" aria-hidden /> Saved to projects
       </span>
     );
@@ -33,7 +33,7 @@ export function RecordActions({ id, status, opportunityId, title }: { id: string
             else router.refresh();
           })
         }
-        className={cn("pressable inline-flex h-9 items-center gap-1.5 rounded-xl border border-line-strong px-3 text-[13px] font-semibold text-ink-2 hover:border-blue/50 hover:text-blue", pending && "opacity-60")}
+        className={cn("pressable inline-flex h-9 items-center gap-1.5 rounded-xl border border-line-strong px-3 text-[13px] font-medium text-ink-2 hover:border-blue/50 hover:text-blue", pending && "opacity-60")}
         aria-label={`Save ${title} to your CRM`}
       >
         <Heart className="size-4" aria-hidden /> Save

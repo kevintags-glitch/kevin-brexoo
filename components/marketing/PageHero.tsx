@@ -35,9 +35,9 @@ export function PageHero({
           <Reveal>
             <Eyebrow>{eyebrow}</Eyebrow>
           </Reveal>
-          <WordsReveal as="h1" text={title} accent={accent} className="mt-5 max-w-[17ch] text-[44px] font-semibold leading-[1.0] tracking-[-0.03em] text-ink sm:text-[72px]" />
+          <WordsReveal as="h1" text={title} accent={accent} className="type-hero mt-5 max-w-[18ch] text-ink" />
           <Reveal delay={0.25}>
-            <p className="mt-6 max-w-[58ch] text-[17px] leading-relaxed text-ink-2 sm:text-[20px]">{body}</p>
+            <p className="type-body mt-6 max-w-[58ch] text-ink-2">{body}</p>
           </Reveal>
           {children ? (
             <Reveal delay={0.35} className="mt-9 flex flex-col gap-3 sm:flex-row">

@@ -23,9 +23,9 @@ export default function LeadsIndex() {
               <li key={t.slug}>
                 <Link href={`/leads/${t.slug}`} className="group flex h-full flex-col rounded-[22px] border border-line p-6 hover:shadow-lg">
                   <Illustration name={t.illustration} className="size-14" />
-                  <span className="mt-5 text-[19px] font-semibold">{t.name}</span>
+                  <span className="type-card mt-5">{t.name}</span>
                   <span className="mt-1 flex-1 text-[14px] text-ink-3">Leads for {t.work}</span>
-                  <span className="mt-4 inline-flex items-center gap-1 text-[13px] font-semibold text-blue group-hover:gap-2">
+                  <span className="mt-4 inline-flex items-center gap-1 text-[13px] font-medium text-blue group-hover:gap-2">
                     See cities <ArrowRight className="size-3.5" aria-hidden />
                   </span>
                 </Link>

@@ -27,7 +27,7 @@ export function IndustryTiles({ variant = "strip", className }: { variant?: "str
             )}
           >
             <Icon className={cn(variant === "strip" ? "size-7" : "size-9", green ? "text-[#16a34a]" : "text-blue")} strokeWidth={1.75} aria-hidden />
-            <span className={cn("font-semibold leading-tight text-ink", variant === "strip" ? "text-[11px] sm:text-[12px]" : "text-[14px]")}>{label}</span>
+            <span className={cn("font-medium leading-tight text-ink", variant === "strip" ? "text-[11px] sm:text-[12px]" : "text-[14px]")}>{label}</span>
           </Link>
         </li>
       ))}

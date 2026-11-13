@@ -9,7 +9,7 @@ export function IntentCard({ intent }: { intent: Intent }) {
   return (
     <div className="mt-5 border-t border-line pt-5">
       <div className="flex items-center justify-between gap-3">
-        <p className="flex items-center gap-2 text-[14px] font-semibold">
+        <p className="flex items-center gap-2 text-[14px] font-medium">
           <Gauge className="size-4 text-ink-3" aria-hidden /> Buying intent
         </p>
         <span className={cn("rounded-full px-2.5 py-1 text-[12px] font-medium", TONE[intent.level])}>{INTENT_LABEL[intent.level]}</span>

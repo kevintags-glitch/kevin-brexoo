@@ -74,7 +74,7 @@ export default async function ClientsPage() {
           <Card key={label} className="p-5">
             <Icon className="size-5 text-ink-3" aria-hidden />
             <p className="mt-4 text-[13px] text-ink-3">{label}</p>
-            <p className="mt-1 text-[24px] font-semibold tracking-tight tabular">{value}</p>
+            <p className="type-subhead mt-1 tabular">{value}</p>
           </Card>
         ))}
       </div>

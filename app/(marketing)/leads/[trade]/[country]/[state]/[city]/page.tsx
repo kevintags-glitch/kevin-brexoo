@@ -77,7 +77,7 @@ export default async function CityPage({ params }: { params: Promise<P> }) {
         aside={
           <div className="grid place-items-center rounded-[28px] border border-line bg-surface-2/50 p-10">
             <TradeHeroIcon trade={trade} />
-            <p className="mt-4 text-center text-[15px] font-semibold">{city.name}</p>
+            <p className="mt-4 text-center text-[15px] font-medium">{city.name}</p>
             <p className="text-center text-[13px] text-ink-3">
               {city.areas.length} areas · {country.currency} · {region.tz.split("/")[1]?.replace("_", " ")}
             </p>

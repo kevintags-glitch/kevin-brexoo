@@ -51,7 +51,7 @@ export function TimePicker({ slots, timezone, minutes, types, value, onChange, d
             return (
               <button key={d} type="button" aria-pressed={d === active} onClick={() => setDay(d)} className={cn("grid min-w-[64px] shrink-0 place-items-center rounded-xl border px-2 py-2 text-center", d === active ? "border-blue bg-blue text-white" : "border-line-strong text-ink-2 hover:border-ink-3")}>
                 <span className="text-[11px] uppercase tracking-wide opacity-80">{wd}</span>
-                <span className="text-[15px] font-semibold tabular">{rest.reverse().join(" ")}</span>
+                <span className="text-[15px] font-medium tabular">{rest.reverse().join(" ")}</span>
               </button>
             );
           })}
@@ -60,7 +60,7 @@ export function TimePicker({ slots, timezone, minutes, types, value, onChange, d
       {active ? (
         <div role="group" aria-label="Available times" className="grid grid-cols-3 gap-2 sm:grid-cols-4">
           {byDay.get(active)!.map((s) => (
-            <button key={s} type="button" aria-pressed={value?.start === s} onClick={() => onChange({ start: s, type })} className={cn("h-10 rounded-lg border text-[14px] tabular", value?.start === s ? "border-blue bg-blue font-semibold text-white" : "border-line text-ink-2 hover:border-blue/50")}>
+            <button key={s} type="button" aria-pressed={value?.start === s} onClick={() => onChange({ start: s, type })} className={cn("h-10 rounded-lg border text-[14px] tabular", value?.start === s ? "border-blue bg-blue font-medium text-white" : "border-line text-ink-2 hover:border-blue/50")}>
               {timeLabel.format(new Date(s))}
             </button>
           ))}

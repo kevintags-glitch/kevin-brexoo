@@ -181,7 +181,7 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
                         aria-current={active ? "page" : undefined}
                         title={compact ? item.label : undefined}
                         className={cn(
-                          "group relative flex h-10 items-center rounded-xl text-[14px] [@media(max-height:960px)]:h-9 transition-colors duration-150",
+                          "type-sidebar group relative flex h-10 items-center rounded-xl [@media(max-height:960px)]:h-9 transition-colors duration-150",
                           compact ? "justify-center" : "gap-3 px-3",
                           active ? "bg-white/10 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.06)]" : "hover:bg-white/5 hover:text-white",
                         )}
@@ -192,7 +192,7 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
                           compact ? (
                             <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-teal" aria-label={`${item.badge} needing attention`} />
                           ) : (
-                            <span className="min-w-6 rounded-md bg-white/15 px-1.5 text-center text-[11px] font-semibold leading-5 text-white tabular">
+                            <span className="min-w-6 rounded-md bg-white/15 px-1.5 text-center text-[11px] font-medium leading-5 text-white tabular">
                               {item.badge > 99 ? "99+" : item.badge}
                               <span className="sr-only"> needing attention</span>
                             </span>
@@ -257,7 +257,7 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
             <Menu className="size-5" />
           </button>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-[15px] font-semibold leading-tight">{first ? `Welcome back, ${first}` : orgName}</p>
+            <p className="truncate text-[15px] font-medium leading-tight">{first ? `Welcome back, ${first}` : orgName}</p>
             <p className="truncate text-[12px] text-ink-3">
               {today} · {orgName}
             </p>
@@ -275,7 +275,7 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
           <Link href="/app/notifications" className="pressable relative grid size-10 shrink-0 place-items-center rounded-lg text-ink-2 hover:bg-surface-2" aria-label={counts.notifications ? `Notifications: ${counts.notifications} new` : "Notifications"}>
             <Bell className="size-5" />
             {counts.notifications ? (
-              <span className="absolute right-1 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#e5533d] px-1 text-[10px] font-semibold leading-none text-white ring-2 ring-surface tabular">{counts.notifications > 99 ? "99+" : counts.notifications}</span>
+              <span className="absolute right-1 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#e5533d] px-1 text-[10px] font-medium leading-none text-white ring-2 ring-surface tabular">{counts.notifications > 99 ? "99+" : counts.notifications}</span>
             ) : null}
           </Link>
           <Link href="/app/brex-ai" className="pressable inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-midnight px-3 text-[14px] font-medium text-white hover:bg-midnight-hover dark:bg-blue dark:text-on-blue">
@@ -292,7 +292,7 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
 function OrgSwitcher({ orgName, orgs, activeOrgId }: { orgName: string; orgs: { id: string; name: string }[]; activeOrgId: string }) {
   const content = (
     <>
-      <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-white/10 text-[13px] font-semibold text-white">{orgName.slice(0, 1).toUpperCase()}</span>
+      <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-white/10 text-[13px] font-medium text-white">{orgName.slice(0, 1).toUpperCase()}</span>
       <span className="min-w-0 flex-1 text-left">
         <span className="block text-[11px] text-white/50">Workspace</span>
         <span className="block truncate text-[14px] font-medium text-white">{orgName}</span>
@@ -310,7 +310,7 @@ function OrgSwitcher({ orgName, orgs, activeOrgId }: { orgName: string; orgs: { 
         {orgs.map((o) => (
           <form key={o.id} action={switchOrganization}>
             <input type="hidden" name="organization_id" value={o.id} />
-            <button type="submit" className={cn("flex w-full items-center rounded-lg px-3 py-2 text-left text-[14px] hover:bg-surface-2", o.id === activeOrgId && "font-semibold")}>
+            <button type="submit" className={cn("flex w-full items-center rounded-lg px-3 py-2 text-left text-[14px] hover:bg-surface-2", o.id === activeOrgId && "font-medium")}>
               {o.name}
             </button>
           </form>

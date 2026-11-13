@@ -149,15 +149,15 @@ export function EnquiryForm({ data, preview, onDone }: { data: PublicPageData; p
     return (
       <div className="flex flex-col items-start gap-3 p-6 sm:p-7" role="status" aria-live="polite">
         <CircleCheck className="size-8 text-green-ink" aria-hidden />
-        <h3 className="text-[22px] font-medium tracking-tight">{done.duplicate ? "We already have this enquiry." : "Thanks, your enquiry is in."}</h3>
-        <p className="text-[15px] leading-relaxed text-ink-2">
+        <h3 className="type-subhead">{done.duplicate ? "We already have this enquiry." : "Thanks, your enquiry is in."}</h3>
+        <p className="type-body text-ink-2">
           {data.business.name} will review the details and get back to you. Your reference is{" "}
-          <strong className="font-semibold tabular text-ink">{done.reference}</strong>.
+          <strong className="font-medium tabular text-ink">{done.reference}</strong>.
         </p>
         {done.requested ? (
           <p className="rounded-xl bg-blue-soft px-3 py-2 text-[14px] text-blue">
             You asked for{" "}
-            <strong className="font-semibold">
+            <strong className="font-medium">
               {new Intl.DateTimeFormat("en-US", { timeZone: data.business.timezone, weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" }).format(new Date(done.requested))}
             </strong>
             . {data.business.name} will confirm it with you.
@@ -196,7 +196,7 @@ export function EnquiryForm({ data, preview, onDone }: { data: PublicPageData; p
             Step {i + 1}
             {v.category_code || data.services.length < 2 ? ` of ${steps.length}` : ""}
           </p>
-          <h3 ref={headingRef} tabIndex={-1} className="mt-1 text-[22px] font-medium tracking-tight outline-none">
+          <h3 ref={headingRef} tabIndex={-1} className="type-subhead mt-1 outline-none">
             {titles[step]}
           </h3>
         </div>

@@ -39,7 +39,7 @@ function Menu({ label, active, children }: { label: string; active: boolean; chi
   }, [open]);
   return (
     <div ref={ref} className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
-      <button type="button" aria-expanded={open} onClick={() => setOpen((o) => !o)} className={cn("flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-blue", active ? "text-blue" : "text-ink")}>
+      <button type="button" aria-expanded={open} onClick={() => setOpen((o) => !o)} className={cn("type-nav flex items-center gap-1 rounded-lg px-3 py-2 transition-colors hover:text-blue", active ? "text-blue" : "text-ink")}>
         {label}
         <ChevronDown className={cn("size-3.5 transition-transform", open && "rotate-180")} aria-hidden />
       </button>
@@ -57,7 +57,7 @@ function MenuItem({ href, label, body, icon }: { href: string; label: string; bo
     <Link href={href} className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-surface-2">
       <Illustration name={icon} className="size-9 shrink-0" />
       <span>
-        <span className="block text-[14px] font-semibold text-ink">{label}</span>
+        <span className="block text-[14px] font-medium text-ink">{label}</span>
         {body ? <span className="block text-[13px] text-ink-3">{body}</span> : null}
       </span>
     </Link>
@@ -113,7 +113,7 @@ export function SiteHeader() {
                 <MenuItem key={t.slug} href={`/leads/${t.slug}`} label={t.name} icon={t.illustration} />
               ))}
             </div>
-            <Link href="/industries" className="mt-1 flex items-center justify-between rounded-xl border-t border-line px-3 pb-1.5 pt-3 text-[13px] font-semibold text-blue hover:underline">
+            <Link href="/industries" className="mt-1 flex items-center justify-between rounded-xl border-t border-line px-3 pb-1.5 pt-3 text-[13px] font-medium text-blue hover:underline">
               All industries and service templates <span aria-hidden>→</span>
             </Link>
           </Menu>
@@ -122,17 +122,17 @@ export function SiteHeader() {
               key={item.href}
               href={item.href}
               aria-current={pathname === item.href ? "page" : undefined}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-ink transition-colors hover:text-blue aria-[current=page]:text-blue"
+              className="type-nav rounded-lg px-3 py-2 text-ink transition-colors hover:text-blue aria-[current=page]:text-blue"
             >
               {item.label}
             </Link>
           ))}
         </nav>
         <div className="ml-auto hidden items-center gap-2 md:flex">
-          <ButtonLink href="/login" variant="outline" size="sm" className="px-4 font-semibold">
+          <ButtonLink href="/login" variant="outline" size="sm" className="px-4 font-medium">
             Log in
           </ButtonLink>
-          <ButtonLink href="/demo" size="sm" className="px-4 font-semibold">
+          <ButtonLink href="/demo" size="sm" className="px-4 font-medium">
             Request a Demo
           </ButtonLink>
         </div>
@@ -154,17 +154,17 @@ export function SiteHeader() {
       >
         <nav aria-label="Mobile" className="grid" onClick={(e) => (e.target as HTMLElement).closest("a") && setOpen(false)}>
           {NAV.map((item) => (
-            <Link key={item.href} href={item.href} className="border-b border-line py-4 font-display text-2xl tracking-tight text-ink">
+            <Link key={item.href} href={item.href} className="type-subhead border-b border-line py-4 text-ink">
               {item.label}
             </Link>
           ))}
-          <Link href="/ai" className="border-b border-line py-4 font-display text-2xl tracking-tight text-ink">
+          <Link href="/ai" className="type-subhead border-b border-line py-4 text-ink">
             Brex AI
           </Link>
-          <p className="pt-5 text-[12px] font-semibold uppercase tracking-[0.12em] text-ink-3">Industries</p>
+          <p className="pt-5 text-[12px] font-medium uppercase tracking-[0.12em] text-ink-3">Industries</p>
           <div className="grid grid-cols-2 gap-1 py-2">
             {TRADES.map((t) => (
-              <Link key={t.slug} href={`/leads/${t.slug}`} className="flex items-center gap-2 rounded-lg py-2 text-[15px] text-ink-2">
+              <Link key={t.slug} href={`/leads/${t.slug}`} className="type-body flex items-center gap-2 rounded-lg py-2 text-ink-2">
                 <Illustration name={t.illustration} className="size-7" />
                 {t.name}
               </Link>

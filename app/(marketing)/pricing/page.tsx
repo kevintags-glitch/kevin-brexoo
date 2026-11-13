@@ -3,6 +3,7 @@ import { Check, Minus } from "lucide-react";
 import { PLANS, type EntitlementKey } from "@/config/plans";
 import { ButtonLink, Notice } from "@/components/ui";
 import { PageHero } from "@/components/marketing/PageHero";
+import { BrandIcon } from "@/components/marketing/brand-icons";
 import { HoverTilt, TiltIn } from "@/components/marketing/motion";
 import { Container, Faq, SectionHeading } from "@/components/marketing/Section";
 import { cn } from "@/lib/cn";
@@ -43,11 +44,12 @@ export default function PricingPage() {
                   className={cn("flex h-full scroll-mt-28 flex-col rounded-[26px] border bg-white p-8", featured ? "border-blue shadow-lg ring-4 ring-blue/10" : "border-line shadow-xs")}
                 >
                   <span id={p.code} className="absolute -top-28" aria-hidden />
-                  {featured ? <span className="absolute -top-3 left-7 rounded-full bg-blue px-2.5 py-1 text-[12px] font-semibold text-on-blue">Most teams</span> : null}
-                  <h2 className="font-sans text-[20px] font-normal tracking-normal">{p.name}</h2>
+                  {featured ? <span className="absolute -top-3 left-7 rounded-full bg-blue px-2.5 py-1 text-[12px] font-medium text-on-blue">Most teams</span> : null}
+                  <BrandIcon name={p.code === "launch" ? "page" : p.code === "growth" ? "pipeline" : "team"} className="size-12" />
+                  <h2 className="type-card mt-4">{p.name}</h2>
                   <p className="mt-2 min-h-12 text-[14px] leading-relaxed text-ink-3">{p.positioning}</p>
                   <p className="mt-6 flex items-baseline gap-1.5">
-                    <span className="text-[60px] font-semibold leading-none tracking-[-0.035em] tabular">{formatMoney(p.monthlyPriceMinor, p.currency)}</span>
+                    <span className="text-[60px] leading-none tracking-[-0.035em] tabular font-light">{formatMoney(p.monthlyPriceMinor, p.currency)}</span>
                     <span className="text-ink-3">/ month</span>
                   </p>
                   <p className="mt-1 text-[13px] text-ink-3">plus {formatMoney(p.setupFeeMinor, p.currency)} one-off setup</p>
@@ -82,7 +84,7 @@ export default function PricingPage() {
                     Limit
                   </th>
                   {PLANS.map((p) => (
-                    <th key={p.code} scope="col" className="px-5 py-3.5 text-center font-semibold">
+                    <th key={p.code} scope="col" className="px-5 py-3.5 text-center font-medium">
                       {p.name}
                     </th>
                   ))}

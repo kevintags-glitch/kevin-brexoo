@@ -55,7 +55,7 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Pro
     <Page wide className="grid gap-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-[26px] font-semibold tracking-[-0.02em] sm:text-[28px]">Discover Projects</h1>
+          <h1 className="type-subhead">Discover Projects</h1>
           <p className="max-w-2xl text-[14px] text-ink-3">Project opportunities from sources you&apos;ve approved, ranked by how well they match your services, areas and ideal work. Every record shows where it came from and when.</p>
         </div>
         {isOwner ? (
@@ -93,9 +93,9 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Pro
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h2 className="font-sans text-[16px] font-semibold tracking-normal">{r.title}</h2>
+                      <h2 className="font-sans type-card">{r.title}</h2>
                       {pct !== null ? (
-                        <span className={`rounded-full px-2 py-0.5 text-[12px] font-semibold tabular ${pct >= 75 ? "bg-green-soft text-green-ink" : pct >= 50 ? "bg-amber-soft text-amber-ink" : "bg-surface-2 text-ink-2"}`} title={r.fit.factors.map((f) => `${f.label}: ${f.detail}`).join("\n")}>
+                        <span className={`rounded-full px-2 py-0.5 text-[12px] font-medium tabular ${pct >= 75 ? "bg-green-soft text-green-ink" : pct >= 50 ? "bg-amber-soft text-amber-ink" : "bg-surface-2 text-ink-2"}`} title={r.fit.factors.map((f) => `${f.label}: ${f.detail}`).join("\n")}>
                           {pct}% Match
                         </span>
                       ) : (

@@ -21,10 +21,10 @@ export function PanelHeader({ eyebrow, title, badge, icon, action, className }: 
   return (
     <div className={cn("flex items-start justify-between gap-4 px-5 pt-4", className)}>
       <div className="min-w-0">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-ink-3">{eyebrow}</p>
+        <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-ink-3">{eyebrow}</p>
         {title !== undefined ? (
           <div className="mt-1 flex flex-wrap items-center gap-2">
-            <span className="font-display text-[24px] font-semibold leading-none tracking-tight tabular">{title}</span>
+            <span className="type-subhead tabular">{title}</span>
             {badge}
           </div>
         ) : null}
@@ -59,7 +59,7 @@ export function Delta({ current, previous, invert, className }: { current: numbe
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-0.5 rounded-full border px-1.5 py-0.5 text-[11px] font-semibold tabular",
+        "inline-flex items-center gap-0.5 rounded-full border px-1.5 py-0.5 text-[11px] font-medium tabular",
         good ? "border-green-ink/20 bg-green-soft text-green-ink" : "border-red-ink/20 bg-red-soft text-red-ink",
         className,
       )}
@@ -94,9 +94,9 @@ export function StatCard({
     <section className="rounded-[20px] border border-line bg-surface-2/70 p-1.5">
       <div className="flex items-start justify-between gap-3 rounded-[15px] border border-line bg-surface p-4 shadow-xs">
         <div className="min-w-0">
-          <p className="truncate text-[11px] font-semibold uppercase tracking-[0.06em] text-ink-3">{label}</p>
+          <p className="truncate text-[11px] font-medium uppercase tracking-[0.06em] text-ink-3">{label}</p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
-            <span className="font-display text-[26px] font-semibold leading-none tracking-tight tabular">{value}</span>
+            <span className="type-subhead tabular">{value}</span>
             <Delta current={current} previous={previous} invert={invert} />
           </div>
         </div>
@@ -137,7 +137,7 @@ export function AvatarStack({ names, max = 3, extra }: { names: string[]; max?: 
       {shown.map((n, i) => (
         <Avatar key={`${n}-${i}`} name={n} className={cn("size-7 ring-2 ring-surface", i > 0 && "-ml-2")} />
       ))}
-      {more > 0 ? <span className="-ml-2 grid size-7 place-items-center rounded-full bg-surface-2 text-[10px] font-semibold text-ink-2 ring-2 ring-surface">+{more}</span> : null}
+      {more > 0 ? <span className="-ml-2 grid size-7 place-items-center rounded-full bg-surface-2 text-[10px] font-medium text-ink-2 ring-2 ring-surface">+{more}</span> : null}
     </span>
   );
 }

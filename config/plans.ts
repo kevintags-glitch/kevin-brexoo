@@ -56,7 +56,7 @@ export const PLANS: Plan[] = [
     monthlyPriceMinor: 69900,
     setupFeeMinor: 79900,
     currency: "USD",
-    positioning: "More pages, more AI and more seats for teams running several services.",
+    positioning: "More pages, more summaries and drafts, and more seats for teams running several services.",
     entitlements: {
       seats: 10,
       published_pages: 3,

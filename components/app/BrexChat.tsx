@@ -40,7 +40,7 @@ export function BrexChat() {
             <span className="grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-blue to-teal text-white shadow-md">
               <Sparkles className="size-6" aria-hidden />
             </span>
-            <h2 className="mt-5 text-[24px] font-semibold tracking-tight">Ask Brex AI about your work</h2>
+            <h2 className="type-subhead mt-5">Ask Brex AI about your work</h2>
             <p className="mt-2 max-w-md text-[14px] text-ink-3">Brex AI reads your own Brexoo records, read-only, and points to where each answer came from. On any enquiry you can also ask for a summary, a draft reply or a site-visit brief.</p>
             <div className="mt-6 flex max-w-xl flex-wrap justify-center gap-2">
               {QUICK.map((q) => (
@@ -94,7 +94,7 @@ export function BrexChat() {
         <label htmlFor="brex-input" className="sr-only">
           Ask Brex AI
         </label>
-        <input id="brex-input" value={input} onChange={(e) => setInput(e.target.value)} maxLength={500} placeholder="Ask about overdue tasks, your pipeline, missing details…" className="h-11 min-w-0 flex-1 bg-transparent px-3 text-[15px] outline-none placeholder:text-ink-3" autoComplete="off" />
+        <input id="brex-input" value={input} onChange={(e) => setInput(e.target.value)} maxLength={500} placeholder="Ask about overdue tasks, your pipeline, missing details…" className="type-body h-11 min-w-0 flex-1 bg-transparent px-3 outline-none placeholder:text-ink-3" autoComplete="off" />
         <button type="submit" disabled={!input.trim() || pending} className={cn("pressable grid size-10 place-items-center rounded-xl bg-blue text-on-blue disabled:opacity-40")} aria-label="Ask">
           <ArrowUp className="size-5" />
         </button>

@@ -86,17 +86,17 @@ export function ProductTabs({ tabs }: { tabs: ProductTab[] }) {
             className="grid items-center gap-8 p-6 outline-none sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12"
           >
             <div>
-              <h3 className="text-[28px] font-semibold leading-[1.1] tracking-[-0.025em] sm:text-[34px]">{tab.title}</h3>
-              <p className="mt-3 text-[16px] leading-relaxed text-ink-2">{tab.body}</p>
+              <h3 className="type-section">{tab.title}</h3>
+              <p className="type-body mt-3 text-ink-2">{tab.body}</p>
               <ul className="mt-5 grid gap-2">
                 {tab.points.map((p) => (
-                  <li key={p} className="flex gap-2.5 text-[15px] text-ink-2">
+                  <li key={p} className="type-body flex gap-2.5 text-ink-2">
                     <span aria-hidden className="mt-[9px] size-1.5 shrink-0 rounded-full bg-teal" />
                     {p}
                   </li>
                 ))}
               </ul>
-              <Link href={tab.href} className="mt-6 inline-flex items-center gap-1.5 text-[15px] font-semibold text-blue hover:gap-2.5">
+              <Link href={tab.href} className="mt-6 inline-flex items-center gap-1.5 text-[15px] font-medium text-blue hover:gap-2.5">
                 Learn more <ArrowRight className="size-4" aria-hidden />
               </Link>
             </div>
