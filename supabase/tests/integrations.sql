@@ -32,7 +32,7 @@ end $$;
 
 insert into public.integrations (organization_id, url, events, created_by)
 values ((select v from ids where k = 'org'), 'https://hook.us1.make.com/abcDEF123456', array['enquiry.received', 'opportunity.won'], '00000000-0000-0000-0000-00000000d1a1');
-select pg_temp.check((select length(secret) from public.integrations) = 48, 'a signing secret is generated');
+select pg_temp.check((select length(secret) from public.integrations where organization_id = (select v from ids where k = 'org')) = 48, 'a signing secret is generated');
 
 -- A member of the same organisation can't see the integration (it holds the secret).
 reset role;
@@ -41,7 +41,7 @@ select pg_temp.as_user('00000000-0000-0000-0000-00000000d1c1');
 select pg_temp.check((select count(*) from public.integrations) = 0, 'members cannot read integrations');
 update public.integrations set url = 'https://hook.eu1.make.com/stolen123456';
 reset role;
-select pg_temp.check((select url from public.integrations) = 'https://hook.us1.make.com/abcDEF123456', 'members cannot change integrations');
+select pg_temp.check((select url from public.integrations where organization_id = (select v from ids where k = 'org')) = 'https://hook.us1.make.com/abcDEF123456', 'members cannot change integrations');
 
 -- Another organisation sees nothing.
 select pg_temp.as_user('00000000-0000-0000-0000-00000000d1b1');
@@ -51,8 +51,8 @@ reset role;
 -- Fan-out: an enquiry notification queues a webhook delivery; unsubscribed events don't.
 insert into public.notification_outbox (organization_id, kind, payload, dedupe_key)
 values ((select v from ids where k = 'org'), 'enquiry.received', '{"reference":"REF00001","contact_name":"Pat"}', 'enquiry.received:test-1');
-select pg_temp.check((select count(*) from public.notification_outbox where kind = 'webhook.make' and payload ->> 'event' = 'enquiry.received') = 1, 'new enquiries fan out to the webhook');
-select pg_temp.check((select payload #>> '{data,reference}' from public.notification_outbox where kind = 'webhook.make') = 'REF00001', 'the webhook payload carries the reference');
+select pg_temp.check((select count(*) from public.notification_outbox where organization_id = (select v from ids where k = 'org') and kind = 'webhook.make' and payload ->> 'event' = 'enquiry.received') = 1, 'new enquiries fan out to the webhook');
+select pg_temp.check((select payload #>> '{data,reference}' from public.notification_outbox where organization_id = (select v from ids where k = 'org') and kind = 'webhook.make') = 'REF00001', 'the webhook payload carries the reference');
 
 select pg_temp.as_user('00000000-0000-0000-0000-00000000d1a1');
 insert into public.contacts (organization_id, full_name, email) values ((select v from ids where k = 'org'), 'Won Client', 'won@example.com') returning id as contact \gset
@@ -61,15 +61,15 @@ insert into public.appointments (organization_id, opportunity_id, contact_id, ty
 values ((select v from ids where k = 'org'), :'opp', :'contact', 'phone', now() + interval '1 day', now() + interval '1 day 30 minutes', 'Australia/Sydney');
 update public.opportunities set stage = 'won', value_minor = 1200000 where id = :'opp';
 reset role;
-select pg_temp.check((select count(*) from public.notification_outbox where kind = 'webhook.make' and payload ->> 'event' = 'appointment.booked') = 0, 'unsubscribed events are not sent');
-select pg_temp.check((select count(*) from public.notification_outbox where kind = 'webhook.make' and payload ->> 'event' = 'opportunity.won') = 1, 'won opportunities fan out once');
+select pg_temp.check((select count(*) from public.notification_outbox where organization_id = (select v from ids where k = 'org') and kind = 'webhook.make' and payload ->> 'event' = 'appointment.booked') = 0, 'unsubscribed events are not sent');
+select pg_temp.check((select count(*) from public.notification_outbox where organization_id = (select v from ids where k = 'org') and kind = 'webhook.make' and payload ->> 'event' = 'opportunity.won') = 1, 'won opportunities fan out once');
 
 -- Pausing stops new deliveries.
-update public.integrations set enabled = false;
+update public.integrations set enabled = false where organization_id = (select v from ids where k = 'org');
 insert into public.notification_outbox (organization_id, kind, payload, dedupe_key)
 values ((select v from ids where k = 'org'), 'enquiry.received', '{}', 'enquiry.received:test-2');
-select pg_temp.check((select count(*) from public.notification_outbox where kind = 'webhook.make' and payload ->> 'event' = 'enquiry.received') = 1, 'paused integrations receive nothing');
-select pg_temp.check((select count(*) from public.audit_events where action like 'integration.%') >= 2, 'integration changes are audited');
+select pg_temp.check((select count(*) from public.notification_outbox where organization_id = (select v from ids where k = 'org') and kind = 'webhook.make' and payload ->> 'event' = 'enquiry.received') = 1, 'paused integrations receive nothing');
+select pg_temp.check((select count(*) from public.audit_events where action like 'integration.%' and organization_id = (select v from ids where k = 'org')) >= 2, 'integration changes are audited');
 
 -- Users can mark their own notifications read, but not someone else's.
 select pg_temp.as_user('00000000-0000-0000-0000-00000000d1c1');

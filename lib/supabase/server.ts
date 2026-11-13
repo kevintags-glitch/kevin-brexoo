@@ -6,8 +6,9 @@ import type { Database } from "./database.types";
 
 /** Server client bound to the signed-in user's session (RLS applies as that user). */
 export async function createClient() {
-  assertSupabaseEnv();
+  // Read cookies first so the route is always dynamic, even in a website-only preview build.
   const store = await cookies();
+  assertSupabaseEnv();
   return createServerClient<Database>(SUPABASE_URL, SUPABASE_KEY, {
     cookies: {
       getAll: () => store.getAll(),

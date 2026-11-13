@@ -16,3 +16,9 @@ Recorded per blueprint §20.5 ("known limitations") and §23.1 ("technical debt 
 | Discovery, credits, ops workspace, admin console | Not built (blueprint phases 8–9). | Validate the first permitted data source before building. |
 | Legal pages | Drafts marked for counsel review. | Jurisdiction-specific review before launch. |
 | Monitoring | Structured errors surface in server logs. | Add Sentry (or equivalent) and alerting on failed jobs. |
+
+## Website-only preview
+
+When a deployment has no `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, the
+website works in full and every sign-in, workspace and customer-page route shows a "workspace isn't
+connected in this preview" page (see `proxy.ts`). Demo requests explain the same instead of failing.

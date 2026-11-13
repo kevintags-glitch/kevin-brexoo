@@ -1,6 +1,7 @@
 "use server";
 import { z } from "zod";
 import { createAnonClient } from "@/lib/supabase/server";
+import { HAS_SUPABASE } from "@/lib/env";
 import { visitorFingerprint } from "@/lib/fingerprint";
 
 const schema = z.object({
@@ -24,6 +25,7 @@ export async function requestDemo(_prev: DemoState, form: FormData): Promise<Dem
     if (fieldErrors.website) return { ok: true }; // silently drop bots
     return { fieldErrors };
   }
+  if (!HAS_SUPABASE) return { error: "Demo requests open once this preview is connected to the Brexoo workspace. Please check back soon." };
   const { website: _hp, consent: _c, ...payload } = parsed.data;
   const { data, error } = await createAnonClient().rpc("submit_demo_request", {
     p: { ...payload, consent: true },
