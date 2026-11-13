@@ -3,7 +3,7 @@ import { Check, Minus } from "lucide-react";
 import { PLANS, type EntitlementKey } from "@/config/plans";
 import { ButtonLink, Notice } from "@/components/ui";
 import { PageHero } from "@/components/marketing/PageHero";
-import { Reveal } from "@/components/marketing/Reveal";
+import { HoverTilt, TiltIn } from "@/components/marketing/motion";
 import { Container, Faq, SectionHeading } from "@/components/marketing/Section";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
@@ -13,7 +13,7 @@ export const metadata: Metadata = { title: "Pricing", description: "Brexoo plans
 const ROWS: { key: EntitlementKey; label: string; unit?: string }[] = [
   { key: "published_pages", label: "Published landing pages" },
   { key: "seats", label: "Team seats" },
-  { key: "xoo_ai_requests_month", label: "Xoo AI requests", unit: "/ month" },
+  { key: "brex_ai_requests_month", label: "Brex AI requests", unit: "/ month" },
   { key: "visitor_chat_conversations_month", label: "Visitor chat conversations", unit: "/ month" },
   { key: "connected_mailboxes", label: "Connected mailboxes (coming)" },
   { key: "managed_service_hours_month", label: "Managed service hours", unit: "/ month" },
@@ -28,26 +28,26 @@ function cell(v: number | null, unit?: string) {
 export default function PricingPage() {
   return (
     <>
-      <PageHero eyebrow="Pricing" title="Clear plans. Limits you can see." body="Every plan includes the full enquiry-to-outcome workflow. Plans differ in pages, seats, AI usage and optional human-managed services." />
+      <PageHero variant="center" eyebrow="Pricing" title="Clear plans. Limits you can see." body="Every plan includes the full enquiry-to-outcome workflow. Plans differ in pages, seats, AI usage and optional human-managed services." />
       <section className="py-16 sm:py-24">
         <Container>
           <Notice tone="amber" title="Illustrative pricing" className="mx-auto max-w-3xl">
-            These are working figures for our pilot, shown in US dollars before tax. Final prices, currency, taxes and terms are confirmed in writing before you're billed.
+            These are working figures for our pilot, shown in US dollars before tax. Launch markets are the USA, Australia and New Zealand; local-currency pricing (USD, AUD, NZD) is confirmed before billing. Final prices, currency, taxes and terms are confirmed in writing before you're billed.
           </Notice>
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
             {PLANS.map((p, i) => {
               const featured = p.code === "growth";
               return (
-                <Reveal
-                  key={p.code}
-                  delay={i * 0.05}
-                  className={cn("relative flex flex-col rounded-[22px] border bg-surface p-7", featured ? "border-blue shadow-lg ring-4 ring-blue/10" : "border-line shadow-xs")}
+                <TiltIn key={p.code} delay={i * 0.12} className="h-full">
+                <HoverTilt
+                  className={cn("flex h-full scroll-mt-28 flex-col rounded-[26px] border bg-white p-8", featured ? "border-blue shadow-lg ring-4 ring-blue/10" : "border-line shadow-xs")}
                 >
+                  <span id={p.code} className="absolute -top-28" aria-hidden />
                   {featured ? <span className="absolute -top-3 left-7 rounded-full bg-blue px-2.5 py-1 text-[12px] font-semibold text-on-blue">Most teams</span> : null}
-                  <h2 className="font-sans text-[18px] font-semibold tracking-normal">{p.name}</h2>
+                  <h2 className="font-sans text-[20px] font-normal tracking-normal">{p.name}</h2>
                   <p className="mt-2 min-h-12 text-[14px] leading-relaxed text-ink-3">{p.positioning}</p>
                   <p className="mt-6 flex items-baseline gap-1.5">
-                    <span className="font-display text-5xl font-semibold tracking-tight tabular">{formatMoney(p.monthlyPriceMinor, p.currency)}</span>
+                    <span className="text-[60px] font-extralight leading-none tracking-[-0.05em] tabular">{formatMoney(p.monthlyPriceMinor, p.currency)}</span>
                     <span className="text-ink-3">/ month</span>
                   </p>
                   <p className="mt-1 text-[13px] text-ink-3">plus {formatMoney(p.setupFeeMinor, p.currency)} one-off setup</p>
@@ -62,7 +62,8 @@ export default function PricingPage() {
                       </li>
                     ))}
                   </ul>
-                </Reveal>
+                </HoverTilt>
+                </TiltIn>
               );
             })}
           </div>

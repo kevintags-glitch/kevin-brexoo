@@ -202,7 +202,7 @@ create table public.plan_entitlements (
 create table public.usage_events (
   id bigint generated always as identity primary key,
   organization_id uuid not null references public.organizations (id) on delete cascade,
-  kind text not null check (kind in ('xoo_ai', 'visitor_chat')),
+  kind text not null check (kind in ('brex_ai', 'visitor_chat')),
   quantity int not null default 1 check (quantity > 0),
   actor_id uuid references public.profiles (id) on delete set null,
   created_at timestamptz not null default now()
@@ -215,7 +215,7 @@ returns int language plpgsql stable security definer set search_path = '' as $$
 declare
   lim int;
   used int;
-  ent_key text := case p_kind when 'xoo_ai' then 'xoo_ai_requests_month' when 'visitor_chat' then 'visitor_chat_conversations_month' end;
+  ent_key text := case p_kind when 'brex_ai' then 'brex_ai_requests_month' when 'visitor_chat' then 'visitor_chat_conversations_month' end;
 begin
   if not public.is_org_member(p_org) then
     raise exception 'Not a member of that organisation' using errcode = '42501';

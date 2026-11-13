@@ -4,8 +4,10 @@ import { notFound } from "next/navigation";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { Page } from "@/components/app/PageHeader";
 import { FitCard } from "@/components/app/crm/FitCard";
+import { IntentCard } from "@/components/app/crm/IntentCard";
+import { computeIntent } from "@/features/crm/intent";
 import { Timeline } from "@/components/app/crm/Timeline";
-import { AppointmentsPanel, DoNotContact, NotesPanel, OwnerSelect, QualificationPanel, StageControl, TaskList, ValueInput, XooPanel } from "@/components/app/crm/widgets";
+import { AppointmentsPanel, DoNotContact, NotesPanel, OwnerSelect, QualificationPanel, StageControl, TaskList, ValueInput, BrexPanel } from "@/components/app/crm/widgets";
 import { Avatar, Badge, Card, CardHeader } from "@/components/ui";
 import { getMembers, getOpportunity, questionsForCategory } from "@/features/crm/queries";
 import { QUAL_LABEL, STAGE_BY_ID } from "@/features/crm/stages";
@@ -146,11 +148,23 @@ export default async function OpportunityPage({ params }: { params: Promise<{ id
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <Card className="p-5">
               <FitCard fit={fit} confidence={confidence} />
+              <IntentCard
+                intent={computeIntent({
+                  answers,
+                  message: enquiry?.message,
+                  duplicateCount: enquiry?.duplicate_count,
+                  startTiming: project?.start_timing,
+                  budgetLabel: project?.budget_label,
+                  appointmentCount: appointments.length,
+                  receivedAt: enquiry?.received_at ?? opp.created_at,
+                  now: Date.now(),
+                })}
+              />
             </Card>
             <Card>
-              <CardHeader title="Xoo AI" description="Read-only help with this record." />
+              <CardHeader title="Brex AI" description="Read-only help with this record." />
               <div className="px-5 pb-5 pt-4">
-                <XooPanel oppId={opp.id} />
+                <BrexPanel oppId={opp.id} />
               </div>
             </Card>
           </div>

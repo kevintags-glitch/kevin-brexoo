@@ -1,6 +1,6 @@
 "use server";
 /**
- * Xoo AI server entry point. Authenticates first, enforces the monthly budget, then runs only
+ * Brex AI server entry point. Authenticates first, enforces the monthly budget, then runs only
  * allowlisted read-only tools scoped to the caller's organisation (RLS applies to every query).
  * It never writes CRM data, sends messages or books anything; drafts come back for a person to use.
  */
@@ -11,15 +11,15 @@ import { requireOrg } from "@/lib/auth/session";
 import { formatMoney, formatRelative, plural } from "@/lib/format";
 import { draftFollowUp, siteVisitBrief, summarizeRecord, type Draft, type RecordInput, type Segment } from "./summarize";
 
-export type XooReply = { segments: Segment[]; draft?: Draft; links?: { label: string; href: string }[]; error?: string; remaining?: number | null };
+export type BrexReply = { segments: Segment[]; draft?: Draft; links?: { label: string; href: string }[]; error?: string; remaining?: number | null };
 
 const TOOLS = ["summarize", "draft", "brief", "overdue", "pipeline", "missing", "recent", "help"] as const;
-export type XooTool = (typeof TOOLS)[number];
+export type BrexTool = (typeof TOOLS)[number];
 
 async function meter(ctx: Awaited<ReturnType<typeof requireOrg>>) {
-  const { data: remaining } = await ctx.supabase.rpc("usage_remaining", { p_org: ctx.org.id, p_kind: "xoo_ai" });
+  const { data: remaining } = await ctx.supabase.rpc("usage_remaining", { p_org: ctx.org.id, p_kind: "brex_ai" });
   if (remaining !== null && remaining !== undefined && remaining <= 0) return { blocked: true as const, remaining };
-  await ctx.supabase.from("usage_events").insert({ organization_id: ctx.org.id, kind: "xoo_ai", actor_id: ctx.user.id });
+  await ctx.supabase.from("usage_events").insert({ organization_id: ctx.org.id, kind: "brex_ai", actor_id: ctx.user.id });
   return { blocked: false as const, remaining: remaining === null || remaining === undefined ? null : remaining - 1 };
 }
 
@@ -51,7 +51,7 @@ function toRecordInput(d: Awaited<ReturnType<typeof getOpportunity>> & object): 
 }
 
 /** Free-text questions are routed to one of the allowlisted tools; nothing else runs. */
-function route(q: string): XooTool {
+function route(q: string): BrexTool {
   const s = q.toLowerCase();
   if (/draft|reply|write|email|follow.?up/.test(s)) return "draft";
   if (/brief|site visit|visit|consult/.test(s)) return "brief";
@@ -63,7 +63,7 @@ function route(q: string): XooTool {
   return "help";
 }
 
-export async function askXoo(input: { tool?: XooTool; question?: string; opportunityId?: string }): Promise<XooReply> {
+export async function askBrex(input: { tool?: BrexTool; question?: string; opportunityId?: string }): Promise<BrexReply> {
   const parsed = z
     .object({ tool: z.enum(TOOLS).optional(), question: z.string().max(500).optional(), opportunityId: z.string().uuid().optional() })
     .safeParse(input);
@@ -71,12 +71,12 @@ export async function askXoo(input: { tool?: XooTool; question?: string; opportu
   const ctx = await requireOrg();
   const tool = parsed.data.tool ?? route(parsed.data.question ?? "");
   const usage = await meter(ctx);
-  if (usage.blocked) return { segments: [], error: "Your plan's Xoo AI requests for this month are used up. They reset on the 1st.", remaining: 0 };
+  if (usage.blocked) return { segments: [], error: "Your plan's Brex AI requests for this month are used up. They reset on the 1st.", remaining: 0 };
 
   const { supabase, org, profile } = ctx;
   const needsRecord = tool === "summarize" || tool === "draft" || tool === "brief";
   if (needsRecord && !parsed.data.opportunityId) {
-    return { segments: [{ text: "Open a record and ask from there, or use the Xoo panel on any enquiry. Here I can find overdue tasks, summarise the pipeline or list enquiries missing information." }], remaining: usage.remaining };
+    return { segments: [{ text: "Open a record and ask from there, or use the Brex AI panel on any enquiry. Here I can find overdue tasks, summarise the pipeline or list enquiries missing information." }], remaining: usage.remaining };
   }
 
   if (needsRecord) {

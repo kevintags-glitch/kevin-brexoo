@@ -6,15 +6,15 @@
  * dark themes flip in one place.
  */
 :root {
-  --canvas: #f6f9fd;
+  --canvas: #ffffff;
   --surface: #ffffff;
-  --surface-2: #eef4fb;
-  --surface-3: #e3ecf7;
+  --surface-2: #f4f7fb;
+  --surface-3: #e9eff7;
   --ink: #0f2742;
   --ink-2: #3a4b63;
   --ink-3: #5f6f86;
-  --line: #e2e9f2;
-  --line-strong: #c9d5e4;
+  --line: #e8edf4;
+  --line-strong: #d2dbe7;
   --brand-ink: #0f2742;
   --brand-mark: #0f2742;
   --navy: #0f2742;
@@ -165,6 +165,15 @@
   --shadow-lg: 0 2px 4px hsl(var(--shadow-color) / 0.04), 0 24px 56px -16px hsl(var(--shadow-color) / 0.22);
 
   --animate-fade-up: fade-up 600ms var(--ease-out) both;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 @keyframes fade-up {

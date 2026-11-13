@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Plan & usage" };
 const LABELS: Record<string, string> = {
   seats: "Team seats",
   published_pages: "Published pages",
-  xoo_ai_requests_month: "Xoo AI requests this month",
+  brex_ai_requests_month: "Brex AI requests this month",
   visitor_chat_conversations_month: "Visitor chat conversations / month",
   connected_mailboxes: "Connected mailboxes",
   managed_service_hours_month: "Managed service hours / month",
@@ -19,16 +19,16 @@ const LABELS: Record<string, string> = {
 export default async function PlanPage() {
   const { supabase, org } = await requireOrg();
   const month = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString();
-  const [ents, seats, pages, xoo] = await Promise.all([
+  const [ents, seats, pages, brex] = await Promise.all([
     supabase.from("plan_entitlements").select("key, limit_value").eq("plan_code", org.plan_code),
     supabase.from("memberships").select("id", { count: "exact", head: true }).eq("organization_id", org.id),
     supabase.from("landing_pages").select("id", { count: "exact", head: true }).eq("organization_id", org.id).eq("status", "published"),
-    supabase.from("usage_events").select("quantity").eq("organization_id", org.id).eq("kind", "xoo_ai").gte("created_at", month),
+    supabase.from("usage_events").select("quantity").eq("organization_id", org.id).eq("kind", "brex_ai").gte("created_at", month),
   ]);
   const used: Record<string, number | undefined> = {
     seats: seats.count ?? 0,
     published_pages: pages.count ?? 0,
-    xoo_ai_requests_month: (xoo.data ?? []).reduce((s, r) => s + r.quantity, 0),
+    brex_ai_requests_month: (brex.data ?? []).reduce((s, r) => s + r.quantity, 0),
   };
   const plan = PLAN_BY_CODE[org.plan_code as keyof typeof PLAN_BY_CODE];
   return (

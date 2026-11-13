@@ -6,7 +6,7 @@ This repository implements the **"Build this first" journey** from the Brexoo pr
 
 > sign up → configure business and services → approve landing page → receive enquiry → manage CRM record → assign follow-up → book appointment → record outcome
 
-plus the marketing site, Discover Projects (approved sources with provenance and match scores), a bookings calendar, Xoo AI (read-only, grounded, with next best action) and the visitor chat assistant.
+plus the marketing site, Discover Projects (approved sources with provenance and match scores), a bookings calendar, Brex AI (read-only, grounded, with next best action) and the visitor chat assistant.
 
 See [docs/roadmap.md](docs/roadmap.md) for the 20-step roadmap with status and [docs/architecture.md](docs/architecture.md) for the system design.
 
@@ -34,7 +34,7 @@ Sign-up sends a real confirmation email; open it in the mail catcher at http://1
 | Command | What it checks |
 | --- | --- |
 | `npm run db:test` | 62 database assertions: tenant isolation (cross-tenant reads, writes, ID substitution, composite-key references), anonymous access, onboarding and page state machines, publish-needs-approval, enquiry validation, dedupe, rate limits, activity history |
-| `npm test` | Unit tests: fit and confidence scoring, time zones across daylight saving, money, visitor assistant guardrails, Xoo AI writers (do-not-contact refusal, prompt-injection text treated as data) |
+| `npm test` | Unit tests: fit and confidence scoring, time zones across daylight saving, money, visitor assistant guardrails, Brex AI writers (do-not-contact refusal, prompt-injection text treated as data) |
 | `npm run test:e2e` | The full builder journey in a browser against a production build and the local stack, plus access-control checks |
 | `npm run lint` / `npm run typecheck` / `npm run build` | Static checks |
 
@@ -47,10 +47,10 @@ app/(marketing)/       Public site: home, how it works, builders, trades, AI, ma
 app/(auth)/            Log in, sign up, verify, password reset
 app/app/setup          Create the organisation (owner membership is created in the same transaction)
 app/app/(workspace)/   The builder workspace: overview, enquiries, opportunities/[id], pipeline, tasks,
-                       appointments, contacts, landing pages (+ editor), reports, Xoo AI, settings
+                       appointments, contacts, landing pages (+ editor), reports, Brex AI, settings
 app/p/[slug]           Published builder landing page with progressive enquiry form and visitor chat
 app/api/jobs/notifications   Notification outbox worker (token-protected)
-features/              Domain logic and server actions: onboarding, landing-pages, crm, xoo-ai, visitor-chat, auth, workspace
+features/              Domain logic and server actions: onboarding, landing-pages, crm, brex-ai, visitor-chat, auth, workspace
 config/                Industry templates (15 verticals, Appendix A questions) and plan entitlements: the source of truth
 supabase/migrations/   Schema, RLS, RPCs; the templates/plans migration is generated from config/
 supabase/tests/        Database tests
@@ -64,7 +64,7 @@ components/            Design system (ui/), brand, marketing, app and public-pag
 - **Publishing.** Page status changes only through RPCs. A submission snapshots the draft into an immutable version; only an owner can approve; publishing requires an approved version and respects the plan's page limit.
 - **Enquiries are never lost.** The enquiry, contact, project, opportunity, follow-up task and activity are written in one transaction; notifications go to an outbox processed separately with retries.
 - **Explainable fit.** `features/crm/fit.ts` shows each factor and its reason, reports confidence separately, never infers budgets, and won't call a record a strong fit when most evidence is unknown.
-- **AI safety.** Xoo AI uses a short allowlist of read-only, tenant-scoped tools and deterministic, cited writers; drafts are returned for a person to send. The visitor assistant answers only from approved FAQs, services and areas, refuses prices, availability and licensing questions, and confirms with the visitor before creating an enquiry.
+- **AI safety.** Brex AI uses a short allowlist of read-only, tenant-scoped tools and deterministic, cited writers; drafts are returned for a person to send. The visitor assistant answers only from approved FAQs, services and areas, refuses prices, availability and licensing questions, and confirms with the visitor before creating an enquiry.
 - **Consent and opt-out.** Consent text and time are stored with each enquiry. Do-not-contact blocks drafts and outreach logging, and is audited.
 
 ## Environment variables
@@ -80,4 +80,4 @@ See `.env.example`. Only `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PU
 
 ## Not built yet (deliberately)
 
-Per the blueprint's phasing, these have seams but no implementation: external discovery feeds and the credit ledger, the Brexoo operations workspace and admin console, Stripe checkout and webhooks, Gmail/Microsoft mailbox sync, calendar provider sync, and a model-backed Xoo AI (the provider adapter is ready; adding a paid AI key needs founder approval). See `docs/known-limitations.md`.
+Per the blueprint's phasing, these have seams but no implementation: external discovery feeds and the credit ledger, the Brexoo operations workspace and admin console, Stripe checkout and webhooks, Gmail/Microsoft mailbox sync, calendar provider sync, and a model-backed Brex AI (the provider adapter is ready; adding a paid AI key needs founder approval). See `docs/known-limitations.md`.

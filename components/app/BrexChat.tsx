@@ -2,32 +2,32 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { ArrowUp, Sparkles } from "lucide-react";
-import { askXoo, type XooReply, type XooTool } from "@/features/xoo-ai/actions";
+import { askBrex, type BrexReply, type BrexTool } from "@/features/brex-ai/actions";
 import { Notice } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
-type Turn = { q: string; r?: XooReply };
+type Turn = { q: string; r?: BrexReply };
 
-const QUICK: { label: string; tool: XooTool }[] = [
+const QUICK: { label: string; tool: BrexTool }[] = [
   { label: "What's overdue?", tool: "overdue" },
   { label: "Summarise my pipeline", tool: "pipeline" },
   { label: "Which records are missing information?", tool: "missing" },
   { label: "Show recent enquiries", tool: "recent" },
 ];
 
-export function XooChat() {
+export function BrexChat() {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [input, setInput] = useState("");
   const [pending, start] = useTransition();
   const end = useRef<HTMLDivElement>(null);
   useEffect(() => end.current?.scrollIntoView({ behavior: "smooth", block: "end" }), [turns]);
 
-  const ask = (q: string, tool?: XooTool) => {
+  const ask = (q: string, tool?: BrexTool) => {
     if (!q.trim() || pending) return;
     setInput("");
     setTurns((t) => [...t, { q }]);
     start(async () => {
-      const r = await askXoo({ question: q, tool });
+      const r = await askBrex({ question: q, tool });
       setTurns((t) => t.map((x, i) => (i === t.length - 1 ? { ...x, r } : x)));
     });
   };
@@ -40,8 +40,8 @@ export function XooChat() {
             <span className="grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-blue to-teal text-white shadow-md">
               <Sparkles className="size-6" aria-hidden />
             </span>
-            <h2 className="mt-5 text-[24px] font-semibold tracking-tight">Ask Xoo about your work</h2>
-            <p className="mt-2 max-w-md text-[14px] text-ink-3">Xoo reads your own Brexoo records, read-only, and points to where each answer came from. On any enquiry you can also ask for a summary, a draft reply or a site-visit brief.</p>
+            <h2 className="mt-5 text-[24px] font-semibold tracking-tight">Ask Brex AI about your work</h2>
+            <p className="mt-2 max-w-md text-[14px] text-ink-3">Brex AI reads your own Brexoo records, read-only, and points to where each answer came from. On any enquiry you can also ask for a summary, a draft reply or a site-visit brief.</p>
             <div className="mt-6 flex max-w-xl flex-wrap justify-center gap-2">
               {QUICK.map((q) => (
                 <button key={q.label} type="button" onClick={() => ask(q.label, q.tool)} className="pressable rounded-full border border-line-strong bg-surface px-3.5 py-2 text-[13px] text-ink-2 hover:bg-surface-2">
@@ -91,15 +91,15 @@ export function XooChat() {
           ask(input);
         }}
       >
-        <label htmlFor="xoo-input" className="sr-only">
-          Ask Xoo
+        <label htmlFor="brex-input" className="sr-only">
+          Ask Brex AI
         </label>
-        <input id="xoo-input" value={input} onChange={(e) => setInput(e.target.value)} maxLength={500} placeholder="Ask about overdue tasks, your pipeline, missing details…" className="h-11 min-w-0 flex-1 bg-transparent px-3 text-[15px] outline-none placeholder:text-ink-3" autoComplete="off" />
+        <input id="brex-input" value={input} onChange={(e) => setInput(e.target.value)} maxLength={500} placeholder="Ask about overdue tasks, your pipeline, missing details…" className="h-11 min-w-0 flex-1 bg-transparent px-3 text-[15px] outline-none placeholder:text-ink-3" autoComplete="off" />
         <button type="submit" disabled={!input.trim() || pending} className={cn("pressable grid size-10 place-items-center rounded-xl bg-blue text-on-blue disabled:opacity-40")} aria-label="Ask">
           <ArrowUp className="size-5" />
         </button>
       </form>
-      <p className="mt-2 text-center text-[12px] text-ink-3">Xoo can't send, book, change or delete anything.</p>
+      <p className="mt-2 text-center text-[12px] text-ink-3">Brex AI can't send, book, change or delete anything.</p>
     </div>
   );
 }

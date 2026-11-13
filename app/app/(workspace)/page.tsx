@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, CalendarCheck, CircleCheck, Circle, Clock, Funnel, Inbox, Trophy } from "lucide-react";
+import { ArrowRight, CalendarCheck, CircleCheck, Circle, Clock, Funnel, Gauge, Inbox, Magnet, Trophy } from "lucide-react";
 import { Page } from "@/components/app/PageHeader";
 import { AreaChart } from "@/components/app/dash/AreaChart";
 import { DataTable, Delta, Panel, PanelHeader, StatCard, StatusPill } from "@/components/app/dash";
 import { Avatar, ButtonLink, EmptyState } from "@/components/ui";
 import { PLAN_BY_CODE } from "@/config/plans";
 import { activationChecklist } from "@/features/onboarding/steps";
+import { INTENT_LABEL, computeIntent } from "@/features/crm/intent";
 import { getFitContext } from "@/features/crm/queries";
 import { APPT_TYPE_LABEL, STAGE_BY_ID } from "@/features/crm/stages";
 import { requireOrg } from "@/lib/auth/session";
@@ -34,8 +35,8 @@ export default async function OverviewPage() {
   const prevStart = new Date(now - 2 * PERIOD * DAY);
   const inCur = (iso: string) => +new Date(iso) >= +start;
 
-  const [enq, opps, appts, recent, dueTasks, pages, ob, counts, fc, usage, plan] = await Promise.all([
-    supabase.from("enquiries").select("id, received_at, first_response_at, status").eq("organization_id", org.id).gte("received_at", prevStart.toISOString()),
+  const [enq, opps, appts, recent, dueTasks, pages, ob, counts, fc, usage, plan, openOpps, found] = await Promise.all([
+    supabase.from("enquiries").select("id, received_at, first_response_at, status, source").eq("organization_id", org.id).gte("received_at", prevStart.toISOString()),
     supabase.from("opportunities").select("id, stage, value_minor, closed_at, enquiry_id, appointments(count)").eq("organization_id", org.id),
     supabase.from("appointments").select("id, created_at, starts_at, status, type, opportunity_id, contact:contacts(full_name)").eq("organization_id", org.id).gte("starts_at", prevStart.toISOString()).order("starts_at"),
     supabase
@@ -54,8 +55,16 @@ export default async function OverviewPage() {
       supabase.from("memberships").select("user_id", { count: "exact", head: true }).eq("organization_id", org.id),
     ]),
     getFitContext(ctx),
-    supabase.from("usage_events").select("quantity").eq("organization_id", org.id).eq("kind", "xoo_ai").gte("created_at", new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()),
+    supabase.from("usage_events").select("quantity").eq("organization_id", org.id).eq("kind", "brex_ai").gte("created_at", new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()),
     supabase.from("plan_entitlements").select("key, limit_value").eq("plan_code", org.plan_code),
+    supabase
+      .from("opportunities")
+      .select("id, title, stage, created_at, contact:contacts(full_name), project:projects(start_timing, budget_label), enquiry:enquiries!opportunities_enquiry_id_organization_id_fkey(answers, message, duplicate_count, received_at), appointments(count)")
+      .eq("organization_id", org.id)
+      .not("stage", "in", "(won,lost)")
+      .order("created_at", { ascending: false })
+      .limit(200),
+    supabase.from("project_records").select("status, imported_at, saved_at").eq("organization_id", org.id).gte("imported_at", start.toISOString()),
   ]);
 
   const E = enq.data ?? [];
@@ -105,6 +114,35 @@ export default async function OverviewPage() {
   ];
   const conversion = cur.length ? ((won / cur.length) * 100).toFixed(1) : "0.0";
 
+  // Buying intent for open opportunities: inferred from recorded evidence, never presented as fact.
+  const intents = (openOpps.data ?? [])
+    .map((o) => ({
+      o,
+      intent: computeIntent({
+        answers: (o.enquiry?.answers ?? {}) as Record<string, unknown>,
+        message: o.enquiry?.message,
+        duplicateCount: o.enquiry?.duplicate_count,
+        startTiming: o.project?.start_timing,
+        budgetLabel: o.project?.budget_label,
+        appointmentCount: o.appointments?.[0]?.count ?? 0,
+        receivedAt: o.enquiry?.received_at ?? o.created_at,
+        now,
+      }),
+    }))
+    .sort((a, b) => b.intent.score - a.intent.score);
+  const intentCounts = { high: 0, medium: 0, low: 0, unknown: 0 };
+  for (const i of intents) intentCounts[i.intent.level]++;
+
+  // Lead capture: where this period's leads came from.
+  const F = found.data ?? [];
+  const capture = [
+    { label: "Landing page form", n: cur.filter((e) => e.source === "landing_page").length, color: "var(--blue)" },
+    { label: "Website chat", n: cur.filter((e) => e.source === "visitor_chat").length, color: "var(--teal)" },
+    { label: "Added manually", n: cur.filter((e) => e.source === "manual").length, color: "var(--line-strong)" },
+    { label: "Saved from Discover", n: F.filter((r) => r.status === "saved").length, color: "var(--midnight)" },
+  ];
+  const captureTotal = capture.reduce((t, c) => t + c.n, 0);
+
   const [svc, areas, qs, members] = counts;
   const checklist = activationChecklist({
     org: { phone: org.phone, website: org.website, contact_name: org.contact_name, settings: (org.settings ?? {}) as Record<string, unknown> },
@@ -118,9 +156,9 @@ export default async function OverviewPage() {
   const todo = checklist.filter((c) => !c.done);
   const planInfo = PLAN_BY_CODE[org.plan_code as keyof typeof PLAN_BY_CODE];
   const limit = (k: string) => plan.data?.find((p) => p.key === k)?.limit_value ?? null;
-  const used = { xoo: (usage.data ?? []).reduce((s, r) => s + r.quantity, 0), pages: (pages.data ?? []).filter((p) => p.status === "published").length, seats: members.count ?? 1 };
+  const used = { brex: (usage.data ?? []).reduce((s, r) => s + r.quantity, 0), pages: (pages.data ?? []).filter((p) => p.status === "published").length, seats: members.count ?? 1 };
   const meters = [
-    { label: "Xoo AI this month", used: used.xoo, limit: limit("xoo_ai_requests_month") },
+    { label: "Brex AI this month", used: used.brex, limit: limit("brex_ai_requests_month") },
     { label: "Published pages", used: used.pages, limit: limit("published_pages") },
     { label: "Team seats", used: used.seats, limit: limit("seats") },
   ];
@@ -231,6 +269,64 @@ export default async function OverviewPage() {
               );
             })}
           </ul>
+        </Panel>
+      </div>
+
+
+      <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+        <Panel>
+          <PanelHeader
+            eyebrow="Buying intent"
+            title={intentCounts.high}
+            icon={<Gauge />}
+            badge={<span className="rounded-full border border-line px-2 py-0.5 text-[11px] font-medium text-ink-3">Inferred</span>}
+            action={<span className="text-[12px] text-ink-3">{intentCounts.high} high · {intentCounts.medium} medium · {intentCounts.low} low</span>}
+          />
+          <p className="px-5 pt-1 text-[12px] text-ink-3">Open leads ranked by how ready they look, from what&apos;s on the record. A prediction, not a confirmed request.</p>
+          <ul className="mt-3 divide-y divide-line border-t border-line">
+            {intents.length === 0 ? <li className="px-5 py-4 text-[14px] text-ink-3">No open leads yet.</li> : null}
+            {intents.slice(0, 5).map(({ o, intent }) => (
+              <li key={o.id}>
+                <Link href={`/app/opportunities/${o.id}`} className="flex items-start gap-3 px-5 py-3 hover:bg-surface-2/50">
+                  <Avatar name={o.contact?.full_name ?? "?"} className="size-8" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-[14px] font-medium">{o.contact?.full_name ?? o.title}</span>
+                    <span className="mt-1 flex flex-wrap gap-1">
+                      {intent.evidence.slice(0, 3).map((e) => (
+                        <span key={e.label} className={e.effect > 0 ? "rounded-md bg-green-soft px-1.5 py-0.5 text-[11px] text-green-ink" : "rounded-md bg-surface-2 px-1.5 py-0.5 text-[11px] text-ink-3"}>
+                          {e.effect > 0 ? "+" : "−"} {e.label}
+                        </span>
+                      ))}
+                    </span>
+                  </span>
+                  <StatusPill tone={intent.level === "high" ? "green" : intent.level === "medium" ? "amber" : "neutral"}>{INTENT_LABEL[intent.level]}</StatusPill>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Panel>
+        <Panel>
+          <PanelHeader eyebrow="Lead capture" title={captureTotal} icon={<Magnet />} badge={<span className="text-[12px] text-ink-3">last {PERIOD} days</span>} />
+          <div className="m-5 mb-3 flex h-3 overflow-hidden rounded-full bg-surface-2" aria-hidden>
+            {capture.map((c) => (captureTotal ? <span key={c.label} style={{ width: `${(c.n / captureTotal) * 100}%`, background: c.color }} /> : null))}
+          </div>
+          <ul className="mx-3 mb-3 divide-y divide-line rounded-xl border border-line">
+            {capture.map((c) => (
+              <li key={c.label} className="flex items-center justify-between gap-3 px-4 py-3">
+                <span className="flex items-center gap-2.5 text-[14px]">
+                  <span className="size-2.5 rounded-sm" style={{ background: c.color }} aria-hidden />
+                  {c.label}
+                </span>
+                <span className="text-[14px] font-semibold tabular">
+                  {c.n}
+                  <span className="ml-2 text-[12px] font-normal text-ink-3">{captureTotal ? `${Math.round((c.n / captureTotal) * 100)}%` : "0%"}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="px-5 pb-4 text-[12px] text-ink-3">
+            {F.length} project records found in Discover this period. <Link href="/app/discover" className="text-blue hover:underline">Review them</Link>
+          </p>
         </Panel>
       </div>
 

@@ -1,85 +1,179 @@
 import { INDUSTRY_BY_CODE } from "@/config/industry-templates";
 import { ButtonLink } from "@/components/ui";
+import { cn } from "@/lib/cn";
 import { INDUSTRY_ICON } from "./industry-icons";
 import { FitCardMock, PhonePageMock } from "./mocks";
+import { HorizontalPin, Marquee, Parallax, SlideIn, TiltIn } from "./motion";
 import { PageHero } from "./PageHero";
-import { Reveal } from "./Reveal";
-import { Container, CtaBand, SectionHeading } from "./Section";
+import { Container, CtaBand, Eyebrow } from "./Section";
 
-export function IndustryPage({ eyebrow, title, body, codes, workflow }: { eyebrow: string; title: string; body: string; codes: string[]; workflow: { t: string; b: string }[] }) {
+/**
+ * Shared content model for the builders and trades pages, with two different scroll designs:
+ * - "zigzag" (builders): services swing in from alternating sides, the workflow pins and slides sideways
+ * - "tiles" (trades): services tilt up as a tile wall, questions drift past in a marquee,
+ *   and the workflow sits beside a floating phone
+ */
+export function IndustryPage({
+  eyebrow,
+  title,
+  body,
+  codes,
+  workflow,
+  layout,
+}: {
+  eyebrow: string;
+  title: string;
+  body: string;
+  codes: string[];
+  workflow: { t: string; b: string }[];
+  layout: "zigzag" | "tiles";
+}) {
   return (
     <>
-      <PageHero eyebrow={eyebrow} title={title} body={body}>
+      <PageHero variant={layout === "zigzag" ? "split" : "left"} eyebrow={eyebrow} title={title} body={body} aside={<PhonePageMock />}>
         <ButtonLink href="/demo" size="lg">
-          Request a demo
+          Request a Demo
         </ButtonLink>
-        <ButtonLink href="/pricing" size="lg" variant="secondary">
+        <ButtonLink href="/pricing" size="lg" variant="outline">
           Explore plans
         </ButtonLink>
       </PageHero>
 
-      <section className="py-20 sm:py-28">
-        <Container>
-          <SectionHeading eyebrow="Your services" title="Questions that fit the work." body="Each service comes with qualification questions drawn from how the work is actually scoped. Keep them, edit them or add your own." />
-          <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {codes.map((code, i) => {
-              const t = INDUSTRY_BY_CODE[code]!;
-              const Icon = INDUSTRY_ICON[code]!;
-              return (
-                <Reveal key={code} delay={(i % 3) * 0.04} className="rounded-2xl border border-line bg-surface p-6 shadow-xs">
-                  <div className="flex items-center gap-3">
-                    <span className="grid size-9 place-items-center rounded-xl bg-blue-soft text-blue">
-                      <Icon className="size-[18px]" aria-hidden />
-                    </span>
-                    <h3 className="font-sans text-[16px] font-semibold tracking-normal">{t.name}</h3>
-                  </div>
-                  <p className="mt-4 text-[13px] font-medium text-ink-3">Typical opportunities</p>
-                  <p className="mt-1 text-[14px] text-ink-2">{t.opportunityTypes.join(" · ")}</p>
-                  <p className="mt-4 text-[13px] font-medium text-ink-3">We ask</p>
-                  <ul className="mt-1.5 grid gap-1">
-                    {t.questions.slice(0, 4).map((q) => (
-                      <li key={q.key} className="text-[14px] text-ink-2">
-                        {q.label}
-                      </li>
-                    ))}
-                  </ul>
-                </Reveal>
-              );
-            })}
-          </div>
-        </Container>
-      </section>
+      {layout === "zigzag" ? <ZigzagServices codes={codes} /> : <TileServices codes={codes} />}
 
-      <section className="border-y border-line bg-surface py-20 sm:py-28">
-        <Container className="grid items-center gap-14 lg:grid-cols-2">
-          <div>
-            <SectionHeading eyebrow="How it works for you" title="A clear path from enquiry to booked visit." />
-            <ol className="mt-10 grid gap-6">
-              {workflow.map((s, i) => (
-                <Reveal as="li" key={s.t} delay={i * 0.04} className="flex gap-4">
-                  <span className="grid size-8 shrink-0 place-items-center rounded-full border border-line-strong text-[13px] font-semibold tabular text-ink-2">{i + 1}</span>
-                  <div>
-                    <p className="text-[16px] font-semibold">{s.t}</p>
-                    <p className="mt-1 text-[15px] leading-relaxed text-ink-3">{s.b}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </ol>
-          </div>
-          <Reveal className="grid gap-6 sm:grid-cols-[auto_1fr] sm:items-center">
-            <PhonePageMock className="max-sm:hidden" />
-            <FitCardMock />
-          </Reveal>
-        </Container>
-      </section>
+      {layout === "zigzag" ? (
+        <section className="bg-surface-2/50">
+          <Container className="pt-20 sm:pt-28">
+            <Eyebrow>How it works for you</Eyebrow>
+            <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[52px]">A clear path from enquiry to site visit.</h2>
+          </Container>
+          <HorizontalPin>
+            {workflow.map((s, i) => (
+              <div key={s.t} className="flex w-full max-w-[880px] flex-col justify-between gap-10 rounded-[32px] border border-line bg-white p-10 shadow-sm md:min-h-[420px] md:p-14">
+                <p className="text-[120px] font-extralight leading-none tracking-[-0.06em] text-blue/20 tabular">{String(i + 1).padStart(2, "0")}</p>
+                <div>
+                  <h3 className="text-[32px] font-light leading-[1.1] tracking-[-0.03em] md:text-[44px]">{s.t}</h3>
+                  <p className="mt-4 max-w-xl text-[17px] font-light leading-relaxed text-ink-2">{s.b}</p>
+                </div>
+              </div>
+            ))}
+          </HorizontalPin>
+        </section>
+      ) : (
+        <section className="border-y border-line bg-surface-2/50 py-20 sm:py-28">
+          <Container className="grid items-start gap-14 lg:grid-cols-[1fr_0.8fr]">
+            <div>
+              <Eyebrow>How it works for you</Eyebrow>
+              <h2 className="mt-4 max-w-[18ch] text-[38px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[52px]">From the first message to the booked visit.</h2>
+              <ol className="mt-12 grid gap-4">
+                {workflow.map((s, i) => (
+                  <li key={s.t}>
+                    <SlideIn from="bottom" delay={i * 0.06} className="flex gap-5 rounded-[22px] border border-line bg-white p-6">
+                      <span className="grid size-10 shrink-0 place-items-center rounded-full bg-blue text-[14px] font-medium text-white tabular">{i + 1}</span>
+                      <div>
+                        <p className="text-[19px] font-normal">{s.t}</p>
+                        <p className="mt-1 text-[15px] font-light leading-relaxed text-ink-3">{s.b}</p>
+                      </div>
+                    </SlideIn>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <Parallax speed={0.18} className="lg:sticky lg:top-28">
+              <FitCardMock />
+            </Parallax>
+          </Container>
+        </section>
+      )}
 
-      <div className="pt-24">
+      <div className="bg-white pt-24">
         <CtaBand title="See it with your services." body="We'll set up a demo using your trade, your service area and your questions.">
           <ButtonLink href="/demo" variant="inverse" size="lg">
-            Request a demo
+            Request a Demo
           </ButtonLink>
         </CtaBand>
       </div>
     </>
+  );
+}
+
+function ZigzagServices({ codes }: { codes: string[] }) {
+  return (
+    <section className="bg-white py-20 sm:py-28">
+      <Container>
+        <Eyebrow>Your services</Eyebrow>
+        <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[52px]">Questions that fit the work.</h2>
+        <div className="mt-16 grid gap-20">
+          {codes.map((code, i) => {
+            const t = INDUSTRY_BY_CODE[code]!;
+            const Icon = INDUSTRY_ICON[code]!;
+            const flip = i % 2 === 1;
+            return (
+              <div key={code} className="grid items-center gap-10 md:grid-cols-2 md:gap-20">
+                <SlideIn from={flip ? "right" : "left"} className={cn(flip && "md:order-last")}>
+                  <Icon className="size-10 text-blue" strokeWidth={1.2} aria-hidden />
+                  <h3 className="mt-5 text-[40px] font-extralight leading-none tracking-[-0.04em] sm:text-[56px]">{t.name}</h3>
+                  <p className="mt-4 text-[17px] font-light leading-relaxed text-ink-2">{t.opportunityTypes.join(" · ")}</p>
+                </SlideIn>
+                <SlideIn from={flip ? "left" : "right"} delay={0.1}>
+                  <div className="rounded-[26px] border border-line bg-surface-2/40 p-7">
+                    <p className="text-[13px] font-medium uppercase tracking-[0.18em] text-ink-3">We ask</p>
+                    <ul className="mt-4 grid gap-2">
+                      {t.questions.slice(0, 5).map((q, k) => (
+                        <li key={q.key} className="flex items-baseline gap-3 border-b border-line pb-2 text-[16px] font-light text-ink-2 last:border-0">
+                          <span className="text-[12px] text-ink-3 tabular">{String(k + 1).padStart(2, "0")}</span>
+                          {q.label}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </SlideIn>
+              </div>
+            );
+          })}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function TileServices({ codes }: { codes: string[] }) {
+  const questions = codes.flatMap((c) => INDUSTRY_BY_CODE[c]!.questions.slice(0, 2).map((q) => q.label));
+  return (
+    <section className="overflow-hidden bg-white py-20 sm:py-28">
+      <Container>
+        <Eyebrow>Your services</Eyebrow>
+        <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[52px]">Every trade, its own questions.</h2>
+        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {codes.map((code, i) => {
+            const t = INDUSTRY_BY_CODE[code]!;
+            const Icon = INDUSTRY_ICON[code]!;
+            return (
+              <li key={code}>
+                <TiltIn delay={(i % 4) * 0.07} className="h-full">
+                  <div className="group flex h-full flex-col rounded-[24px] border border-line bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-blue/40 hover:shadow-lg">
+                    <span className="grid size-12 place-items-center rounded-2xl bg-blue-soft text-blue transition-colors group-hover:bg-blue group-hover:text-white">
+                      <Icon className="size-6" strokeWidth={1.5} aria-hidden />
+                    </span>
+                    <h3 className="mt-6 text-[22px] font-light tracking-[-0.02em]">{t.name}</h3>
+                    <p className="mt-2 text-[14px] font-light leading-relaxed text-ink-3">{t.opportunityTypes.join(" · ")}</p>
+                  </div>
+                </TiltIn>
+              </li>
+            );
+          })}
+        </ul>
+      </Container>
+      <div className="mt-16 grid gap-3">
+        <p className="text-center text-[13px] uppercase tracking-[0.24em] text-ink-3">Questions your customers answer</p>
+        <Marquee speed={70}>
+          {questions.map((q, i) => (
+            <span key={`${q}-${i}`} className="shrink-0 rounded-full border border-line bg-surface-2/60 px-5 py-3 text-[15px] font-light text-ink-2">
+              {q}
+            </span>
+          ))}
+        </Marquee>
+      </div>
+    </section>
   );
 }

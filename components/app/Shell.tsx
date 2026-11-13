@@ -10,6 +10,7 @@ import {
   CircleQuestionMark,
   Compass,
   FileText,
+  Handshake,
   Inbox,
   LayoutDashboard,
   ListTodo,
@@ -43,7 +44,7 @@ export type ShellProps = {
   userEmail: string;
   team: string[];
   today: string;
-  counts: { unreviewed: number; overdue: number };
+  counts: { unreviewed: number; overdue: number; notifications: number };
   initialCollapsed: boolean;
   children: React.ReactNode;
 };
@@ -90,6 +91,7 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
         { href: "/app/pipeline", label: "Pipeline", icon: SquareKanban },
         { href: "/app/tasks", label: "Tasks", icon: ListTodo, badge: counts.overdue },
         { href: "/app/appointments", label: "Appointments", icon: CalendarDays },
+        { href: "/app/clients", label: "Clients", icon: Handshake },
         { href: "/app/contacts", label: "Contacts", icon: Users },
       ],
     },
@@ -98,10 +100,15 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
       items: [
         { href: "/app/landing-pages", label: "Landing pages", icon: FileText },
         { href: "/app/reports", label: "Reports", icon: ChartColumn },
-        { href: "/app/xoo", label: "AI Xoo", icon: Sparkles },
+        { href: "/app/brex-ai", label: "Brex AI", icon: Sparkles },
       ],
     },
-    { label: "Account", items: [{ href: "/app/settings", label: "Settings", icon: Settings }] },
+    {
+      label: "Account",
+      items: [
+        { href: "/app/settings", label: "Settings", icon: Settings },
+      ],
+    },
   ];
   const isActive = (item: NavItem) => (item.exact ? pathname === item.href : pathname === item.href || pathname.startsWith(item.href + "/"));
 
@@ -265,13 +272,15 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
           <Link href="/how-it-works" target="_blank" className="pressable hidden size-10 place-items-center rounded-lg text-ink-2 hover:bg-surface-2 sm:grid" aria-label="Help: how Brexoo works (opens in a new tab)">
             <CircleQuestionMark className="size-5" />
           </Link>
-          <Link href="/app/enquiries?status=unreviewed" className="pressable relative grid size-10 shrink-0 place-items-center rounded-lg text-ink-2 hover:bg-surface-2" aria-label={counts.unreviewed ? `${counts.unreviewed} enquiries to review` : "No new enquiries"}>
+          <Link href="/app/notifications" className="pressable relative grid size-10 shrink-0 place-items-center rounded-lg text-ink-2 hover:bg-surface-2" aria-label={counts.notifications ? `Notifications: ${counts.notifications} new` : "Notifications"}>
             <Bell className="size-5" />
-            {counts.unreviewed ? <span className="absolute right-2 top-2 size-2 rounded-full bg-[#e5533d] ring-2 ring-surface" /> : null}
+            {counts.notifications ? (
+              <span className="absolute right-1 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#e5533d] px-1 text-[10px] font-semibold leading-none text-white ring-2 ring-surface tabular">{counts.notifications > 99 ? "99+" : counts.notifications}</span>
+            ) : null}
           </Link>
-          <Link href="/app/xoo" className="pressable inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-midnight px-3 text-[14px] font-medium text-white hover:bg-midnight-hover dark:bg-blue dark:text-on-blue">
+          <Link href="/app/brex-ai" className="pressable inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-midnight px-3 text-[14px] font-medium text-white hover:bg-midnight-hover dark:bg-blue dark:text-on-blue">
             <Sparkles className="size-4" aria-hidden />
-            <span className="max-sm:sr-only">Ask Xoo</span>
+            <span className="max-sm:sr-only">Ask Brex AI</span>
           </Link>
         </header>
         {children}

@@ -18,7 +18,7 @@ import {
   type ActionResult,
 } from "@/features/crm/actions";
 import { APPT_STATUS, APPT_TYPE_LABEL, LOSS_REASONS, STAGES, type LossReason, type Stage } from "@/features/crm/stages";
-import { askXoo, type XooReply, type XooTool } from "@/features/xoo-ai/actions";
+import { askBrex, type BrexReply, type BrexTool } from "@/features/brex-ai/actions";
 import { Badge, Button, Checkbox, Field, Input, Notice, Select, Textarea } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { formatDateTime, formatRelative, utcToZonedInputs } from "@/lib/format";
@@ -573,16 +573,16 @@ export function BookDialog({
   );
 }
 
-/* Xoo AI panel ----------------------------------------------------------------------------------- */
-export function XooPanel({ oppId }: { oppId: string }) {
-  const [reply, setReply] = useState<XooReply | null>(null);
-  const [active, setActive] = useState<XooTool | null>(null);
+/* Brex AI panel ----------------------------------------------------------------------------------- */
+export function BrexPanel({ oppId }: { oppId: string }) {
+  const [reply, setReply] = useState<BrexReply | null>(null);
+  const [active, setActive] = useState<BrexTool | null>(null);
   const [pending, start] = useTransition();
   const [copied, setCopied] = useState(false);
-  const ask = (tool: XooTool) => {
+  const ask = (tool: BrexTool) => {
     setActive(tool);
     setCopied(false);
-    start(async () => setReply(await askXoo({ tool, opportunityId: oppId })));
+    start(async () => setReply(await askBrex({ tool, opportunityId: oppId })));
   };
   const draftText = reply?.draft ? `${reply.draft.subject ? `Subject: ${reply.draft.subject}\n\n` : ""}${reply.draft.body}` : "";
   return (
@@ -630,7 +630,7 @@ export function XooPanel({ oppId }: { oppId: string }) {
             ) : null}
             <p className="text-[12px] text-ink-3">
               <Sparkles className="mr-1 inline size-3.5" aria-hidden />
-              Xoo reads this record only and never sends anything.{reply.remaining != null ? ` ${reply.remaining} requests left this month.` : ""}
+              Brex AI reads this record only and never sends anything.{reply.remaining != null ? ` ${reply.remaining} requests left this month.` : ""}
             </p>
           </div>
         ) : (

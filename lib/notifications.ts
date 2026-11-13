@@ -2,6 +2,7 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import { SITE_URL } from "@/lib/env";
+import { postToMake } from "@/lib/integrations/make";
 
 type Row = Database["public"]["Tables"]["notification_outbox"]["Row"];
 type Result = { status: "sent" | "failed" | "skipped"; error?: string };
@@ -12,6 +13,7 @@ type Result = { status: "sent" | "failed" | "skipped"; error?: string };
  * Swap this function to change provider without touching product code (§16.3).
  */
 export async function deliverNotification(admin: SupabaseClient<Database>, n: Row): Promise<Result> {
+  if (n.kind === "webhook.make") return deliverMake(admin, n);
   if (n.kind !== "enquiry.received" || !n.organization_id) return { status: "skipped", error: "No delivery rule for this kind" };
   const p = n.payload as { reference?: string; contact_name?: string; category?: string; opportunity_id?: string; owner_id?: string };
 
@@ -40,4 +42,15 @@ export async function deliverNotification(admin: SupabaseClient<Database>, n: Ro
   }).catch((e: unknown) => ({ ok: false, status: 0, statusText: String(e) }) as Response);
   if (!res.ok) return { status: "failed", error: `Email provider ${res.status} ${res.statusText}` };
   return { status: "sent" };
+}
+
+/** Make.com webhook delivery for events fanned out by the database (see the integrations migration). */
+async function deliverMake(admin: SupabaseClient<Database>, n: Row): Promise<Result> {
+  const p = n.payload as { integration_id?: string; event?: string; data?: Record<string, unknown> };
+  if (!p.integration_id || !p.event) return { status: "skipped", error: "Malformed webhook payload" };
+  const { data: integ } = await admin.from("integrations").select("id, url, secret, enabled, organization_id").eq("id", p.integration_id).single();
+  if (!integ || !integ.enabled || integ.organization_id !== n.organization_id) return { status: "skipped", error: "Integration disabled or removed" };
+  const r = await postToMake(integ.url, integ.secret, p.event, p.data ?? {}, n.id);
+  await admin.rpc("record_integration_delivery", { p_id: integ.id, p_status: r.ok ? `Delivered (${r.status})` : `Failed (${r.status})` });
+  return r.ok ? { status: "sent" } : { status: "failed", error: r.status };
 }

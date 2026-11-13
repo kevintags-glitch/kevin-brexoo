@@ -92,7 +92,7 @@ export function SiteHeader() {
             </Link>
           ))}
           <Link href="/ai" className="border-b border-line py-4 font-display text-2xl tracking-tight text-ink">
-            Brexoo AI
+            Brex AI
           </Link>
         </nav>
         <div className="mt-6 grid gap-3">

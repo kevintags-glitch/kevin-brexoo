@@ -7,7 +7,7 @@
 export type EntitlementKey =
   | "seats"
   | "published_pages"
-  | "xoo_ai_requests_month"
+  | "brex_ai_requests_month"
   | "visitor_chat_conversations_month"
   | "connected_mailboxes"
   | "managed_service_hours_month"
@@ -36,7 +36,7 @@ export const PLANS: Plan[] = [
     entitlements: {
       seats: 3,
       published_pages: 1,
-      xoo_ai_requests_month: 200,
+      brex_ai_requests_month: 200,
       visitor_chat_conversations_month: 300,
       connected_mailboxes: 0,
       managed_service_hours_month: 0,
@@ -46,7 +46,7 @@ export const PLANS: Plan[] = [
       "1 published landing page",
       "Enquiry capture with consent and spam checks",
       "CRM pipeline, tasks and appointments",
-      "Xoo AI summaries and drafts (200 / month)",
+      "Brex AI summaries and drafts (200 / month)",
       "Up to 3 team seats",
     ],
   },
@@ -60,7 +60,7 @@ export const PLANS: Plan[] = [
     entitlements: {
       seats: 10,
       published_pages: 3,
-      xoo_ai_requests_month: 1000,
+      brex_ai_requests_month: 1000,
       visitor_chat_conversations_month: 1500,
       connected_mailboxes: 2,
       managed_service_hours_month: 0,
@@ -69,7 +69,7 @@ export const PLANS: Plan[] = [
     highlights: [
       "Up to 3 published landing pages",
       "Everything in Launch",
-      "Xoo AI (1,000 / month)",
+      "Brex AI (1,000 / month)",
       "Up to 10 team seats",
       "Discovery credits when sourced data launches",
     ],
@@ -84,7 +84,7 @@ export const PLANS: Plan[] = [
     entitlements: {
       seats: 25,
       published_pages: 5,
-      xoo_ai_requests_month: 3000,
+      brex_ai_requests_month: 3000,
       visitor_chat_conversations_month: 5000,
       connected_mailboxes: 5,
       managed_service_hours_month: 20,

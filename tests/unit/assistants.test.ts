@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { computeFit } from "@/features/crm/fit";
 import { answer, type ChatKnowledge } from "@/features/visitor-chat/engine";
-import { draftFollowUp, summarizeRecord, type RecordInput } from "@/features/xoo-ai/summarize";
+import { draftFollowUp, summarizeRecord, type RecordInput } from "@/features/brex-ai/summarize";
 import { generateDraft, pageContentSchema, parsePageContent } from "@/features/landing-pages/content";
 import { publicQuestions } from "@/config/industry-templates";
 
@@ -67,7 +67,7 @@ const record: RecordInput = {
   fit,
 };
 
-describe("Xoo AI writers", () => {
+describe("Brex AI writers", () => {
   it("cites the record and quotes prospect text as data", () => {
     const s = summarizeRecord(record);
     expect(s[0]!.cite).toBe("Enquiry 7F3A21C0");

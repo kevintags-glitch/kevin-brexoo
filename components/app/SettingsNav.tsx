@@ -7,6 +7,7 @@ const ITEMS = [
   { href: "/app/settings", label: "Business" },
   { href: "/app/settings/team", label: "Team" },
   { href: "/app/settings/plan", label: "Plan & usage" },
+  { href: "/app/settings/integrations", label: "Integrations" },
   { href: "/app/settings/audit", label: "Audit log" },
 ];
 

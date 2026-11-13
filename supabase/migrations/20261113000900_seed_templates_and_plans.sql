@@ -67,7 +67,7 @@ insert into public.plan_entitlements (plan_code, key, limit_value) values ('laun
   on conflict (plan_code, key) do update set limit_value = excluded.limit_value;
 insert into public.plan_entitlements (plan_code, key, limit_value) values ('launch', 'published_pages', 1)
   on conflict (plan_code, key) do update set limit_value = excluded.limit_value;
-insert into public.plan_entitlements (plan_code, key, limit_value) values ('launch', 'xoo_ai_requests_month', 200)
+insert into public.plan_entitlements (plan_code, key, limit_value) values ('launch', 'brex_ai_requests_month', 200)
   on conflict (plan_code, key) do update set limit_value = excluded.limit_value;
 insert into public.plan_entitlements (plan_code, key, limit_value) values ('launch', 'visitor_chat_conversations_month', 300)
   on conflict (plan_code, key) do update set limit_value = excluded.limit_value;
@@ -83,7 +83,7 @@ insert into public.plan_entitlements (plan_code, key, limit_value) values ('grow
   on conflict (plan_code, key) do update set limit_value = excluded.limit_value;
 insert into public.plan_entitlements (plan_code, key, limit_value) values ('growth', 'published_pages', 3)
   on conflict (plan_code, key) do update set limit_value = excluded.limit_value;
-insert into public.plan_entitlements (plan_code, key, limit_value) values ('growth', 'xoo_ai_requests_month', 1000)
+insert into public.plan_entitlements (plan_code, key, limit_value) values ('growth', 'brex_ai_requests_month', 1000)
   on conflict (plan_code, key) do update set limit_value = excluded.limit_value;
 insert into public.plan_entitlements (plan_code, key, limit_value) values ('growth', 'visitor_chat_conversations_month', 1500)
   on conflict (plan_code, key) do update set limit_value = excluded.limit_value;
@@ -99,7 +99,7 @@ insert into public.plan_entitlements (plan_code, key, limit_value) values ('mana
   on conflict (plan_code, key) do update set limit_value = excluded.limit_value;
 insert into public.plan_entitlements (plan_code, key, limit_value) values ('managed', 'published_pages', 5)
   on conflict (plan_code, key) do update set limit_value = excluded.limit_value;
-insert into public.plan_entitlements (plan_code, key, limit_value) values ('managed', 'xoo_ai_requests_month', 3000)
+insert into public.plan_entitlements (plan_code, key, limit_value) values ('managed', 'brex_ai_requests_month', 3000)
   on conflict (plan_code, key) do update set limit_value = excluded.limit_value;
 insert into public.plan_entitlements (plan_code, key, limit_value) values ('managed', 'visitor_chat_conversations_month', 5000)
   on conflict (plan_code, key) do update set limit_value = excluded.limit_value;

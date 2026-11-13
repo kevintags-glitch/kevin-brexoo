@@ -1,5 +1,5 @@
 /**
- * Xoo AI grounded writers (blueprint §10.3). Pure functions over a record, so every sentence can
+ * Brex AI grounded writers (blueprint §10.3). Pure functions over a record, so every sentence can
  * be traced to a field and tested. Unknowns are stated as unknown. Text that came from the
  * prospect is quoted as data and never interpreted as an instruction.
  */

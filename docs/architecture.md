@@ -6,7 +6,7 @@ row-level security, and provider adapters for everything external.
 ```
 User experience     Web app (Next.js) · Builder portal · Public builder pages · Team / admin (planned)
         │
-Application layer   Auth & access · Discovery · Matching & scoring · CRM & pipeline · Xoo AI
+Application layer   Auth & access · Discovery · Matching & scoring · CRM & pipeline · Brex AI
                     Scheduling & comms · Billing & plans
         │
 Data & processing   PostgreSQL (Supabase, RLS) · Storage (brand assets) · Background jobs (outbox worker)
@@ -47,7 +47,7 @@ submission use two `SECURITY DEFINER` functions that resolve the business from a
 | Frontend | Next.js 16 (App Router, Server Actions), React 19, TypeScript, Tailwind CSS v4, Motion |
 | Backend | Supabase (Postgres, Auth, Storage), RLS, SQL functions |
 | Jobs | Notification outbox + token-protected worker route (Trigger.dev-compatible) |
-| AI | Grounded rule-based Xoo AI v1; provider adapter for Anthropic / OpenAI |
+| AI | Grounded rule-based Brex AI v1; provider adapter for Anthropic / OpenAI |
 | Email | Resend adapter (key required) |
 | Testing | Vitest, Playwright, SQL tests against a local Supabase stack |
 | Hosting / monitoring | Vercel + Supabase; Sentry (to provision) |

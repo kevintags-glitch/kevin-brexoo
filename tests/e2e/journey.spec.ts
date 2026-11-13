@@ -172,7 +172,7 @@ test.describe.serial("builder journey", () => {
     // Follow-up task was created automatically.
     await expect(page.getByText("Respond to Sarah Mitchell's enquiry", { exact: true })).toBeVisible();
 
-    // Xoo AI summary is grounded in the record.
+    // Brex AI summary is grounded in the record.
     await page.getByRole("button", { name: "Summarise" }).click();
     await expect(page.getByText(/In their words: “Double-storey new build/)).toBeVisible();
     await page.getByRole("button", { name: "Draft follow-up" }).click();
@@ -222,6 +222,34 @@ test.describe.serial("builder journey", () => {
     await expect(page.getByText("exported enquiries")).toBeVisible();
     await expect(page.getByText("published a page")).toBeVisible();
     await expect(page.getByText("approved a page version")).toBeVisible();
+  });
+
+  test("clients, buying intent, notifications and Make.com", async () => {
+    // A won opportunity makes the contact a client.
+    await page.goto("/app/clients");
+    await expect(page.getByRole("link", { name: /Sarah Mitchell/ })).toBeVisible();
+
+    // The dashboard shows inferred buying intent and where leads came from.
+    await page.goto("/app");
+    await expect(page.getByText("Buying intent", { exact: true })).toBeVisible();
+    await expect(page.getByText("Inferred", { exact: true })).toBeVisible();
+    await expect(page.getByText("Landing page form")).toBeVisible();
+
+    // Notifications list what happened; marking read clears the count.
+    await page.goto("/app/notifications");
+    await expect(page.getByRole("heading", { name: "Notifications" })).toBeVisible();
+    await page.getByRole("button", { name: "Mark all as read" }).click();
+    await expect(page.getByText("You're all caught up")).toBeVisible();
+
+    // Only Make.com webhook URLs are accepted.
+    await page.goto("/app/settings/integrations");
+    await page.getByLabel("Webhook URL").fill("https://example.com/not-make");
+    await page.getByRole("button", { name: "Connect Make.com" }).click();
+    await expect(page.getByText(/Paste a Make.com webhook URL/)).toBeVisible();
+    await page.getByLabel("Webhook URL").fill("https://hook.us1.make.com/e2eTest1234567");
+    await page.getByRole("button", { name: "Connect Make.com" }).click();
+    await expect(page.getByText(/Make.com connected/)).toBeVisible();
+    await expect(page.getByText("Connected", { exact: true })).toBeVisible();
   });
 
   test("discover: register a source, import projects, save a match", async () => {

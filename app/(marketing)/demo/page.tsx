@@ -1,36 +1,42 @@
 import type { Metadata } from "next";
 import { DemoForm } from "@/components/marketing/DemoForm";
+import { SlideIn, WordsReveal } from "@/components/marketing/motion";
 import { Container, Eyebrow } from "@/components/marketing/Section";
 
 export const metadata: Metadata = { title: "Request a demo", description: "See Brexoo with your services and service area." };
 
+const NEXT = [
+  ["You send the form", "It takes about a minute. We only ask what we need to prepare."],
+  ["We set up your demo", "Your services, your service area and your qualification questions."],
+  ["We walk you through it", "30 minutes, including what Brexoo doesn't do yet."],
+];
+
 export default function DemoPage() {
   return (
-    <section className="relative overflow-hidden">
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(45%_60%_at_10%_0%,color-mix(in_oklab,var(--sky)_12%,transparent),transparent_70%)]" />
-      <Container className="grid gap-12 py-16 sm:py-24 lg:grid-cols-[1fr_1.15fr]">
+    <section className="relative overflow-hidden bg-white">
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(45%_60%_at_0%_0%,rgb(6_182_212/0.08),transparent_70%),radial-gradient(40%_50%_at_100%_100%,rgb(59_130_246/0.07),transparent_70%)]" />
+      <Container className="relative grid gap-14 py-16 sm:py-24 lg:grid-cols-[1fr_1.1fr]">
         <div>
           <Eyebrow>Request a demo</Eyebrow>
-          <h1 className="mt-4 text-[40px] font-bold leading-[1.05] tracking-[-0.03em] sm:text-[56px]">See Brexoo with your own work.</h1>
-          <p className="mt-5 max-w-[48ch] text-[17px] leading-relaxed text-ink-2">
-            Tell us a little about your business. We'll set up a demo using your services and service area, walk through the workflow and answer your questions.
+          <WordsReveal as="h1" text="See Brexoo with your own work." className="mt-5 max-w-[14ch] text-[44px] font-extralight leading-[1.02] tracking-[-0.045em] sm:text-[68px]" />
+          <p className="mt-6 max-w-[46ch] text-[17px] font-light leading-relaxed text-ink-2 sm:text-[19px]">
+            Tell us a little about your business. Available for builders and home-service businesses in the USA, Australia and New Zealand.
           </p>
-          <dl className="mt-10 grid gap-6">
-            {[
-              ["30 minutes", "A focused walkthrough, not a sales marathon."],
-              ["Your trade", "Qualification questions and pages for your services."],
-              ["Straight answers", "Including what Brexoo doesn't do yet."],
-            ].map(([t, b]) => (
-              <div key={t} className="border-l-2 border-blue pl-4">
-                <dt className="text-[15px] font-semibold">{t}</dt>
-                <dd className="mt-0.5 text-[15px] text-ink-3">{b}</dd>
-              </div>
+          <ol className="relative mt-12 grid gap-8 border-l border-line pl-8">
+            {NEXT.map(([t, b], i) => (
+              <li key={t} className="relative">
+                <SlideIn from="left" delay={0.15 + i * 0.12}>
+                  <span className="absolute -left-[45px] top-0 z-10 grid size-6 place-items-center rounded-full border border-blue bg-white text-[11px] font-medium text-blue tabular">{i + 1}</span>
+                  <p className="text-[19px] font-light">{t}</p>
+                  <p className="mt-1 text-[15px] font-light text-ink-3">{b}</p>
+                </SlideIn>
+              </li>
             ))}
-          </dl>
+          </ol>
         </div>
-        <div className="relative">
+        <SlideIn from="right" delay={0.1}>
           <DemoForm />
-        </div>
+        </SlideIn>
       </Container>
     </section>
   );

@@ -218,7 +218,7 @@ do $$ begin
 exception when insufficient_privilege then raise notice 'ok - cannot switch into a foreign organisation';
 end $$;
 do $$ begin
-  perform public.usage_remaining((select v from ids where k = 'acme'), 'xoo_ai');
+  perform public.usage_remaining((select v from ids where k = 'acme'), 'brex_ai');
   raise exception 'FAILED: read foreign usage';
 exception when insufficient_privilege then raise notice 'ok - usage is tenant-scoped';
 end $$;

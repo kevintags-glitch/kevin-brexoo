@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ButtonLink } from "@/components/ui";
 import { PageHero } from "@/components/marketing/PageHero";
-import { Reveal } from "@/components/marketing/Reveal";
+import { CountUp, StickySteps, TiltIn } from "@/components/marketing/motion";
 import { Container, CtaBand, Faq, SectionHeading } from "@/components/marketing/Section";
 
 export const metadata: Metadata = {
@@ -13,14 +13,31 @@ export default function ManagedServicesPage() {
   return (
     <>
       <PageHero
+        variant="center"
         eyebrow="Managed services"
-        title="People to qualify and follow up, when you need them."
+        title="People who qualify and follow up for you."
         body="An optional service, scoped in writing: agreed channels, hours, contact limits and escalation rules. Our team works inside your Brexoo workspace, so every call and note is on the record."
       >
         <ButtonLink href="/demo" size="lg">
           Discuss the service
         </ButtonLink>
       </PageHero>
+      <section className="border-y border-line bg-white py-16">
+        <Container className="grid grid-cols-2 gap-10 md:grid-cols-4">
+          {[
+            { to: 20, label: "Hours a month", sub: "Included in the Managed plan" },
+            { to: 4, label: "Things agreed in writing", sub: "Channels, hours, brief, service levels" },
+            { to: 6, label: "Steps per handoff", sub: "Every one on the record" },
+            { to: 0, label: "Guaranteed outcomes", sub: "We guarantee effort, not results" },
+          ].map((s) => (
+            <div key={s.label}>
+              <CountUp to={s.to} className="block text-[60px] font-extralight leading-none tracking-[-0.05em]" />
+              <p className="mt-3 text-[15px] font-medium">{s.label}</p>
+              <p className="text-[14px] font-light text-ink-3">{s.sub}</p>
+            </div>
+          ))}
+        </Container>
+      </section>
       <section className="py-20 sm:py-28">
         <Container>
           <SectionHeading eyebrow="What's agreed up front" title="Defined, not open-ended." />
@@ -31,34 +48,28 @@ export default function ManagedServicesPage() {
               ["Your instructions", "Qualification brief, disqualifiers and handoff conditions."],
               ["Service levels", "Response expectations, escalation rules and exclusions."],
             ].map(([t, b], i) => (
-              <Reveal key={t} delay={i * 0.04} className="rounded-2xl border border-line bg-surface p-6 shadow-xs">
-                <p className="text-[16px] font-semibold">{t}</p>
-                <p className="mt-1.5 text-[14px] leading-relaxed text-ink-3">{b}</p>
-              </Reveal>
+              <TiltIn key={t} delay={i * 0.08} className="rounded-[24px] border border-line bg-white p-7 shadow-xs">
+                <p className="text-[20px] font-light">{t}</p>
+                <p className="mt-2 text-[15px] font-light leading-relaxed text-ink-3">{b}</p>
+              </TiltIn>
             ))}
           </div>
         </Container>
       </section>
-      <section className="border-y border-line bg-surface py-20 sm:py-28">
-        <Container className="grid gap-12 lg:grid-cols-[1fr_1.4fr]">
+      <section className="bg-surface-2/50 py-20 sm:py-28">
+        <Container>
           <SectionHeading eyebrow="How our team works" title="Facts separate from opinions." body="Agents record what the prospect said separately from their own interpretation and from AI suggestions." />
-          <Reveal>
-            <ol className="grid gap-4">
-              {[
-                "Sign in with an individual account and multi-factor authentication",
-                "Confirm your instructions, then review the project, source and contact restrictions",
-                "Use only approved channels and your approved identity",
-                "Record answers, set the next action or close with a reason",
-                "Book an appointment only after confirmation and an availability check",
-                "Send you a structured handoff summary and log service time",
-              ].map((s, i) => (
-                <li key={s} className="flex gap-4 rounded-xl border border-line bg-canvas p-4">
-                  <span className="text-[13px] font-semibold tabular text-ink-3">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="text-[15px] text-ink-2">{s}</span>
-                </li>
-              ))}
-            </ol>
-          </Reveal>
+          <StickySteps
+            className="mt-14"
+            steps={[
+              { title: "Sign in securely", body: "Each agent has an individual account with multi-factor authentication. No shared logins." },
+              { title: "Read your instructions first", body: "Confirm the qualification brief, then review the project, its source and any contact restrictions." },
+              { title: "Contact only through approved channels", body: "Using your approved business identity, within the contact limits you agreed." },
+              { title: "Record what was said", body: "Answers go on the record, separate from the agent's opinion. Then set the next action or close with a reason." },
+              { title: "Book only when confirmed", body: "An appointment is made only after the customer confirms and availability is checked." },
+              { title: "Hand off cleanly", body: "You get a structured summary, and service time is logged against your hours." },
+            ]}
+          />
         </Container>
       </section>
       <section className="py-20 sm:py-28">

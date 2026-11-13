@@ -46,7 +46,7 @@ const SIDEBAR = [
   { icon: Users, label: "Contacts" },
   { icon: CalendarDays, label: "Appointments" },
   { icon: FileText, label: "Landing pages" },
-  { icon: Sparkles, label: "Xoo AI" },
+  { icon: Sparkles, label: "Brex AI" },
 ];
 
 export const SAMPLE_ENQUIRIES = [
@@ -186,14 +186,14 @@ export function FitCardMock({ className }: { className?: string }) {
   );
 }
 
-export function XooMock({ className }: { className?: string }) {
+export function BrexMock({ className }: { className?: string }) {
   return (
     <div className={cn("rounded-2xl border border-line bg-surface p-5 shadow-md", className)}>
       <div className="flex items-center gap-2">
         <span className="grid size-7 place-items-center rounded-lg bg-gradient-to-br from-blue to-teal text-white">
           <Sparkles className="size-4" aria-hidden />
         </span>
-        <p className="text-[13px] font-semibold">Xoo AI</p>
+        <p className="text-[13px] font-semibold">Brex AI</p>
         <Badge tone="neutral" className="ml-auto">
           Read-only
         </Badge>

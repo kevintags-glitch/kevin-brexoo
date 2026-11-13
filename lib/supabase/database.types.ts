@@ -249,6 +249,32 @@ isOneToOne: false
       referencedColumns: ["code"]
     }
                   ]
+                },"integrations": {
+                  Row: {
+                    "created_at": string,"created_by": string | null,"enabled": boolean,"events": (string)[],"id": string,"kind": string,"last_delivery_at": string | null,"last_status": string | null,"organization_id": string,"secret": string,"updated_at": string,"url": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"created_by"?: string | null,"enabled"?: boolean,"events"?: (string)[],"id"?: string,"kind"?: string,"last_delivery_at"?: string | null,"last_status"?: string | null,"organization_id": string,"secret"?: string,"updated_at"?: string,"url": string
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string | null,"enabled"?: boolean,"events"?: (string)[],"id"?: string,"kind"?: string,"last_delivery_at"?: string | null,"last_status"?: string | null,"organization_id"?: string,"secret"?: string,"updated_at"?: string,"url"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "integrations_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "integrations_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"invitations": {
                   Row: {
                     "accepted_at": string | null,"created_at": string,"email": string,"expires_at": string,"id": string,"invited_by": string | null,"organization_id": string,"role": Database["public"]['Enums']["member_role"],"token": string
@@ -621,14 +647,14 @@ isOneToOne: false
                   ]
                 },"profiles": {
                   Row: {
-                    "active_organization_id": string | null,"created_at": string,"email": string | null,"full_name": string | null,"id": string,"timezone": string,"updated_at": string
+                    "active_organization_id": string | null,"created_at": string,"email": string | null,"full_name": string | null,"id": string,"notifications_seen_at": string | null,"timezone": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "active_organization_id"?: string | null,"created_at"?: string,"email"?: string | null,"full_name"?: string | null,"id": string,"timezone"?: string,"updated_at"?: string
+                    "active_organization_id"?: string | null,"created_at"?: string,"email"?: string | null,"full_name"?: string | null,"id": string,"notifications_seen_at"?: string | null,"timezone"?: string,"updated_at"?: string
                   }
                   Update: {
-                    "active_organization_id"?: string | null,"created_at"?: string,"email"?: string | null,"full_name"?: string | null,"id"?: string,"timezone"?: string,"updated_at"?: string
+                    "active_organization_id"?: string | null,"created_at"?: string,"email"?: string | null,"full_name"?: string | null,"id"?: string,"notifications_seen_at"?: string | null,"timezone"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -897,6 +923,9 @@ isOneToOne: false
 "create_organization":
 { Args: { "p_country"?: string,"p_currency"?: string,"p_name": string,"p_slug": string,"p_timezone"?: string }; Returns: string
                            },
+"enqueue_integration_event":
+{ Args: { "p_data": Json,"p_event": string,"p_key": string,"p_org": string }; Returns: undefined
+                           },
 "finish_notification":
 { Args: { "p_error"?: string,"p_id": string,"p_ok": boolean,"p_skipped"?: boolean }; Returns: undefined
                            },
@@ -926,6 +955,9 @@ isOneToOne: false
                            },
 "record_export":
 { Args: { "p_count": number,"p_entity": string,"p_filters"?: Json }; Returns: undefined
+                           },
+"record_integration_delivery":
+{ Args: { "p_id": string,"p_status": string }; Returns: undefined
                            },
 "review_onboarding":
 { Args: { "p_org": string }; Returns: Database["public"]['Enums']["onboarding_status"]

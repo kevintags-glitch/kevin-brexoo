@@ -9,8 +9,8 @@ Recorded per blueprint §20.5 ("known limitations") and §23.1 ("technical debt 
 | Email notifications | Outbox + worker + Resend adapter. Without `RESEND_API_KEY` notifications are marked `skipped`. | Add the provider key, verify the sending domain, schedule the worker. |
 | Calendar | Appointments are internal records with time zone, status and audit; `provider_event_id` is reserved. | Google or Microsoft 365 OAuth adapter (one provider for MVP). |
 | Mailbox sync | Not built. Outreach is drafted for people to send from their own email and logged manually. | OAuth mailbox connection with minimal scopes (§11.2). |
-| Billing | Plans and entitlements are data; limits are enforced for pages, seats and Xoo AI. No payments. | Stripe Checkout + verified, idempotent webhooks as source of truth (§14.4). |
-| Xoo AI | Deterministic and grounded; allowlisted read-only tools; monthly usage budget. | Optional model-backed provider behind the same tool allowlist, after founder approval and an evaluation set. |
+| Billing | Plans and entitlements are data; limits are enforced for pages, seats and Brex AI. No payments. | Stripe Checkout + verified, idempotent webhooks as source of truth (§14.4). |
+| Brex AI | Deterministic and grounded; allowlisted read-only tools; monthly usage budget. | Optional model-backed provider behind the same tool allowlist, after founder approval and an evaluation set. |
 | Visitor chat usage | Not metered (anonymous visitors can't write usage rows). | Meter server-side in the submission path. |
 | Brand assets bucket | Public-read (logos and approved images are shown on public pages); writes restricted to members' own folder. | Separate private bucket for non-public attachments with signed URLs. |
 | Discovery, credits, ops workspace, admin console | Not built (blueprint phases 8–9). | Validate the first permitted data source before building. |
