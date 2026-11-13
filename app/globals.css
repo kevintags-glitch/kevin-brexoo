@@ -1,0 +1,240 @@
+@import "tailwindcss";
+
+/*
+ * Brexoo design tokens (blueprint §18.1). Colours were sampled from the logo artwork:
+ * mark #06326A, wordmark #022049. Working palette: Midnight Navy, Electric Blue, Cloud White,
+ * Growth Teal. Every colour is a token so light and dark themes flip in one place.
+ */
+:root {
+  --canvas: #f5f7fb;
+  --surface: #ffffff;
+  --surface-2: #eef2f8;
+  --surface-3: #e4eaf3;
+  --ink: #0a1a33;
+  --ink-2: #33445e;
+  --ink-3: #5f6e85;
+  --line: #e2e8f0;
+  --line-strong: #cbd5e1;
+  --brand-ink: #022049;
+  --brand-mark: #06326a;
+  --navy: #102c50;
+  --blue: #2563eb;
+  --blue-hover: #1d4fd8;
+  --blue-soft: #e8efff;
+  --on-blue: #ffffff;
+  --teal: #21b6a8;
+  --teal-ink: #0b7a70;
+  --teal-soft: #e3f7f4;
+  --amber-ink: #9a5b06;
+  --amber-soft: #fdf3e1;
+  --red-ink: #b42318;
+  --red-soft: #fdecea;
+  --green-ink: #13795b;
+  --green-soft: #e4f6ee;
+  --violet-ink: #5b3fc4;
+  --violet-soft: #efebff;
+  --focus: #2563eb;
+  --shadow-color: 215 45% 20%;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --canvas: #060d1a;
+    --surface: #0b1626;
+    --surface-2: #112038;
+    --surface-3: #172a47;
+    --ink: #e9eff8;
+    --ink-2: #b5c2d6;
+    --ink-3: #8696ae;
+    --line: #1a2a44;
+    --line-strong: #263a5a;
+    --brand-ink: #e9eff8;
+    --brand-mark: #7fa8ff;
+    --navy: #0e2142;
+    --blue: #4f86f7;
+    --blue-hover: #6b99f8;
+    --blue-soft: #14264a;
+    --on-blue: #ffffff;
+    --teal: #3ccfc0;
+    --teal-ink: #5edccd;
+    --teal-soft: #0d2b2d;
+    --amber-ink: #f3b75b;
+    --amber-soft: #2c2110;
+    --red-ink: #f59a8f;
+    --red-soft: #33161a;
+    --green-ink: #5fd3a5;
+    --green-soft: #0e2a22;
+    --violet-ink: #b6a5ff;
+    --violet-soft: #221a45;
+    --focus: #7fa8ff;
+    --shadow-color: 220 60% 2%;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --canvas: #060d1a;
+  --surface: #0b1626;
+  --surface-2: #112038;
+  --surface-3: #172a47;
+  --ink: #e9eff8;
+  --ink-2: #b5c2d6;
+  --ink-3: #8696ae;
+  --line: #1a2a44;
+  --line-strong: #263a5a;
+  --brand-ink: #e9eff8;
+  --brand-mark: #7fa8ff;
+  --navy: #0e2142;
+  --blue: #4f86f7;
+  --blue-hover: #6b99f8;
+  --blue-soft: #14264a;
+  --teal: #3ccfc0;
+  --teal-ink: #5edccd;
+  --teal-soft: #0d2b2d;
+  --amber-ink: #f3b75b;
+  --amber-soft: #2c2110;
+  --red-ink: #f59a8f;
+  --red-soft: #33161a;
+  --green-ink: #5fd3a5;
+  --green-soft: #0e2a22;
+  --violet-ink: #b6a5ff;
+  --violet-soft: #221a45;
+  --focus: #7fa8ff;
+  --shadow-color: 220 60% 2%;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-mark: var(--brand-mark);
+  --color-navy: var(--navy);
+  --color-blue: var(--blue);
+  --color-blue-hover: var(--blue-hover);
+  --color-blue-soft: var(--blue-soft);
+  --color-on-blue: var(--on-blue);
+  --color-teal: var(--teal);
+  --color-teal-ink: var(--teal-ink);
+  --color-teal-soft: var(--teal-soft);
+  --color-amber-ink: var(--amber-ink);
+  --color-amber-soft: var(--amber-soft);
+  --color-red-ink: var(--red-ink);
+  --color-red-soft: var(--red-soft);
+  --color-green-ink: var(--green-ink);
+  --color-green-soft: var(--green-soft);
+  --color-violet-ink: var(--violet-ink);
+  --color-violet-soft: var(--violet-soft);
+
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Outfit Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --shadow-xs: 0 1px 2px hsl(var(--shadow-color) / 0.06);
+  --shadow-sm: 0 1px 2px hsl(var(--shadow-color) / 0.06), 0 2px 6px -2px hsl(var(--shadow-color) / 0.08);
+  --shadow-md: 0 1px 2px hsl(var(--shadow-color) / 0.05), 0 8px 24px -8px hsl(var(--shadow-color) / 0.14);
+  --shadow-lg: 0 2px 4px hsl(var(--shadow-color) / 0.04), 0 24px 56px -16px hsl(var(--shadow-color) / 0.22);
+
+  --animate-fade-up: fade-up 600ms var(--ease-out) both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-padding-block-start: 5rem;
+  }
+  body {
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--blue) 22%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  /* Inputs draw their own focus ring. */
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: none;
+  }
+  [hidden] {
+    display: none !important;
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  /* Press feedback for anything pressable (Emil Kowalski: 0.97, 160ms ease-out). */
+  .pressable {
+    transition: transform 160ms var(--ease-out), background-color 150ms ease, border-color 150ms ease, color 150ms ease, box-shadow 150ms ease;
+  }
+  .pressable:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+  .grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  }
+  .mask-fade-x {
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
