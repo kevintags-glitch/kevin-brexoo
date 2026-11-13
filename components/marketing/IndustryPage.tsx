@@ -20,6 +20,7 @@ export function IndustryPage({
   codes,
   workflow,
   layout,
+  accent,
 }: {
   eyebrow: string;
   title: string;
@@ -27,10 +28,11 @@ export function IndustryPage({
   codes: string[];
   workflow: { t: string; b: string }[];
   layout: "zigzag" | "tiles";
+  accent?: string[];
 }) {
   return (
     <>
-      <PageHero variant={layout === "zigzag" ? "split" : "left"} eyebrow={eyebrow} title={title} body={body} aside={<PhonePageMock />}>
+      <PageHero variant={layout === "zigzag" ? "split" : "left"} eyebrow={eyebrow} title={title} accent={accent} body={body} aside={<PhonePageMock />}>
         <ButtonLink href="/demo" size="lg">
           Request a Demo
         </ButtonLink>
@@ -45,12 +47,12 @@ export function IndustryPage({
         <section className="bg-surface-2/50">
           <Container className="pt-20 sm:pt-28">
             <Eyebrow>How it works for you</Eyebrow>
-            <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[52px]">A clear path from enquiry to site visit.</h2>
+            <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[52px]">A clear path from enquiry to site visit.</h2>
           </Container>
           <HorizontalPin>
             {workflow.map((s, i) => (
               <div key={s.t} className="flex w-full max-w-[880px] flex-col justify-between gap-10 rounded-[32px] border border-line bg-white p-10 shadow-sm md:min-h-[420px] md:p-14">
-                <p className="text-[120px] font-extralight leading-none tracking-[-0.06em] text-blue/20 tabular">{String(i + 1).padStart(2, "0")}</p>
+                <p className="text-[120px] font-extralight leading-none tracking-[-0.025em] text-blue/20 tabular">{String(i + 1).padStart(2, "0")}</p>
                 <div>
                   <h3 className="text-[32px] font-light leading-[1.1] tracking-[-0.03em] md:text-[44px]">{s.t}</h3>
                   <p className="mt-4 max-w-xl text-[17px] font-light leading-relaxed text-ink-2">{s.b}</p>
@@ -64,7 +66,7 @@ export function IndustryPage({
           <Container className="grid items-start gap-14 lg:grid-cols-[1fr_0.8fr]">
             <div>
               <Eyebrow>How it works for you</Eyebrow>
-              <h2 className="mt-4 max-w-[18ch] text-[38px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[52px]">From the first message to the booked visit.</h2>
+              <h2 className="mt-4 max-w-[18ch] text-[38px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[52px]">From the first message to the booked visit.</h2>
               <ol className="mt-12 grid gap-4">
                 {workflow.map((s, i) => (
                   <li key={s.t}>
@@ -102,7 +104,7 @@ function ZigzagServices({ codes }: { codes: string[] }) {
     <section className="bg-white py-20 sm:py-28">
       <Container>
         <Eyebrow>Your services</Eyebrow>
-        <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[52px]">Questions that fit the work.</h2>
+        <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[52px]">Questions that fit the work.</h2>
         <div className="mt-16 grid gap-20">
           {codes.map((code, i) => {
             const t = INDUSTRY_BY_CODE[code]!;
@@ -112,7 +114,7 @@ function ZigzagServices({ codes }: { codes: string[] }) {
               <div key={code} className="grid items-center gap-10 md:grid-cols-2 md:gap-20">
                 <SlideIn from={flip ? "right" : "left"} className={cn(flip && "md:order-last")}>
                   <Icon className="size-10 text-blue" strokeWidth={1.2} aria-hidden />
-                  <h3 className="mt-5 text-[40px] font-extralight leading-none tracking-[-0.04em] sm:text-[56px]">{t.name}</h3>
+                  <h3 className="mt-5 text-[40px] font-extralight leading-none tracking-[-0.025em] sm:text-[56px]">{t.name}</h3>
                   <p className="mt-4 text-[17px] font-light leading-relaxed text-ink-2">{t.opportunityTypes.join(" · ")}</p>
                 </SlideIn>
                 <SlideIn from={flip ? "left" : "right"} delay={0.1}>
@@ -143,7 +145,7 @@ function TileServices({ codes }: { codes: string[] }) {
     <section className="overflow-hidden bg-white py-20 sm:py-28">
       <Container>
         <Eyebrow>Your services</Eyebrow>
-        <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[52px]">Every trade, its own questions.</h2>
+        <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[52px]">Every trade, its own questions.</h2>
         <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {codes.map((code, i) => {
             const t = INDUSTRY_BY_CODE[code]!;

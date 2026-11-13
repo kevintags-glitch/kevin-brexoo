@@ -13,6 +13,7 @@ export default function TradesPage() {
       eyebrow="For trades & home services"
       title="Answer the right jobs first."
       body="Work type, urgency, access and property details, captured on a mobile-friendly page and lined up for your team, with follow-ups that don't slip."
+      accent={["first"]}
       layout="tiles"
       codes={TRADE_CODES}
       workflow={[

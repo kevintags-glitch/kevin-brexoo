@@ -29,7 +29,7 @@ export default function IndustriesPage() {
       <PageHero
         variant="split"
         eyebrow="Industries"
-        title="Built for builders and home services."
+        title="Built for builders and home services." accent={["home", "services"]}
         body="Pick the services you offer. Each comes with its own enquiry questions, qualification criteria and pipeline language, which you can tailor."
         aside={
           <div className="grid grid-cols-3 gap-4">
@@ -52,7 +52,7 @@ export default function IndustriesPage() {
       <section className="bg-white py-16 sm:py-24">
         <Container>
           <Eyebrow>Eight launch industries</Eyebrow>
-          <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[52px]">Start with the work you do.</h2>
+          <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[52px]">Start with the work you do.</h2>
           <div className="mt-12 grid auto-rows-[minmax(210px,auto)] grid-cols-1 gap-4 md:grid-cols-4">
             {GROUPS.map((g, i) => {
               const Icon = INDUSTRY_ICON[g.codes[0]!]!;
@@ -89,7 +89,7 @@ export default function IndustriesPage() {
       <section className="bg-white py-16 sm:py-24">
         <Container>
           <Eyebrow>Every service we support</Eyebrow>
-          <h2 className="mt-4 text-[38px] font-light tracking-[-0.04em] sm:text-[52px]">{INDUSTRY_TEMPLATES.length} service templates, and growing.</h2>
+          <h2 className="mt-4 text-[38px] font-light tracking-[-0.025em] sm:text-[52px]">{INDUSTRY_TEMPLATES.length} service templates, and growing.</h2>
           <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {INDUSTRY_TEMPLATES.map((t, i) => {
               const Icon = INDUSTRY_ICON[t.code]!;

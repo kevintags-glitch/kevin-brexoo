@@ -48,68 +48,75 @@ const FAQS = [
 export default function HomePage() {
   return (
     <>
-      {/* 1 — The logo film fills the first screen. */}
-      <section className="relative h-[calc(100dvh-4rem)] min-h-[520px] overflow-hidden bg-white">
-        <HeroVideo />
-        <div className="absolute inset-x-0 bottom-[7%] flex flex-col items-center gap-6 px-4">
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/demo" size="lg" className="px-7">
-              Request a Demo <ArrowRight className="size-4" aria-hidden />
-            </ButtonLink>
-            <ButtonLink href="/how-it-works" size="lg" variant="outline" className="bg-white/80 px-7 backdrop-blur">
-              See How It Works
-            </ButtonLink>
+      {/* 1 — Left-aligned promise, the logo film on the right. */}
+      <section className="relative overflow-hidden bg-white">
+        <Container className="relative grid min-h-[calc(100dvh-4rem)] items-center gap-6 py-14 lg:grid-cols-[1.08fr_0.92fr] lg:gap-4 lg:py-10">
+          <div>
+            <Reveal>
+              <p className="inline-flex items-center gap-2.5 rounded-full border border-line bg-white py-1 pl-1 pr-3.5 text-[13px] text-ink-2 shadow-xs">
+                <span className="rounded-full bg-teal-soft px-2.5 py-0.5 text-[12px] font-medium text-teal-ink">USA · AU · NZ</span>
+                For builders &amp; home services
+              </p>
+            </Reveal>
+            <WordsReveal
+              as="h1"
+              text="Turn local demand into your next project."
+              accent={["next", "project"]}
+              className="mt-7 max-w-[13ch] text-[50px] font-extralight leading-[1.02] tracking-[-0.03em] text-ink sm:text-[76px] xl:text-[92px]"
+              delay={0.15}
+            />
+            <Reveal delay={0.45}>
+              <p className="mt-7 max-w-[46ch] text-[17px] font-light leading-relaxed text-ink-2 sm:text-[19px]">
+                Brexoo finds project leads, qualifies them with Brex AI and keeps every follow-up moving, so you spend your time on the jobs you&apos;re most likely to win.
+              </p>
+            </Reveal>
+            <Reveal delay={0.55} className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <ButtonLink href="/demo" size="lg" className="px-7">
+                Request a Demo <ArrowRight className="size-4" aria-hidden />
+              </ButtonLink>
+              <ButtonLink href="/how-it-works" size="lg" variant="outline" className="px-7">
+                See How It Works
+              </ButtonLink>
+            </Reveal>
+            <Reveal delay={0.65}>
+              <ul className="mt-12 grid max-w-xl grid-cols-5 gap-2 border-t border-line pt-6">
+                {[
+                  { icon: Search, label: "Discover", href: "/how-it-works#discover" },
+                  { icon: Funnel, label: "Qualify", href: "/how-it-works#qualify" },
+                  { icon: Users, label: "Manage", href: "/how-it-works#win" },
+                  { icon: CalendarDays, label: "Book", href: "/how-it-works#book" },
+                  { icon: ChartColumn, label: "Grow", href: "/how-it-works#grow" },
+                ].map(({ icon: Icon, label, href }) => (
+                  <li key={label}>
+                    <Link href={href} className="group flex flex-col items-start gap-2">
+                      <Icon className="size-5 text-blue transition-transform duration-300 group-hover:-translate-y-1" strokeWidth={1.5} aria-hidden />
+                      <span className="text-[13px] text-ink-2 group-hover:text-ink">{label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
           </div>
-          <a href="#intro" className="flex flex-col items-center gap-1.5 text-[11px] uppercase tracking-[0.3em] text-ink-3 hover:text-ink">
-            Scroll
-            <ArrowDown className="size-4 motion-safe:animate-bounce" aria-hidden />
-          </a>
-        </div>
-      </section>
-
-      {/* 1b — The promise, big and thin. */}
-      <section id="intro" className="bg-white py-24 md:py-32">
-        <Container className="text-center">
-          <Reveal>
-            <p className="text-[13px] font-medium uppercase tracking-[0.28em] text-blue">The AI Growth Platform for Builders &amp; Home Services</p>
-          </Reveal>
-          <WordsReveal as="h1" text="Turn local demand into your next project." className="mx-auto mt-6 max-w-[17ch] text-[44px] font-extralight leading-[1.02] tracking-[-0.045em] text-ink sm:text-[72px] lg:text-[96px]" />
-          <Reveal delay={0.3}>
-            <p className="mx-auto mt-8 max-w-[52ch] text-[17px] font-light leading-relaxed text-ink-2 sm:text-[20px]">Find project leads. Qualify opportunities. Book more jobs. Grow your business — across the USA, Australia and New Zealand.</p>
-          </Reveal>
-          <Reveal delay={0.4}>
-            <ul className="mx-auto mt-14 grid max-w-3xl grid-cols-5 divide-x divide-line">
-              {[
-                { icon: Search, label: "Discover Projects", href: "/how-it-works#discover" },
-                { icon: Funnel, label: "Qualify with AI", href: "/how-it-works#qualify" },
-                { icon: Users, label: "Manage Leads", href: "/how-it-works#win" },
-                { icon: CalendarDays, label: "Book Appointments", href: "/how-it-works#book" },
-                { icon: ChartColumn, label: "Grow Revenue", href: "/how-it-works#grow" },
-              ].map(({ icon: Icon, label, href }) => (
-                <li key={label}>
-                  <Link href={href} className="group flex flex-col items-center gap-2 px-1 text-center">
-                    <Icon className="size-6 text-blue transition-transform duration-300 group-hover:-translate-y-1" strokeWidth={1.4} aria-hidden />
-                    <span className="text-[11px] font-normal leading-tight text-ink-2 group-hover:text-ink sm:text-[13px]">{label}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
+          <HeroVideo className="relative mx-auto aspect-square w-full max-w-[340px] [mask-image:radial-gradient(closest-side,black_72%,transparent)] sm:max-w-[440px] lg:max-w-none" />
         </Container>
+        <a href="#engines" className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-1.5 text-[11px] uppercase tracking-[0.3em] text-ink-3 hover:text-ink lg:flex">
+          Scroll
+          <ArrowDown className="size-4 motion-safe:animate-bounce" aria-hidden />
+        </a>
       </section>
 
       {/* 2 — Three engines: pinned, scrolls sideways. */}
       <section id="engines" className="relative bg-white">
-        <Container className="pt-24 text-center md:pt-28">
+        <Container className="pt-24 md:pt-28">
           <Eyebrow>Three engines, one platform</Eyebrow>
-          <WordsReveal text="Discover. Qualify. Win." className="mt-4 text-[44px] font-extralight tracking-[-0.045em] sm:text-[72px]" />
+          <WordsReveal text="Discover. Qualify. Win." accent={["Win"]} className="mt-4 text-[44px] font-extralight tracking-[-0.03em] sm:text-[72px]" />
         </Container>
         <HorizontalPin>
           {ENGINES.map((e) => (
             <div key={e.n} className="grid w-full max-w-[1180px] items-center gap-10 rounded-[32px] bg-surface-2/60 p-8 md:grid-cols-[1fr_1fr] md:p-14">
               <div>
-                <p className="text-[96px] font-extralight leading-none tracking-[-0.06em] text-blue/25 md:text-[140px]">{e.n}</p>
-                <h3 className="mt-2 text-[44px] font-light tracking-[-0.04em] md:text-[60px]">{e.title}</h3>
+                <p className="text-[96px] font-extralight leading-none tracking-[-0.025em] text-blue/25 md:text-[140px]">{e.n}</p>
+                <h3 className="mt-2 text-[44px] font-light tracking-[-0.025em] md:text-[60px]">{e.title}</h3>
                 <p className="mt-2 text-[20px] font-light text-ink-2">{e.lead}</p>
                 <p className="mt-5 max-w-md text-[16px] leading-relaxed text-ink-3">{e.body}</p>
                 <Link href={e.href} className="mt-6 inline-flex items-center gap-2 text-[15px] font-medium text-blue hover:gap-3">
@@ -127,7 +134,7 @@ export default function HomePage() {
         <Container className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div>
             <Eyebrow>Built for these industries</Eyebrow>
-            <WordsReveal text="One platform, tuned to your trade." className="mt-4 max-w-[16ch] text-[40px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[56px]" />
+            <WordsReveal text="One platform, tuned to your trade." className="mt-4 max-w-[16ch] text-[40px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[56px]" />
           </div>
           <ButtonLink href="/industries" variant="outline">
             All industries <ArrowRight className="size-4" aria-hidden />
@@ -161,7 +168,7 @@ export default function HomePage() {
             { to: 100, suffix: "%", label: "Records with a source", sub: "Every lead shows where it came from" },
           ].map((s, i) => (
             <Reveal key={s.label} delay={i * 0.08}>
-              <CountUp to={s.to} suffix={s.suffix} className="block text-[56px] font-extralight leading-none tracking-[-0.05em] text-ink sm:text-[72px]" />
+              <CountUp to={s.to} suffix={s.suffix} className="block text-[56px] font-extralight leading-none tracking-[-0.035em] text-ink sm:text-[72px]" />
               <p className="mt-3 text-[15px] font-medium">{s.label}</p>
               <p className="text-[14px] font-light text-ink-3">{s.sub}</p>
             </Reveal>
@@ -174,7 +181,7 @@ export default function HomePage() {
         <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
           <div className="lg:sticky lg:top-28 lg:h-fit">
             <Eyebrow>Trust, built in</Eyebrow>
-            <WordsReveal text="Honest about data. Careful with people." className="mt-4 text-[40px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[52px]" />
+            <WordsReveal text="Honest about data. Careful with people." className="mt-4 text-[40px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[52px]" />
             <p className="mt-5 max-w-md text-[17px] font-light leading-relaxed text-ink-2">A predicted opportunity is never shown as a confirmed request. Brexoo keeps verified projects, direct enquiries, business prospects and inferred intent apart.</p>
             <ButtonLink href="/resources" variant="outline" className="mt-8">
               How we handle data
@@ -196,7 +203,7 @@ export default function HomePage() {
         <Container className="grid items-start gap-14 lg:grid-cols-2">
           <SlideIn from="left" className="lg:sticky lg:top-32">
             <Eyebrow>Brex AI</Eyebrow>
-            <h2 className="mt-4 text-[40px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[56px]">Your project and sales assistant.</h2>
+            <h2 className="mt-4 text-[40px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[56px]">Your project and sales assistant.</h2>
             <p className="mt-5 max-w-md text-[17px] font-light leading-relaxed text-ink-2">Summaries that quote the record, the next best action, follow-up drafts and site-visit briefs. Grounded in your data, never sent on its own.</p>
             <ButtonLink href="/ai" className="mt-8">
               Meet Brex AI <ArrowRight className="size-4" aria-hidden />
@@ -228,9 +235,9 @@ export default function HomePage() {
 
       {/* 7 — Product shot zooms into place. */}
       <section className="bg-white py-24">
-        <Container className="text-center">
+        <Container>
           <Eyebrow>Your workspace</Eyebrow>
-          <WordsReveal text="Every lead, task and booking in one calm place." className="mx-auto mt-4 max-w-[20ch] text-[40px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[56px]" />
+          <WordsReveal text="Every lead, task and booking in one calm place." accent={["calm"]} className="mt-4 max-w-[20ch] text-[40px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[56px]" />
         </Container>
         <Container className="mt-14">
           <ZoomIn>
@@ -245,7 +252,7 @@ export default function HomePage() {
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div>
               <Eyebrow>Pricing</Eyebrow>
-              <h2 className="mt-4 text-[40px] font-light tracking-[-0.04em] sm:text-[52px]">Plans that grow with you.</h2>
+              <h2 className="mt-4 text-[40px] font-light tracking-[-0.025em] sm:text-[52px]">Plans that grow with you.</h2>
               <p className="mt-2 text-[15px] font-light text-ink-3">Illustrative pricing in USD while we run our pilot.</p>
             </div>
             <ButtonLink href="/pricing" variant="outline">
@@ -257,7 +264,7 @@ export default function HomePage() {
               <TiltIn key={p.code} delay={i * 0.1}>
                 <Link href={`/pricing#${p.code}`} className="group block h-full rounded-[24px] border border-line bg-white p-7 shadow-sm transition-shadow hover:shadow-lg">
                   <p className="text-[15px] font-medium">{p.name}</p>
-                  <p className="mt-5 text-[52px] font-extralight leading-none tracking-[-0.05em] tabular">{formatMoney(p.monthlyPriceMinor, p.currency)}</p>
+                  <p className="mt-5 text-[52px] font-extralight leading-none tracking-[-0.035em] tabular">{formatMoney(p.monthlyPriceMinor, p.currency)}</p>
                   <p className="mt-1 text-[13px] text-ink-3">per month · {formatMoney(p.setupFeeMinor, p.currency)} setup</p>
                   <p className="mt-5 text-[15px] font-light leading-relaxed text-ink-2">{p.positioning}</p>
                   <span className="mt-6 inline-flex items-center gap-1.5 text-[14px] font-medium text-blue group-hover:gap-2.5">
@@ -275,7 +282,7 @@ export default function HomePage() {
         <Container className="grid items-center gap-12 lg:grid-cols-2">
           <SlideIn from="left">
             <Eyebrow>Where we launch</Eyebrow>
-            <h2 className="mt-4 text-[40px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[52px]">USA · Australia · New Zealand</h2>
+            <h2 className="mt-4 text-[40px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[52px]">USA · Australia · New Zealand</h2>
             <p className="mt-5 max-w-md text-[17px] font-light leading-relaxed text-ink-2">Each business works in its own time zone and currency, with appointments and reports in local time.</p>
           </SlideIn>
           <SlideIn from="right" className="grid gap-3">
@@ -298,7 +305,7 @@ export default function HomePage() {
         <Container className="grid gap-12 lg:grid-cols-[1fr_1.4fr]">
           <div>
             <Eyebrow>Questions</Eyebrow>
-            <h2 className="mt-4 text-[40px] font-light tracking-[-0.04em]">Straight answers.</h2>
+            <h2 className="mt-4 text-[40px] font-light tracking-[-0.025em]">Straight answers.</h2>
             <p className="mt-3 text-[16px] font-light text-ink-3">
               Or ask Brex AI — the chat button is bottom right. <ShieldCheck className="inline size-4 text-teal-ink" aria-hidden />
             </p>

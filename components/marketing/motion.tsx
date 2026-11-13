@@ -18,17 +18,30 @@ export function ScrollProgress({ className }: { className?: string }) {
 }
 
 /** Headline that rises word by word, with a slight blur, as it enters. */
-export function WordsReveal({ text, className, as = "h2", delay = 0 }: { text: string; className?: string; as?: "h1" | "h2" | "p"; delay?: number }) {
+export function WordsReveal({ text, className, as = "h2", delay = 0, accent = [] }: { text: string; className?: string; as?: "h1" | "h2" | "p"; delay?: number; accent?: string[] }) {
   const reduce = useReducedMotion();
   const Tag = as;
   const words = text.split(" ");
-  if (reduce) return <Tag className={className}>{text}</Tag>;
+  // Accent words are set in the italic serif, the brand's one decorative touch.
+  const isAccent = (w: string) => accent.includes(w.replace(/[.,!?]$/, ""));
+  const accentClass = "font-accent font-normal italic tracking-[-0.01em] text-blue";
+  if (reduce)
+    return (
+      <Tag className={className}>
+        {words.map((w, i) => (
+          <span key={i} className={isAccent(w) ? accentClass : undefined}>
+            {w}
+            {i < words.length - 1 ? " " : ""}
+          </span>
+        ))}
+      </Tag>
+    );
   return (
     <Tag className={className} aria-label={text}>
       {words.map((w, i) => (
-        <span key={i} aria-hidden className="inline-block overflow-hidden pb-[0.12em] align-bottom">
+        <span key={i} aria-hidden className="-mb-[0.14em] inline-block overflow-hidden pb-[0.14em] align-bottom">
           <motion.span
-            className="inline-block"
+            className={cn("inline-block", isAccent(w) && accentClass)}
             initial={{ y: "105%", opacity: 0, filter: "blur(6px)" }}
             whileInView={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
             viewport={{ once: true, margin: "0px 0px -10% 0px" }}
@@ -149,7 +162,7 @@ export function ScrollMarquee({ text, className }: { text: string; className?: s
   const x = useTransform(scrollYProgress, [0, 1], ["5%", "-45%"]);
   return (
     <div ref={ref} className={cn("overflow-hidden", className)} aria-hidden>
-      <motion.p style={reduce ? undefined : { x }} className="whitespace-nowrap text-[13vw] font-extralight leading-none tracking-[-0.05em] text-ink/[0.06]">
+      <motion.p style={reduce ? undefined : { x }} className="whitespace-nowrap text-[13vw] font-extralight leading-none tracking-[-0.035em] text-ink/[0.06]">
         {text} {text}
       </motion.p>
     </div>
@@ -354,7 +367,7 @@ export function StickySteps({ steps, className }: { steps: { title: string; body
               <motion.p
                 key={i}
                 aria-hidden
-                className="absolute inset-0 text-[180px] font-extralight leading-none tracking-[-0.06em] text-blue tabular"
+                className="absolute inset-0 text-[180px] font-extralight leading-none tracking-[-0.025em] text-blue tabular"
                 initial={false}
                 animate={{ y: i === active ? "0%" : i < active ? "-100%" : "100%", opacity: i === active ? 1 : 0 }}
                 transition={{ duration: 0.6, ease: EASE }}

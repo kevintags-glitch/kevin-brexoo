@@ -36,7 +36,7 @@ const GUIDES = [
 export default function ResourcesPage() {
   return (
     <>
-      <PageHero eyebrow="Resources" title="Everything you need to know." body="Guides to how Brexoo works, what its AI does, how records are labelled, and the policies behind it." />
+      <PageHero eyebrow="Resources" title="Everything you need to know." accent={["know"]} body="Guides to how Brexoo works, what its AI does, how records are labelled, and the policies behind it." />
 
       <section className="overflow-hidden bg-white pb-20">
         <Container>
@@ -61,7 +61,7 @@ export default function ResourcesPage() {
       <section id="record-types" className="scroll-mt-24 bg-[#0f2742] py-24 text-white sm:py-32">
         <Container>
           <p className="text-[13px] font-medium uppercase tracking-[0.24em] text-[#5fd4ea]">Know your records</p>
-          <WordsReveal text="Four kinds of record. Never mixed up." className="mt-4 max-w-[18ch] text-[40px] font-extralight leading-[1.05] tracking-[-0.04em] sm:text-[60px]" />
+          <WordsReveal text="Four kinds of record. Never mixed up." className="mt-4 max-w-[18ch] text-[40px] font-extralight leading-[1.05] tracking-[-0.025em] sm:text-[60px]" />
           <div className="mt-14 grid gap-px overflow-hidden rounded-[28px] bg-white/10 md:grid-cols-2">
             {RECORD_TYPES.map(({ icon: Icon, name, body }, i) => (
               <SlideIn key={name} from={i % 2 === 0 ? "left" : "right"} delay={Math.floor(i / 2) * 0.1} className="bg-[#0f2742] p-8 sm:p-10">
@@ -78,7 +78,7 @@ export default function ResourcesPage() {
         <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
           <div className="lg:sticky lg:top-28 lg:h-fit">
             <Eyebrow>Guides</Eyebrow>
-            <h2 className="mt-4 text-[38px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[48px]">Practical habits that win work.</h2>
+            <h2 className="mt-4 text-[38px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[48px]">Practical habits that win work.</h2>
             <nav aria-label="Guides" className="mt-8 grid gap-2">
               {GUIDES.map((g) => (
                 <a key={g.id} href={`#${g.id}`} className="text-[15px] font-light text-ink-3 hover:text-blue">

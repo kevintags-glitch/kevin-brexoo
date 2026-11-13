@@ -36,9 +36,8 @@ export default function HowItWorksPage() {
   return (
     <>
       <PageHero
-        variant="center"
         eyebrow="How it works"
-        title="From first interest to won work."
+        title="From first interest to won work." accent={["won", "work"]}
         body="One workflow for the whole life of an opportunity, with a record of every step so nothing depends on memory or a spreadsheet."
       >
         <ButtonLink href="/demo" size="lg">
@@ -87,11 +86,11 @@ export default function HowItWorksPage() {
         <ScrollMarquee text="Discover · Identify · Score · Capture · Qualify · Engage · Book · Convert · Learn ·" />
         <Container className="-mt-6">
           <Eyebrow>The full lifecycle</Eyebrow>
-          <h2 className="mt-4 text-[38px] font-light tracking-[-0.04em] sm:text-[52px]">Nine stages, one record.</h2>
+          <h2 className="mt-4 text-[38px] font-light tracking-[-0.025em] sm:text-[52px]">Nine stages, one record.</h2>
           <SnapCarousel label="lifecycle stages" className="mt-8">
             {LIFECYCLE.map(([t, b], i) => (
               <div key={t} className="flex h-full min-h-[220px] flex-col justify-between rounded-[24px] border border-line bg-white p-7 shadow-xs">
-                <p className="text-[56px] font-extralight leading-none tracking-[-0.05em] text-blue/30 tabular">{String(i + 1).padStart(2, "0")}</p>
+                <p className="text-[56px] font-extralight leading-none tracking-[-0.035em] text-blue/30 tabular">{String(i + 1).padStart(2, "0")}</p>
                 <div>
                   <p className="text-[22px] font-light">{t}</p>
                   <p className="mt-1.5 text-[15px] font-light leading-relaxed text-ink-3">{b}</p>

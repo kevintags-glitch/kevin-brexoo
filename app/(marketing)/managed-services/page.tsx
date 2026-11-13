@@ -13,9 +13,8 @@ export default function ManagedServicesPage() {
   return (
     <>
       <PageHero
-        variant="center"
         eyebrow="Managed services"
-        title="People who qualify and follow up for you."
+        title="People who qualify and follow up for you." accent={["for", "you"]}
         body="An optional service, scoped in writing: agreed channels, hours, contact limits and escalation rules. Our team works inside your Brexoo workspace, so every call and note is on the record."
       >
         <ButtonLink href="/demo" size="lg">
@@ -31,7 +30,7 @@ export default function ManagedServicesPage() {
             { to: 0, label: "Guaranteed outcomes", sub: "We guarantee effort, not results" },
           ].map((s) => (
             <div key={s.label}>
-              <CountUp to={s.to} className="block text-[60px] font-extralight leading-none tracking-[-0.05em]" />
+              <CountUp to={s.to} className="block text-[60px] font-extralight leading-none tracking-[-0.025em]" />
               <p className="mt-3 text-[15px] font-medium">{s.label}</p>
               <p className="text-[14px] font-light text-ink-3">{s.sub}</p>
             </div>

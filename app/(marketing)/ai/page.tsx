@@ -22,7 +22,7 @@ export default function AiPage() {
         variant="split"
         aside={<BrexMock />}
         eyebrow="Brex AI"
-        title="AI that helps you act. People who decide."
+        title="AI that helps you act. People who decide." accent={["decide"]}
         body="Two assistants with deliberately narrow jobs: Brex AI inside your workspace, and a visitor assistant on your landing page. Both work only from approved, scoped information."
       >
         <ButtonLink href="/demo" size="lg">
@@ -34,7 +34,7 @@ export default function AiPage() {
         <Container className="grid items-start gap-14 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="lg:sticky lg:top-28">
             <Eyebrow>Watch it work</Eyebrow>
-            <WordsReveal text="Ask in plain words. Get answers from your records." className="mt-4 max-w-[16ch] text-[38px] font-light leading-[1.05] tracking-[-0.04em] sm:text-[52px]" />
+            <WordsReveal text="Ask in plain words. Get answers from your records." className="mt-4 max-w-[16ch] text-[38px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[52px]" />
             <p className="mt-5 max-w-md text-[17px] font-light leading-relaxed text-ink-2">Scroll to play the conversation. Every answer cites the record it came from, and anything inferred says so.</p>
           </div>
           <div className="rounded-[28px] border border-line bg-white p-6 shadow-lg sm:p-8">
@@ -117,7 +117,7 @@ export default function AiPage() {
 
       <section className="py-20 sm:py-28">
         <Container>
-          <SectionHeading eyebrow="Controls" title="Safety is a feature, not a footnote." align="center" />
+          <SectionHeading eyebrow="Controls" title="Safety is a feature, not a footnote." />
           <div className="mt-12 grid gap-4 md:grid-cols-3">
             {[
               ["Tenant-scoped retrieval", "The assistant authenticates you first and can only read your organisation's records. Database policies enforce the same rule."],

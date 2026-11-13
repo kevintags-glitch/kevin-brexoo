@@ -152,8 +152,9 @@
   --color-violet-ink: var(--violet-ink);
   --color-violet-soft: var(--violet-soft);
 
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Hanken Grotesk Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Bricolage Grotesque Variable", "Hanken Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-accent: "Instrument Serif", ui-serif, Georgia, serif;
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
@@ -189,6 +190,10 @@
   }
 }
 
+@utility font-accent {
+  font-family: var(--font-accent);
+}
+
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
@@ -201,10 +206,10 @@
     background: var(--canvas);
     color: var(--ink);
     font-family: var(--font-sans);
-    font-feature-settings: "cv11", "ss01";
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
+    font-optical-sizing: auto;
     letter-spacing: -0.025em;
     text-wrap: balance;
   }

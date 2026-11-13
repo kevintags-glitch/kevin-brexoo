@@ -27,7 +27,7 @@ export function LegalPage({ title, updated, children }: { title: string; updated
           </nav>
         </aside>
         <article className="max-w-3xl">
-          <h1 className="text-[44px] font-extralight leading-[1.02] tracking-[-0.04em] sm:text-[60px]">{title}</h1>
+          <h1 className="text-[44px] font-extralight leading-[1.02] tracking-[-0.025em] sm:text-[60px]">{title}</h1>
           <p className="mt-3 text-sm text-ink-3">Last updated {updated}</p>
           <Notice tone="amber" className="mt-8" title="Draft for legal review">
             This document is a working draft. It must be reviewed by qualified counsel in each launch market (the USA, Australia and New Zealand) before Brexoo is sold.

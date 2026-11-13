@@ -13,6 +13,7 @@ export default function BuildersPage() {
       eyebrow="For builders & developers"
       title="Every build enquiry, qualified before you quote."
       body="Land status, house type, budget range, timing and the decision-maker, captured up front and checked against your service area, so consultations go to the right projects."
+      accent={["quote"]}
       layout="zigzag"
       codes={BUILDER_CODES}
       workflow={[

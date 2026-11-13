@@ -12,7 +12,7 @@ export default function WorkspacePreviewPage() {
     <section className="bg-white">
       <Container className="flex min-h-[70dvh] flex-col items-center justify-center py-24 text-center">
         <LogoMark className="size-14 text-[#0f2742]" />
-        <h1 className="mt-8 max-w-[18ch] text-[40px] font-extralight leading-[1.05] tracking-[-0.04em] sm:text-[56px]">The Brexoo workspace isn&apos;t connected in this preview.</h1>
+        <h1 className="mt-8 max-w-[18ch] text-[40px] font-extralight leading-[1.05] tracking-[-0.025em] sm:text-[56px]">The Brexoo workspace isn&apos;t connected in this preview.</h1>
         <p className="mt-5 max-w-[52ch] text-[17px] font-light leading-relaxed text-ink-2">
           This link shows the Brexoo website. Sign-up, the dashboard and customer landing pages open once the preview is connected to its database.
         </p>

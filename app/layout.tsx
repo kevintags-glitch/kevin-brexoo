@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/inter";
+import "@fontsource-variable/bricolage-grotesque/opsz.css";
+import "@fontsource-variable/hanken-grotesk";
+import "@fontsource/instrument-serif/400-italic.css";
 import "./globals.css";
 import { SITE_URL } from "@/lib/env";
 

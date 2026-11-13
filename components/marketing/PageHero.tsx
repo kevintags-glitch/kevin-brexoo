@@ -5,10 +5,10 @@ import { Reveal } from "./Reveal";
 import { Container, Eyebrow } from "./Section";
 
 /**
- * Page heroes come in three shapes so pages don't open the same way:
- * - "left": a big thin headline, left aligned
- * - "center": an oversized centred headline with a soft glow
+ * Page heroes are left-aligned, in two shapes so pages don't open the same way:
+ * - "left": a big thin headline
  * - "split": headline left, a floating visual right (parallax)
+ * `accent` words are set in the italic serif.
  */
 export function PageHero({
   eyebrow,
@@ -17,44 +17,30 @@ export function PageHero({
   children,
   variant = "left",
   aside,
+  accent,
 }: {
   eyebrow: string;
   title: string;
   body: ReactNode;
   children?: ReactNode;
-  variant?: "left" | "center" | "split";
+  variant?: "left" | "split";
   aside?: ReactNode;
+  accent?: string[];
 }) {
-  const center = variant === "center";
   return (
     <section className="relative overflow-hidden bg-white">
-      <div
-        aria-hidden
-        className={cn(
-          "pointer-events-none absolute inset-0",
-          center
-            ? "bg-[radial-gradient(50%_60%_at_50%_100%,rgb(59_130_246/0.08),transparent_70%)]"
-            : "bg-[radial-gradient(40%_60%_at_100%_0%,rgb(6_182_212/0.07),transparent_70%)]",
-        )}
-      />
-      <Container className={cn("relative py-20 sm:py-28", variant === "split" && "grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]", center && "text-center")}>
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_60%_at_100%_0%,rgb(6_182_212/0.07),transparent_70%)]" />
+      <Container className={cn("relative py-20 sm:py-28", variant === "split" && "grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]")}>
         <div>
           <Reveal>
             <Eyebrow>{eyebrow}</Eyebrow>
           </Reveal>
-          <WordsReveal
-            as="h1"
-            text={title}
-            className={cn(
-              "mt-5 font-extralight leading-[1.02] tracking-[-0.045em] text-ink",
-              center ? "mx-auto max-w-[16ch] text-[44px] sm:text-[80px]" : "max-w-[17ch] text-[42px] sm:text-[68px]",
-            )}
-          />
+          <WordsReveal as="h1" text={title} accent={accent} className="mt-5 max-w-[17ch] text-[44px] font-extralight leading-[1.0] tracking-[-0.03em] text-ink sm:text-[72px]" />
           <Reveal delay={0.25}>
-            <p className={cn("mt-6 max-w-[58ch] text-[17px] font-light leading-relaxed text-ink-2 sm:text-[20px]", center && "mx-auto")}>{body}</p>
+            <p className="mt-6 max-w-[58ch] text-[17px] font-light leading-relaxed text-ink-2 sm:text-[20px]">{body}</p>
           </Reveal>
           {children ? (
-            <Reveal delay={0.35} className={cn("mt-9 flex flex-col gap-3 sm:flex-row", center && "justify-center")}>
+            <Reveal delay={0.35} className="mt-9 flex flex-col gap-3 sm:flex-row">
               {children}
             </Reveal>
           ) : null}

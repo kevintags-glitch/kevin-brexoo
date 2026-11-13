@@ -28,11 +28,11 @@ function cell(v: number | null, unit?: string) {
 export default function PricingPage() {
   return (
     <>
-      <PageHero variant="center" eyebrow="Pricing" title="Clear plans. Limits you can see." body="Every plan includes the full enquiry-to-outcome workflow. Plans differ in pages, seats, AI usage and optional human-managed services." />
+      <PageHero eyebrow="Pricing" title="Clear plans. Limits you can see." accent={["see"]} body="Every plan includes the full enquiry-to-outcome workflow. Plans differ in pages, seats, AI usage and optional human-managed services." />
       <section className="py-16 sm:py-24">
         <Container>
-          <Notice tone="amber" title="Illustrative pricing" className="mx-auto max-w-3xl">
-            These are working figures for our pilot, shown in US dollars before tax. Launch markets are the USA, Australia and New Zealand; local-currency pricing (USD, AUD, NZD) is confirmed before billing. Final prices, currency, taxes and terms are confirmed in writing before you're billed.
+          <Notice tone="amber" title="Illustrative pricing" className="max-w-3xl">
+            These are working figures for our pilot, shown in US dollars before tax. We launch in the USA, Australia and New Zealand, and your final price, currency (USD, AUD or NZD), taxes and terms are confirmed in writing before you're billed.
           </Notice>
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
             {PLANS.map((p, i) => {
@@ -47,7 +47,7 @@ export default function PricingPage() {
                   <h2 className="font-sans text-[20px] font-normal tracking-normal">{p.name}</h2>
                   <p className="mt-2 min-h-12 text-[14px] leading-relaxed text-ink-3">{p.positioning}</p>
                   <p className="mt-6 flex items-baseline gap-1.5">
-                    <span className="text-[60px] font-extralight leading-none tracking-[-0.05em] tabular">{formatMoney(p.monthlyPriceMinor, p.currency)}</span>
+                    <span className="text-[60px] font-extralight leading-none tracking-[-0.035em] tabular">{formatMoney(p.monthlyPriceMinor, p.currency)}</span>
                     <span className="text-ink-3">/ month</span>
                   </p>
                   <p className="mt-1 text-[13px] text-ink-3">plus {formatMoney(p.setupFeeMinor, p.currency)} one-off setup</p>

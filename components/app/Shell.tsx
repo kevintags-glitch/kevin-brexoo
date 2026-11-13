@@ -167,9 +167,9 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
           )}
         </div>
 
-        <nav aria-label="Workspace" className={cn("mt-5 flex-1 overflow-y-auto pb-4", compact ? "px-2" : "px-3")}>
+        <nav aria-label="Workspace" className={cn("mt-5 flex-1 overflow-y-auto pb-4 [@media(max-height:960px)]:mt-3", compact ? "px-2" : "px-3")}>
           {groups.map((g) => (
-            <div key={g.label} className="mt-5 first:mt-0">
+            <div key={g.label} className="mt-5 first:mt-0 [@media(max-height:960px)]:mt-3.5">
               {compact ? <div className="mx-3 mb-2 border-t border-white/10" /> : <p className="px-2.5 pb-2 text-[12px] font-medium text-white/50">{g.label}</p>}
               <ul className="grid gap-1">
                 {g.items.map((item) => {
@@ -181,7 +181,7 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
                         aria-current={active ? "page" : undefined}
                         title={compact ? item.label : undefined}
                         className={cn(
-                          "group relative flex h-10 items-center rounded-xl text-[14px] transition-colors duration-150",
+                          "group relative flex h-10 items-center rounded-xl text-[14px] [@media(max-height:960px)]:h-9 transition-colors duration-150",
                           compact ? "justify-center" : "gap-3 px-3",
                           active ? "bg-white/10 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.06)]" : "hover:bg-white/5 hover:text-white",
                         )}

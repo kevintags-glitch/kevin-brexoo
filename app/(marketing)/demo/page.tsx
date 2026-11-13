@@ -18,7 +18,7 @@ export default function DemoPage() {
       <Container className="relative grid gap-14 py-16 sm:py-24 lg:grid-cols-[1fr_1.1fr]">
         <div>
           <Eyebrow>Request a demo</Eyebrow>
-          <WordsReveal as="h1" text="See Brexoo with your own work." className="mt-5 max-w-[14ch] text-[44px] font-extralight leading-[1.02] tracking-[-0.045em] sm:text-[68px]" />
+          <WordsReveal as="h1" text="See Brexoo with your own work." className="mt-5 max-w-[14ch] text-[44px] font-extralight leading-[1.02] tracking-[-0.03em] sm:text-[68px]" />
           <p className="mt-6 max-w-[46ch] text-[17px] font-light leading-relaxed text-ink-2 sm:text-[19px]">
             Tell us a little about your business. Available for builders and home-service businesses in the USA, Australia and New Zealand.
           </p>
