@@ -7,9 +7,9 @@ import type { PublicPageData } from "./types";
 import { VisitorChat } from "./VisitorChat";
 
 const ACCENTS = {
-  blue: "bg-[linear-gradient(160deg,#06264f_0%,#0f4598_120%)]",
-  teal: "bg-[linear-gradient(160deg,#0b2f3a_0%,#138a80_120%)]",
-  navy: "bg-[linear-gradient(160deg,#081a33_0%,#102c50_100%)]",
+  blue: "bg-[linear-gradient(160deg,#0f2742_0%,#1f5fd0_115%)]",
+  teal: "bg-[linear-gradient(160deg,#0f2742_0%,#0891b2_120%)]",
+  navy: "bg-[linear-gradient(160deg,#081a2e_0%,#0f2742_100%)]",
 };
 
 /**
@@ -47,7 +47,7 @@ export function PublicLanding({ data, preview }: { data: PublicPageData; preview
           <div aria-hidden className="grain pointer-events-none absolute inset-0 opacity-[0.07] mix-blend-overlay" />
           <div className="relative mx-auto grid max-w-[1120px] gap-10 px-4 pb-10 pt-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_440px] lg:pb-20 lg:pt-20">
             <div className="lg:pt-6">
-              <h1 className="max-w-[18ch] text-[38px] font-medium leading-[1.05] tracking-[-0.03em] sm:text-[54px]">{c.headline}</h1>
+              <h1 className="max-w-[18ch] text-[38px] font-bold leading-[1.05] tracking-[-0.03em] sm:text-[54px]">{c.headline}</h1>
               {c.subheadline ? <p className="mt-5 max-w-[52ch] text-[17px] leading-relaxed text-white/80">{c.subheadline}</p> : null}
               {c.highlights.length ? (
                 <ul className="mt-8 grid gap-3">
@@ -103,14 +103,14 @@ export function PublicLanding({ data, preview }: { data: PublicPageData; preview
 
         {c.about ? (
           <section className="mx-auto max-w-[1120px] px-4 py-16 sm:px-6">
-            <h2 className="text-[30px] font-medium tracking-[-0.02em]">About {b.name}</h2>
+            <h2 className="text-[30px] font-bold tracking-[-0.02em]">About {b.name}</h2>
             <p className="mt-4 max-w-[65ch] whitespace-pre-line text-[17px] leading-relaxed text-ink-2">{c.about}</p>
           </section>
         ) : null}
 
         {c.gallery.length ? (
           <section className="mx-auto max-w-[1120px] px-4 pb-16 sm:px-6">
-            <h2 className="text-[30px] font-medium tracking-[-0.02em]">Recent work</h2>
+            <h2 className="text-[30px] font-bold tracking-[-0.02em]">Recent work</h2>
             <ul className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3">
               {c.gallery.map((g) => (
                 <li key={g.url} className="overflow-hidden rounded-2xl bg-surface-2">
@@ -126,7 +126,7 @@ export function PublicLanding({ data, preview }: { data: PublicPageData; preview
         {c.process.length ? (
           <section className="border-y border-line bg-surface">
             <div className="mx-auto max-w-[1120px] px-4 py-16 sm:px-6">
-              <h2 className="text-[30px] font-medium tracking-[-0.02em]">How it works</h2>
+              <h2 className="text-[30px] font-bold tracking-[-0.02em]">How it works</h2>
               <ol className="mt-8 grid gap-6 md:grid-cols-3">
                 {c.process.map((p, i) => (
                   <li key={i}>
@@ -142,7 +142,7 @@ export function PublicLanding({ data, preview }: { data: PublicPageData; preview
 
         {c.faqs.length ? (
           <section className="mx-auto max-w-[800px] px-4 py-16 sm:px-6">
-            <h2 className="text-[30px] font-medium tracking-[-0.02em]">Questions</h2>
+            <h2 className="text-[30px] font-bold tracking-[-0.02em]">Questions</h2>
             <div className="mt-6 divide-y divide-line border-y border-line">
               {c.faqs.map((f) => (
                 <details key={f.q} className="group [&_summary::-webkit-details-marker]:hidden">

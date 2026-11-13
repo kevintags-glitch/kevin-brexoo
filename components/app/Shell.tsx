@@ -223,7 +223,7 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
 
   return (
     <div className={cn("min-h-dvh bg-canvas lg:grid", collapsed ? "lg:grid-cols-[76px_minmax(0,1fr)]" : "lg:grid-cols-[264px_minmax(0,1fr)]")}>
-      <aside className="sticky top-0 hidden h-dvh bg-[#0b2347] dark:bg-[#071630] lg:block">{sidebar(false)}</aside>
+      <aside className="sticky top-0 hidden h-dvh bg-midnight lg:block">{sidebar(false)}</aside>
 
       <div className={cn("fixed inset-0 z-50 lg:hidden", open ? "pointer-events-auto" : "pointer-events-none")} aria-hidden={!open}>
         <div className={cn("absolute inset-0 bg-black/40 transition-opacity duration-200", open ? "opacity-100" : "opacity-0")} onClick={() => setOpen(false)} />
@@ -234,7 +234,7 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
           aria-label="Navigation"
           inert={!open}
           className={cn(
-            "absolute inset-y-0 left-0 w-[86%] max-w-[300px] bg-[#0b2347] shadow-lg transition-transform duration-300 [transition-timing-function:var(--ease-drawer)] dark:bg-[#071630]",
+            "absolute inset-y-0 left-0 w-[86%] max-w-[300px] bg-midnight shadow-lg transition-transform duration-300 [transition-timing-function:var(--ease-drawer)]",
             open ? "translate-x-0" : "-translate-x-full",
           )}
         >
@@ -267,7 +267,7 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
             <Bell className="size-5" />
             {counts.unreviewed ? <span className="absolute right-2 top-2 size-2 rounded-full bg-[#e5533d] ring-2 ring-surface" /> : null}
           </Link>
-          <Link href="/app/xoo" className="pressable inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-[#0b2347] px-3 text-[14px] font-medium text-white hover:bg-[#06326a] dark:bg-blue dark:text-on-blue">
+          <Link href="/app/xoo" className="pressable inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-midnight px-3 text-[14px] font-medium text-white hover:bg-midnight-hover dark:bg-blue dark:text-on-blue">
             <Sparkles className="size-4" aria-hidden />
             <span className="max-sm:sr-only">Ask Xoo</span>
           </Link>

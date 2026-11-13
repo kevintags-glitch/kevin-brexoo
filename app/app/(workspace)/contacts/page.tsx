@@ -55,11 +55,11 @@ export default async function ContactsPage({ searchParams }: { searchParams: Pro
     <Page wide className="grid gap-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-[26px] font-medium tracking-[-0.02em] sm:text-[28px]">Contacts</h1>
+          <h1 className="text-[26px] font-semibold tracking-[-0.02em] sm:text-[28px]">Contacts</h1>
           <p className="text-[14px] text-ink-3">People and businesses who&apos;ve enquired or that you&apos;ve added. Private to your organisation.</p>
         </div>
         {isOwner ? (
-          <a href={`/app/contacts/export?${new URLSearchParams(Object.entries({ q, status, source }).filter(([, v]) => v)).toString()}`} className="pressable inline-flex h-10 items-center gap-2 self-start rounded-xl bg-[#0b2347] px-4 text-[14px] font-medium text-white hover:bg-[#06326a] dark:bg-blue dark:text-on-blue sm:self-auto">
+          <a href={`/app/contacts/export?${new URLSearchParams(Object.entries({ q, status, source }).filter(([, v]) => v)).toString()}`} className="pressable inline-flex h-10 items-center gap-2 self-start rounded-xl bg-midnight px-4 text-[14px] font-medium text-white hover:bg-midnight-hover dark:bg-blue dark:text-on-blue sm:self-auto">
             <FileDown className="size-4" aria-hidden /> Export data
           </a>
         ) : null}
@@ -69,7 +69,7 @@ export default async function ContactsPage({ searchParams }: { searchParams: Pro
         {cards.map((c) => (
           <Link key={c.label} href={c.href} className="pressable rounded-2xl border border-line bg-surface p-5 shadow-xs hover:border-line-strong">
             <p className="text-[14px] font-medium text-ink-2">{c.label}</p>
-            <p className="mt-3 font-display text-[36px] font-medium leading-none tracking-tight tabular">{c.n.toLocaleString("en-AU")}</p>
+            <p className="mt-3 font-display text-[36px] font-semibold leading-none tracking-tight tabular">{c.n.toLocaleString("en-AU")}</p>
             <div className="mt-4 flex items-center justify-between gap-3">
               <span className="flex items-center gap-2 text-[12px] text-ink-3">
                 {c.week !== null ? <span className="rounded-full bg-green-soft px-2 py-0.5 text-[11px] font-semibold text-green-ink">+{c.week}</span> : null}

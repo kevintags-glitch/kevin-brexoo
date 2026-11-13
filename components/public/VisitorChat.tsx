@@ -157,7 +157,7 @@ export function VisitorChat({ data, preview }: { data: PublicPageData; preview?:
         type="button"
         onClick={() => setOpen(true)}
         className={cn(
-          "pressable fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-40 inline-flex h-12 items-center gap-2 rounded-full bg-[#0a1a33] pl-4 pr-5 text-[14px] font-medium text-white shadow-lg transition-[opacity,transform] duration-200",
+          "pressable fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-40 inline-flex h-12 items-center gap-2 rounded-full bg-[#0f2742] pl-4 pr-5 text-[14px] font-medium text-white shadow-lg transition-[opacity,transform] duration-200",
           open && "pointer-events-none opacity-0",
           formInView && "max-sm:pointer-events-none max-sm:translate-y-4 max-sm:opacity-0",
         )}

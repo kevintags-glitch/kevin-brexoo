@@ -9,7 +9,7 @@ export function PageHero({ eyebrow, title, body, children }: { eyebrow: string; 
       <Container className="py-16 sm:py-24">
         <Reveal>
           <Eyebrow>{eyebrow}</Eyebrow>
-          <h1 className="mt-4 max-w-[18ch] text-[40px] font-medium leading-[1.04] tracking-[-0.03em] sm:text-[60px]">{title}</h1>
+          <h1 className="mt-4 max-w-[18ch] text-[40px] font-bold leading-[1.04] tracking-[-0.03em] sm:text-[60px]">{title}</h1>
           <p className="mt-5 max-w-[60ch] text-[17px] leading-relaxed text-ink-2 sm:text-[19px]">{body}</p>
           {children ? <div className="mt-8 flex flex-col gap-3 sm:flex-row">{children}</div> : null}
         </Reveal>

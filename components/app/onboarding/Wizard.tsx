@@ -121,7 +121,7 @@ export function Wizard({ data, step }: { data: WizardData; step: StepId | "revie
 function StepHeader({ title, body }: { title: string; body: string }) {
   return (
     <div className="border-b border-line px-6 py-5 sm:px-8">
-      <h2 className="text-[22px] font-medium tracking-[-0.015em]">{title}</h2>
+      <h2 className="text-[22px] font-semibold tracking-[-0.015em]">{title}</h2>
       <p className="mt-1 text-[14px] text-ink-3">{body}</p>
     </div>
   );

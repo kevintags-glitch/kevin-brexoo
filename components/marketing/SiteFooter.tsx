@@ -14,6 +14,7 @@ const COLUMNS = [
   {
     title: "Industries",
     links: [
+      { href: "/industries", label: "All industries" },
       { href: "/builders", label: "Builders & developers" },
       { href: "/trades", label: "Trades & home services" },
     ],
@@ -21,6 +22,7 @@ const COLUMNS = [
   {
     title: "Company",
     links: [
+      { href: "/resources", label: "Resources" },
       { href: "/demo", label: "Request a demo" },
       { href: "/login", label: "Log in" },
       { href: "/signup", label: "Create an account" },
@@ -42,9 +44,8 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-[1200px] gap-12 px-4 py-16 sm:px-6 md:grid-cols-[1.2fr_2fr]">
         <div className="max-w-xs">
           <Logo knockout="var(--surface)" />
-          <p className="mt-4 text-sm leading-relaxed text-ink-3">
-            The growth and next-project platform for builders and service businesses. Find your next opportunity, move the conversation forward and keep your pipeline moving.
-          </p>
+          <p className="mt-4 text-[15px] font-semibold leading-snug text-ink">The AI Growth Platform for Builders &amp; Home Services.</p>
+          <p className="mt-2 text-sm leading-relaxed text-ink-3">Find project leads. Qualify opportunities. Book more jobs.</p>
         </div>
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
           {COLUMNS.map((col) => (

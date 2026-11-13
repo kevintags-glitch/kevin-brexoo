@@ -48,14 +48,14 @@ export default async function EnquiriesPage({ searchParams }: { searchParams: Pr
     <Page wide className="grid gap-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-[26px] font-medium tracking-[-0.02em] sm:text-[28px]">Enquiries</h1>
+          <h1 className="text-[26px] font-semibold tracking-[-0.02em] sm:text-[28px]">Enquiries</h1>
           <p className="text-[14px] text-ink-3">Every enquiry from your pages and chat, plus anything you add yourself.</p>
         </div>
         <div className="flex gap-2">
             <>
               <NewOpportunity services={fc.orgServices} />
               {isOwner ? (
-                <a href={exportHref} className="pressable grid size-10 place-items-center rounded-[10px] bg-[#0b2347] text-white hover:bg-[#06326a] dark:bg-blue dark:text-on-blue" aria-label="Export these enquiries as CSV" title="Export CSV (owners only, recorded in the audit log)">
+                <a href={exportHref} className="pressable grid size-10 place-items-center rounded-[10px] bg-midnight text-white hover:bg-midnight-hover dark:bg-blue dark:text-on-blue" aria-label="Export these enquiries as CSV" title="Export CSV (owners only, recorded in the audit log)">
                   <Download className="size-4" />
                 </a>
               ) : null}
@@ -71,7 +71,7 @@ export default async function EnquiriesPage({ searchParams }: { searchParams: Pr
               <IconTile tone="dark">{s.icon}</IconTile>
               <span className="min-w-0">
                 <span className="block truncate text-[13px] text-ink-3">{s.label}</span>
-                <span className="block font-display text-[22px] font-medium leading-tight tabular">{s.n.toLocaleString("en-AU")}</span>
+                <span className="block font-display text-[22px] font-semibold leading-tight tabular">{s.n.toLocaleString("en-AU")}</span>
               </span>
             </Link>
           );

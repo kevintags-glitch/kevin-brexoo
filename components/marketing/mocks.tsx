@@ -79,7 +79,7 @@ export function OverviewMock({ className }: { className?: string }) {
           <div className="flex items-baseline justify-between">
             <div>
               <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-ink-3">Thursday</p>
-              <p className="mt-0.5 font-display text-lg font-medium tracking-tight">Good morning, Jordan</p>
+              <p className="mt-0.5 font-display text-lg font-semibold tracking-tight">Good morning, Jordan</p>
             </div>
             <Badge tone="teal" dot>
               Page live
@@ -93,7 +93,7 @@ export function OverviewMock({ className }: { className?: string }) {
             ].map((s) => (
               <div key={s.k} className="rounded-xl border border-line p-3">
                 <p className="truncate text-[11px] text-ink-3">{s.k}</p>
-                <p className="mt-1 font-display text-2xl font-medium tabular">{s.v}</p>
+                <p className="mt-1 font-display text-2xl font-semibold tabular">{s.v}</p>
                 <p className="text-[11px] text-ink-3">{s.d}</p>
               </div>
             ))}
@@ -161,7 +161,7 @@ export function FitCardMock({ className }: { className?: string }) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-[12px] text-ink-3">Why it fits</p>
-          <p className="mt-0.5 font-display text-xl font-medium tracking-tight">Strong fit · 86</p>
+          <p className="mt-0.5 font-display text-xl font-semibold tracking-tight">Strong fit · 86</p>
         </div>
         <div className="text-right">
           <p className="text-[12px] text-ink-3">Confidence</p>
@@ -305,7 +305,7 @@ export function PipelineMock({ className }: { className?: string }) {
       <div className="flex items-end justify-between px-1">
         <div>
           <p className="text-[12px] text-ink-3">Won this quarter</p>
-          <p className="font-display text-2xl font-medium tabular">$612,000</p>
+          <p className="font-display text-2xl font-semibold tabular">$612,000</p>
         </div>
         <div className="flex h-12 items-end gap-1.5" aria-hidden>
           {[30, 42, 38, 55, 48, 70, 88].map((h, i) => (
@@ -335,15 +335,15 @@ export function PipelineMock({ className }: { className?: string }) {
 export function PhonePageMock({ className }: { className?: string }) {
   return (
     <div className={cn("relative mx-auto w-[280px] rounded-[44px] border-[10px] border-[#0b1626] bg-[#0b1626] shadow-lg", className)}>
-      <div className="overflow-hidden rounded-[34px] bg-white text-[#0a1a33]">
+      <div className="overflow-hidden rounded-[34px] bg-white text-[#0f2742]">
         <div className="flex items-center justify-between px-5 pb-2 pt-3 text-[10px] font-semibold">
           <span>9:41</span>
           <span className="h-5 w-20 rounded-full bg-[#0b1626]" />
           <span>100%</span>
         </div>
-        <div className="bg-[linear-gradient(160deg,#102c50,#06326a)] px-5 pb-6 pt-4 text-white">
+        <div className="bg-[linear-gradient(160deg,#0f2742_0%,#1f5fd0_130%)] px-5 pb-6 pt-4 text-white">
           <p className="text-[10px] font-medium uppercase tracking-[0.14em] opacity-70">Coastline Homes</p>
-          <p className="mt-2 font-display text-[22px] font-medium leading-[1.1] tracking-tight">New homes across Newcastle & the Lake</p>
+          <p className="mt-2 font-display text-[22px] font-semibold leading-[1.1] tracking-tight">New homes across Newcastle & the Lake</p>
           <p className="mt-2 text-[11px] leading-relaxed opacity-80">Tell us what you have in mind. We reply within 4 business hours.</p>
         </div>
         <div className="grid gap-2.5 p-4">
@@ -354,12 +354,12 @@ export function PhonePageMock({ className }: { className?: string }) {
           ))}
           <div className="flex gap-1.5">
             {["Own the land", "Buying", "Not sure"].map((c, i) => (
-              <span key={c} className={cn("rounded-full border px-2.5 py-1 text-[10px]", i === 0 ? "border-[#0b3a7e] bg-[#e8eef8] text-[#0b3a7e]" : "border-[#cbd5e1] text-[#33445e]")}>
+              <span key={c} className={cn("rounded-full border px-2.5 py-1 text-[10px]", i === 0 ? "border-[#2f6fe4] bg-[#e6f4ff] text-[#2f6fe4]" : "border-[#cbd5e1] text-[#33445e]")}>
                 {c}
               </span>
             ))}
           </div>
-          <div className="mt-1 h-10 rounded-lg bg-[#0b3a7e] text-center text-[12px] font-semibold leading-10 text-white">Request a quote</div>
+          <div className="mt-1 h-10 rounded-lg bg-[#2f6fe4] text-center text-[12px] font-semibold leading-10 text-white">Request a quote</div>
           <p className="text-center text-[9px] text-[#5f6e85]">Your details go only to Coastline Homes.</p>
         </div>
       </div>

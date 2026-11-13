@@ -23,7 +23,7 @@ export default async function SetupPage({ searchParams }: { searchParams: Promis
       </Link>
       <main id="main" className="mx-auto flex w-full max-w-[460px] flex-1 flex-col justify-center py-12">
         <p className="text-[13px] font-semibold uppercase tracking-[0.12em] text-blue">Step 1 of 2</p>
-        <h1 className="mt-3 text-[32px] font-medium leading-tight tracking-[-0.025em]">{firstName ? `Welcome, ${firstName}.` : "Welcome."} Let's set up your business.</h1>
+        <h1 className="mt-3 text-[32px] font-bold leading-tight tracking-[-0.025em]">{firstName ? `Welcome, ${firstName}.` : "Welcome."} Let's set up your business.</h1>
         <p className="mb-8 mt-2 text-[15px] text-ink-3">Your organisation keeps your enquiries, team and pages separate from everyone else's. You'll be its owner.</p>
         <SetupForm siteHost={new URL(SITE_URL).host} zones={allTimezones()} />
       </main>

@@ -47,7 +47,7 @@ export default function PricingPage() {
                   <h2 className="font-sans text-[18px] font-semibold tracking-normal">{p.name}</h2>
                   <p className="mt-2 min-h-12 text-[14px] leading-relaxed text-ink-3">{p.positioning}</p>
                   <p className="mt-6 flex items-baseline gap-1.5">
-                    <span className="font-display text-5xl font-medium tracking-tight tabular">{formatMoney(p.monthlyPriceMinor, p.currency)}</span>
+                    <span className="font-display text-5xl font-semibold tracking-tight tabular">{formatMoney(p.monthlyPriceMinor, p.currency)}</span>
                     <span className="text-ink-3">/ month</span>
                   </p>
                   <p className="mt-1 text-[13px] text-ink-3">plus {formatMoney(p.setupFeeMinor, p.currency)} one-off setup</p>

@@ -40,7 +40,7 @@ export function XooChat() {
             <span className="grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-blue to-teal text-white shadow-md">
               <Sparkles className="size-6" aria-hidden />
             </span>
-            <h2 className="mt-5 text-[24px] font-medium tracking-tight">Ask Xoo about your work</h2>
+            <h2 className="mt-5 text-[24px] font-semibold tracking-tight">Ask Xoo about your work</h2>
             <p className="mt-2 max-w-md text-[14px] text-ink-3">Xoo reads your own Brexoo records, read-only, and points to where each answer came from. On any enquiry you can also ask for a summary, a draft reply or a site-visit brief.</p>
             <div className="mt-6 flex max-w-xl flex-wrap justify-center gap-2">
               {QUICK.map((q) => (

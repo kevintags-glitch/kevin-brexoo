@@ -24,7 +24,7 @@ export function PanelHeader({ eyebrow, title, badge, icon, action, className }: 
         <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-ink-3">{eyebrow}</p>
         {title !== undefined ? (
           <div className="mt-1 flex flex-wrap items-center gap-2">
-            <span className="font-display text-[24px] font-medium leading-none tracking-tight tabular">{title}</span>
+            <span className="font-display text-[24px] font-semibold leading-none tracking-tight tabular">{title}</span>
             {badge}
           </div>
         ) : null}
@@ -40,7 +40,7 @@ export function IconTile({ children, tone = "light" }: { children: ReactNode; to
       aria-hidden
       className={cn(
         "grid size-10 shrink-0 place-items-center rounded-xl [&_svg]:size-[18px]",
-        tone === "dark" ? "bg-[#0b2347] text-white" : "border border-line bg-surface text-teal-ink shadow-xs",
+        tone === "dark" ? "bg-midnight text-white" : "border border-line bg-surface text-teal-ink shadow-xs",
       )}
     >
       {children}
@@ -96,7 +96,7 @@ export function StatCard({
         <div className="min-w-0">
           <p className="truncate text-[11px] font-semibold uppercase tracking-[0.06em] text-ink-3">{label}</p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
-            <span className="font-display text-[26px] font-medium leading-none tracking-tight tabular">{value}</span>
+            <span className="font-display text-[26px] font-semibold leading-none tracking-tight tabular">{value}</span>
             <Delta current={current} previous={previous} invert={invert} />
           </div>
         </div>
@@ -175,7 +175,7 @@ export function Pagination({ page, pageSize, total, hrefFor, noun }: { page: num
             {n === "…" ? (
               <span className={cn(btn, "text-ink-3")}>…</span>
             ) : (
-              <Link href={hrefFor(n)} aria-current={n === page ? "page" : undefined} className={cn(btn, n === page ? "bg-[#0b2347] text-white dark:bg-blue dark:text-on-blue" : "bg-surface text-ink-2 shadow-xs ring-1 ring-line hover:bg-surface-2")}>
+              <Link href={hrefFor(n)} aria-current={n === page ? "page" : undefined} className={cn(btn, n === page ? "bg-midnight text-white dark:bg-blue dark:text-on-blue" : "bg-surface text-ink-2 shadow-xs ring-1 ring-line hover:bg-surface-2")}>
                 {n}
               </Link>
             )}

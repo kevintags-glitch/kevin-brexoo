@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
  * Buttons. One primary action per view; secondary and ghost for the rest. Press feedback is a
  * 0.97 scale at 160ms ease-out. Hit areas are at least 40px (36px for sm, which is desktop-only).
  * ---------------------------------------------------------------------------------------------- */
-type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "inverse";
+type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "danger" | "inverse";
 type ButtonSize = "sm" | "md" | "lg";
 
 const buttonBase =
@@ -15,9 +15,10 @@ const buttonBase =
 const buttonVariants: Record<ButtonVariant, string> = {
   primary: "bg-blue text-on-blue shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_1px_2px_rgb(10_26_51/0.2)] hover:bg-blue-hover",
   secondary: "bg-surface text-ink border border-line-strong shadow-xs hover:bg-surface-2",
+  outline: "border border-blue/70 bg-surface text-blue hover:bg-blue-soft",
   ghost: "text-ink-2 hover:text-ink hover:bg-surface-2",
   danger: "bg-surface text-red-ink border border-line-strong hover:bg-red-soft",
-  inverse: "bg-white text-[#0a1a33] hover:bg-white/90",
+  inverse: "bg-white text-[#0f2742] hover:bg-white/90",
 };
 
 const buttonSizes: Record<ButtonSize, string> = {

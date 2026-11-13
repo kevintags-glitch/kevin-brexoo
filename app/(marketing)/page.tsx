@@ -1,9 +1,10 @@
-import Link from "next/link";
 import { ArrowRight, Database, Eye, Lock, ShieldCheck, Sparkles, Waypoints } from "lucide-react";
 import { INDUSTRY_TEMPLATES } from "@/config/industry-templates";
 import { PLANS } from "@/config/plans";
 import { ButtonLink } from "@/components/ui";
 import { HeroProduct } from "@/components/marketing/HeroProduct";
+import { IndustryTiles } from "@/components/marketing/brand-industries";
+import { Swoosh } from "@/components/marketing/Swoosh";
 import { INDUSTRY_ICON } from "@/components/marketing/industry-icons";
 import { BookingMock, DiscoverMock, FitCardMock, PhonePageMock, PipelineMock, XooMock } from "@/components/marketing/mocks";
 import { Reveal } from "@/components/marketing/Reveal";
@@ -88,43 +89,42 @@ export default function HomePage() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute inset-x-0 top-0 h-[720px] bg-[radial-gradient(50%_60%_at_50%_0%,color-mix(in_oklab,var(--sky)_14%,transparent),transparent_75%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--line)_1px,transparent_1px),linear-gradient(to_bottom,var(--line)_1px,transparent_1px)] bg-[size:64px_64px] opacity-50 [mask-image:radial-gradient(60%_50%_at_50%_0%,black,transparent_80%)]" />
-        </div>
-        <Container className="pb-10 pt-16 text-center sm:pt-24">
-          <Reveal>
-            <Link
-              href="/how-it-works"
-              className="pressable inline-flex items-center gap-2 rounded-full border border-line bg-surface/70 py-1 pl-1 pr-3 text-[13px] text-ink-2 shadow-xs backdrop-blur"
-            >
-              <span className="rounded-full bg-teal-soft px-2 py-0.5 text-[12px] font-medium text-teal-ink">For builders & trades</span>
-              <span className="max-sm:hidden">Discover → Qualify → Engage → Book → Win</span>
-              <span className="sm:hidden">See how it works</span>
-              <ArrowRight className="size-3.5" aria-hidden />
-            </Link>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h1 className="mx-auto mt-6 max-w-[15ch] text-[44px] font-medium leading-[1.02] tracking-[-0.035em] sm:text-[68px] lg:text-[80px]">
-              Turn project interest into real opportunities.
-            </h1>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="mx-auto mt-6 max-w-[58ch] text-[17px] leading-relaxed text-ink-2 sm:text-[19px]">
-              Brexoo brings project discovery, AI-assisted qualification, lead management and follow-up into one workspace, helping builders and service businesses find and win their next projects.
-            </p>
-          </Reveal>
-          <Reveal delay={0.15} className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-            <ButtonLink href="/demo" size="lg" className="px-6">
-              Request a demo
-            </ButtonLink>
-            <ButtonLink href="/how-it-works" size="lg" variant="secondary" className="px-6">
-              Explore how it works
-            </ButtonLink>
-          </Reveal>
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(180deg,var(--canvas)_0%,var(--surface)_100%)]" />
+        <Swoosh className="absolute -right-[10%] bottom-0 -z-10 h-[78%] w-[85%] max-lg:hidden" />
+        <Swoosh className="absolute -right-1/3 bottom-0 -z-10 h-[40%] w-[160%] lg:hidden" />
+        <Container className="grid items-center gap-12 pb-12 pt-14 sm:pt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:pb-20">
+          <div>
+            <Reveal>
+              <p className="text-[15px] font-semibold text-blue sm:text-[16px]">The AI Growth Platform for Builders &amp; Home Services</p>
+              <span aria-hidden className="mt-3 block h-1 w-14 rounded-full bg-signal" />
+            </Reveal>
+            <Reveal delay={0.05}>
+              <h1 className="mt-6 max-w-[14ch] text-[42px] font-bold leading-[1.04] tracking-[-0.035em] text-ink sm:text-[58px] lg:text-[64px]">Turn Local Demand Into Your Next Project.</h1>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-ink-2 sm:text-[18px]">
+                Project enquiries, AI-assisted qualification and follow-up for builders, trades and home service businesses.
+              </p>
+              <p className="mt-3 text-[16px] font-medium text-ink">Find project leads. Qualify opportunities. Book more jobs.</p>
+            </Reveal>
+            <Reveal delay={0.15} className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <ButtonLink href="/demo" size="lg" className="px-6 font-semibold">
+                Request a Demo <ArrowRight className="size-4" aria-hidden />
+              </ButtonLink>
+              <ButtonLink href="/how-it-works" size="lg" variant="outline" className="px-6 font-semibold text-ink">
+                See How It Works
+              </ButtonLink>
+            </Reveal>
+          </div>
+          <div className="relative">
+            <HeroProduct />
+          </div>
         </Container>
-        <Container className="pb-20 sm:pb-28">
-          <HeroProduct />
+        <Container className="pb-16 sm:pb-20">
+          <Reveal className="rounded-[22px] border border-line bg-surface/95 p-2 shadow-md backdrop-blur">
+            <p className="sr-only">Built for these industries</p>
+            <IndustryTiles />
+          </Reveal>
         </Container>
       </section>
 
@@ -178,7 +178,7 @@ export default function HomePage() {
               const Icon = INDUSTRY_ICON[t.code]!;
               return (
                 <Reveal as="li" key={t.code} delay={(i % 5) * 0.03} className="group rounded-2xl border border-line bg-canvas p-4 transition-colors duration-200 hover:border-line-strong hover:bg-surface">
-                  <Icon className="size-5 text-ink-3 transition-colors group-hover:text-blue" aria-hidden />
+                  <Icon className="size-6 text-blue" strokeWidth={1.75} aria-hidden />
                   <p className="mt-6 text-[15px] font-medium">{t.name}</p>
                   <p className="mt-1 line-clamp-2 text-[13px] leading-snug text-ink-3">{t.opportunityTypes.slice(0, 3).join(", ")}</p>
                 </Reveal>
@@ -255,7 +255,7 @@ export default function HomePage() {
               <Reveal key={p.code} delay={i * 0.05} className="flex flex-col rounded-2xl border border-line bg-surface p-6 shadow-xs">
                 <p className="text-[15px] font-semibold">{p.name}</p>
                 <p className="mt-4 flex items-baseline gap-1">
-                  <span className="font-display text-4xl font-medium tracking-tight tabular">{formatMoney(p.monthlyPriceMinor, p.currency)}</span>
+                  <span className="font-display text-4xl font-semibold tracking-tight tabular">{formatMoney(p.monthlyPriceMinor, p.currency)}</span>
                   <span className="text-sm text-ink-3">/ month</span>
                 </p>
                 <p className="mt-1 text-[13px] text-ink-3">+ {formatMoney(p.setupFeeMinor, p.currency)} setup</p>

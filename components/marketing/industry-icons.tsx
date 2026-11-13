@@ -1,11 +1,11 @@
-import { Bug, Building, Droplets, Fence, Grid2x2, Hammer, House, Leaf, PaintRoller, SprayCan, Trees, Warehouse, Wrench, Zap, Snowflake, type LucideIcon } from "lucide-react";
+import { Bug, Building, Fan, Fence, Grid2x2, Hammer, House, Leaf, PaintRoller, ShowerHead, SprayCan, Trees, Warehouse, Wrench, Zap, type LucideIcon } from "lucide-react";
 
 export const INDUSTRY_ICON: Record<string, LucideIcon> = {
   home_builder: House,
   property_developer: Building,
   electrician: Zap,
-  plumber: Droplets,
-  hvac: Snowflake,
+  plumber: ShowerHead,
+  hvac: Fan,
   renovation: Hammer,
   roofing: Warehouse,
   landscaping: Trees,

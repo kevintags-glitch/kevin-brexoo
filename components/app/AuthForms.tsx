@@ -37,7 +37,7 @@ function PasswordInput(props: React.ComponentProps<typeof Input>) {
 function Heading({ title, body }: { title: string; body?: React.ReactNode }) {
   return (
     <div className="mb-8">
-      <h1 className="text-[32px] font-medium leading-tight tracking-[-0.025em]">{title}</h1>
+      <h1 className="text-[32px] font-semibold leading-tight tracking-[-0.025em]">{title}</h1>
       {body ? <p className="mt-2 text-[15px] text-ink-3">{body}</p> : null}
     </div>
   );

@@ -1,14 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/inter";
-import "@fontsource-variable/outfit";
 import "./globals.css";
 import { SITE_URL } from "@/lib/env";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: "Brexoo — The growth and next-project platform for service businesses", template: "%s · Brexoo" },
+  title: { default: "Brexoo — The AI Growth Platform for Builders & Home Services", template: "%s · Brexoo" },
   description:
-    "Brexoo brings project discovery, AI-assisted qualification, lead management and follow-up into one workspace — helping builders and service businesses find and win their next projects.",
+    "Find project leads. Qualify opportunities. Book more jobs. Project enquiries, AI-assisted qualification and follow-up for builders, trades and home service businesses.",
   icons: { icon: "/icon.svg" },
   openGraph: { siteName: "Brexoo", type: "website" },
 };
@@ -18,8 +17,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f7fb" },
-    { media: "(prefers-color-scheme: dark)", color: "#060d1a" },
+    { media: "(prefers-color-scheme: light)", color: "#f6f9fd" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a1a2e" },
   ],
 };
 

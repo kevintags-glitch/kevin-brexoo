@@ -23,7 +23,7 @@ export default async function InvitePage({ params }: { params: Promise<{ token: 
         <Logo knockout="var(--canvas)" />
       </Link>
       <main id="main" className="mx-auto flex w-full max-w-[420px] flex-1 flex-col justify-center">
-        <h1 className="text-[30px] font-medium tracking-[-0.025em]">You've been invited</h1>
+        <h1 className="text-[30px] font-bold tracking-[-0.025em]">You've been invited</h1>
         <p className="mt-2 text-[15px] text-ink-3">Join your team's Brexoo workspace as {data.user.email}. The invitation must have been sent to this email.</p>
         <form action={accept} className="mt-8">
           <Button type="submit" size="lg" className="w-full">

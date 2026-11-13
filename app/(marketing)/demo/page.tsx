@@ -11,7 +11,7 @@ export default function DemoPage() {
       <Container className="grid gap-12 py-16 sm:py-24 lg:grid-cols-[1fr_1.15fr]">
         <div>
           <Eyebrow>Request a demo</Eyebrow>
-          <h1 className="mt-4 text-[40px] font-medium leading-[1.05] tracking-[-0.03em] sm:text-[56px]">See Brexoo with your own work.</h1>
+          <h1 className="mt-4 text-[40px] font-bold leading-[1.05] tracking-[-0.03em] sm:text-[56px]">See Brexoo with your own work.</h1>
           <p className="mt-5 max-w-[48ch] text-[17px] leading-relaxed text-ink-2">
             Tell us a little about your business. We'll set up a demo using your services and service area, walk through the workflow and answer your questions.
           </p>

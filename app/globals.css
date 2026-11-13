@@ -1,32 +1,35 @@
 @import "tailwindcss";
 
 /*
- * Brexoo design tokens (blueprint §18.1). Colours were sampled from the logo artwork:
- * mark #06326A, wordmark #022049. Working palette: Midnight Navy, Electric Blue, Cloud White,
- * Growth Teal. Every colour is a token so light and dark themes flip in one place.
+ * Brexoo design tokens — final brand guide: Midnight Blue #0F2742, Signal Blue #3B82F6,
+ * Growth Teal #06B6D4, Cloud White #E6F4FF; typeface Inter. Every colour is a token so light and
+ * dark themes flip in one place.
  */
 :root {
-  --canvas: #f5f7fb;
+  --canvas: #f6f9fd;
   --surface: #ffffff;
-  --surface-2: #eef2f8;
-  --surface-3: #e4eaf3;
-  --ink: #0a1a33;
-  --ink-2: #33445e;
-  --ink-3: #5f6e85;
-  --line: #e2e8f0;
-  --line-strong: #cbd5e1;
-  --brand-ink: #022049;
-  --brand-mark: #06326a;
-  --navy: #102c50;
-  /* Primary comes from the logo: the mark's navy, a touch lifted for interactive states. */
-  --blue: #0b3a7e;
-  --blue-hover: #06326a;
-  --blue-soft: #e8eef8;
+  --surface-2: #eef4fb;
+  --surface-3: #e3ecf7;
+  --ink: #0f2742;
+  --ink-2: #3a4b63;
+  --ink-3: #5f6f86;
+  --line: #e2e9f2;
+  --line-strong: #c9d5e4;
+  --brand-ink: #0f2742;
+  --brand-mark: #0f2742;
+  --navy: #0f2742;
+  --midnight: #0f2742;
+  --midnight-hover: #183a60;
+  /* Signal Blue. Fills use a half-step deeper shade so white text meets WCAG AA (4.7:1). */
+  --signal: #3b82f6;
+  --blue: #2f6fe4;
+  --blue-hover: #2560cc;
+  --blue-soft: #e6f4ff;
   --on-blue: #ffffff;
-  --sky: #3d78d6;
-  --teal: #21b6a8;
-  --teal-ink: #0b7a70;
-  --teal-soft: #e3f7f4;
+  --sky: #3b82f6;
+  --teal: #06b6d4;
+  --teal-ink: #0e7490;
+  --teal-soft: #e0f7fb;
   --amber-ink: #9a5b06;
   --amber-soft: #fdf3e1;
   --red-ink: #b42318;
@@ -35,33 +38,36 @@
   --green-soft: #e4f6ee;
   --violet-ink: #5b3fc4;
   --violet-soft: #efebff;
-  --focus: #0b3a7e;
-  --shadow-color: 215 45% 20%;
+  --focus: #3b82f6;
+  --shadow-color: 213 63% 16%;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --canvas: #060d1a;
-    --surface: #0b1626;
-    --surface-2: #112038;
-    --surface-3: #172a47;
-    --ink: #e9eff8;
-    --ink-2: #b5c2d6;
-    --ink-3: #8696ae;
-    --line: #1a2a44;
-    --line-strong: #263a5a;
-    --brand-ink: #e9eff8;
-    --brand-mark: #8db0f5;
-    --navy: #0e2142;
-    --blue: #8db0f5;
-    --blue-hover: #a9c3f8;
-    --blue-soft: #14264a;
-    --on-blue: #06142b;
-    --sky: #3d78d6;
-    --teal: #3ccfc0;
-    --teal-ink: #5edccd;
-    --teal-soft: #0d2b2d;
+    --canvas: #0a1a2e;
+    --surface: #0f2742;
+    --surface-2: #15314f;
+    --surface-3: #1b3a5c;
+    --ink: #eaf3ff;
+    --ink-2: #b9c8db;
+    --ink-3: #8a9bb2;
+    --line: #1e3a5a;
+    --line-strong: #2a4a6e;
+    --brand-ink: #e6f4ff;
+    --brand-mark: #e6f4ff;
+    --navy: #0f2742;
+    --midnight: #07182b;
+    --midnight-hover: #0f2742;
+    --signal: #3b82f6;
+    --blue: #5b9bf8;
+    --blue-hover: #7aaefa;
+    --blue-soft: #16345a;
+    --on-blue: #0a1a2e;
+    --sky: #3b82f6;
+    --teal: #22c3e0;
+    --teal-ink: #5fd4ea;
+    --teal-soft: #0b3140;
     --amber-ink: #f3b75b;
     --amber-soft: #2c2110;
     --red-ink: #f59a8f;
@@ -70,33 +76,36 @@
     --green-soft: #0e2a22;
     --violet-ink: #b6a5ff;
     --violet-soft: #221a45;
-    --focus: #8db0f5;
+    --focus: #7aaefa;
     --shadow-color: 220 60% 2%;
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --canvas: #060d1a;
-  --surface: #0b1626;
-  --surface-2: #112038;
-  --surface-3: #172a47;
-  --ink: #e9eff8;
-  --ink-2: #b5c2d6;
-  --ink-3: #8696ae;
-  --line: #1a2a44;
-  --line-strong: #263a5a;
-  --brand-ink: #e9eff8;
-  --brand-mark: #8db0f5;
-  --navy: #0e2142;
-  --blue: #8db0f5;
-  --blue-hover: #a9c3f8;
-  --blue-soft: #14264a;
-  --on-blue: #06142b;
-  --sky: #3d78d6;
-  --teal: #3ccfc0;
-  --teal-ink: #5edccd;
-  --teal-soft: #0d2b2d;
+  --canvas: #0a1a2e;
+  --surface: #0f2742;
+  --surface-2: #15314f;
+  --surface-3: #1b3a5c;
+  --ink: #eaf3ff;
+  --ink-2: #b9c8db;
+  --ink-3: #8a9bb2;
+  --line: #1e3a5a;
+  --line-strong: #2a4a6e;
+  --brand-ink: #e6f4ff;
+  --brand-mark: #e6f4ff;
+  --navy: #0f2742;
+  --midnight: #07182b;
+  --midnight-hover: #0f2742;
+  --signal: #3b82f6;
+  --blue: #5b9bf8;
+  --blue-hover: #7aaefa;
+  --blue-soft: #16345a;
+  --on-blue: #0a1a2e;
+  --sky: #3b82f6;
+  --teal: #22c3e0;
+  --teal-ink: #5fd4ea;
+  --teal-soft: #0b3140;
   --amber-ink: #f3b75b;
   --amber-soft: #2c2110;
   --red-ink: #f59a8f;
@@ -105,7 +114,7 @@
   --green-soft: #0e2a22;
   --violet-ink: #b6a5ff;
   --violet-soft: #221a45;
-  --focus: #8db0f5;
+  --focus: #7aaefa;
   --shadow-color: 220 60% 2%;
   color-scheme: dark;
 }
@@ -128,6 +137,9 @@
   --color-blue-soft: var(--blue-soft);
   --color-on-blue: var(--on-blue);
   --color-sky: var(--sky);
+  --color-signal: var(--signal);
+  --color-midnight: var(--midnight);
+  --color-midnight-hover: var(--midnight-hover);
   --color-teal: var(--teal);
   --color-teal-ink: var(--teal-ink);
   --color-teal-soft: var(--teal-soft);
@@ -141,7 +153,7 @@
   --color-violet-soft: var(--violet-soft);
 
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Outfit Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
@@ -184,7 +196,7 @@
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
     text-wrap: balance;
   }
   p {

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { LogoMark } from "@/components/brand/Logo";
+import { Swoosh } from "./Swoosh";
 import { Reveal } from "./Reveal";
 
 export function Container({ className, children }: { className?: string; children: ReactNode }) {
@@ -27,7 +28,7 @@ export function SectionHeading({
   return (
     <Reveal className={cn("max-w-2xl", align === "center" && "mx-auto text-center", className)}>
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-      <h2 className="mt-3 text-[34px] font-medium leading-[1.08] sm:text-[44px]">{title}</h2>
+      <h2 className="mt-3 text-[34px] font-bold leading-[1.08] sm:text-[44px]">{title}</h2>
       {body ? <p className="mt-4 text-[17px] leading-relaxed text-ink-2">{body}</p> : null}
     </Reveal>
   );
@@ -57,13 +58,11 @@ export function Faq({ items }: { items: { q: string; a: ReactNode }[] }) {
 export function CtaBand({ title, body, children }: { title: ReactNode; body?: ReactNode; children: ReactNode }) {
   return (
     <section className="px-4 pb-24 sm:px-6">
-      <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-[28px] bg-[#0b2347] px-6 py-16 text-white sm:px-14 sm:py-20">
-        <div aria-hidden className="grain pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay" />
-        <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 size-[520px] rounded-full bg-[radial-gradient(circle,rgba(61,120,214,0.45),transparent_65%)]" />
-        <div aria-hidden className="pointer-events-none absolute -bottom-40 left-1/3 size-[420px] rounded-full bg-[radial-gradient(circle,rgba(33,182,168,0.28),transparent_65%)]" />
-        <LogoMark color="#fff" className="pointer-events-none absolute -right-16 bottom-[-35%] h-[140%] w-auto opacity-[0.07]" />
+      <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-[28px] bg-[#0f2742] px-6 py-16 text-white sm:px-14 sm:py-20">
+        <Swoosh tone="dark" className="absolute inset-y-0 right-0 h-full w-[75%] opacity-90" />
+        <LogoMark color="#fff" className="pointer-events-none absolute right-10 top-1/2 h-[70%] w-auto -translate-y-1/2 opacity-[0.12] max-md:hidden" />
         <div className="relative max-w-2xl">
-          <h2 className="text-[34px] font-medium leading-[1.08] sm:text-[48px]">{title}</h2>
+          <h2 className="text-[34px] font-bold leading-[1.08] sm:text-[48px]">{title}</h2>
           {body ? <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-white/75">{body}</p> : null}
           <div className="mt-8 flex flex-wrap gap-3">{children}</div>
         </div>

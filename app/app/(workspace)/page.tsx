@@ -130,7 +130,7 @@ export default async function OverviewPage() {
     <Page wide className="grid gap-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-[26px] font-medium tracking-[-0.02em] sm:text-[28px]">Overview</h1>
+          <h1 className="text-[26px] font-semibold tracking-[-0.02em] sm:text-[28px]">Overview</h1>
           <p className="text-[14px] text-ink-3">Last {PERIOD} days, compared with the {PERIOD} before.</p>
         </div>
         <ButtonLink href="/app/enquiries?status=all" variant="secondary" size="sm">
@@ -193,7 +193,7 @@ export default async function OverviewPage() {
                 <span className="size-2.5 rounded-sm bg-teal" /> This period
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="size-2.5 rounded-sm bg-[#3d78d6]" /> Previous period
+                <span className="size-2.5 rounded-sm bg-signal" /> Previous period
               </span>
             </div>
           </div>
@@ -202,7 +202,7 @@ export default async function OverviewPage() {
               labels={labels}
               series={[
                 { label: "This period", values: curSeries, color: "var(--teal)" },
-                { label: "Previous", values: prevSeries, color: "#3d78d6" },
+                { label: "Previous", values: prevSeries, color: "var(--signal)" },
               ]}
               ariaLabel={`Rolling 7-day enquiries: ${cur.length} in the last ${PERIOD} days against ${prev.length} in the previous ${PERIOD}.`}
             />
@@ -239,9 +239,9 @@ export default async function OverviewPage() {
           <div className="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-ink-3">Your plan</p>
-              <p className="mt-1 font-display text-[22px] font-medium tracking-tight">{planInfo?.name ?? org.plan_code}</p>
+              <p className="mt-1 font-display text-[22px] font-semibold tracking-tight">{planInfo?.name ?? org.plan_code}</p>
             </div>
-            <ButtonLink href="/app/settings/plan" size="sm" className="bg-[#0b2347] text-white hover:bg-[#06326a] dark:bg-blue dark:text-on-blue">
+            <ButtonLink href="/app/settings/plan" size="sm" className="bg-midnight text-white hover:bg-midnight-hover dark:bg-blue dark:text-on-blue">
               Manage
             </ButtonLink>
           </div>

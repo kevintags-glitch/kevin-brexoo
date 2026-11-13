@@ -8,11 +8,10 @@ import { ButtonLink } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
 export const NAV = [
-  { href: "/how-it-works", label: "How it works" },
-  { href: "/builders", label: "Builders" },
-  { href: "/trades", label: "Trades" },
-  { href: "/ai", label: "Brexoo AI" },
+  { href: "/how-it-works", label: "Product" },
+  { href: "/industries", label: "Industries" },
   { href: "/pricing", label: "Pricing" },
+  { href: "/resources", label: "Resources" },
 ];
 
 export function SiteHeader() {
@@ -56,18 +55,18 @@ export function SiteHeader() {
               key={item.href}
               href={item.href}
               aria-current={pathname === item.href ? "page" : undefined}
-              className="rounded-lg px-3 py-2 text-sm text-ink-2 transition-colors hover:text-ink aria-[current=page]:text-ink aria-[current=page]:font-medium"
+              className="rounded-lg px-3 py-2 text-sm font-medium text-ink transition-colors hover:text-blue aria-[current=page]:text-blue"
             >
               {item.label}
             </Link>
           ))}
         </nav>
         <div className="ml-auto hidden items-center gap-2 md:flex">
-          <ButtonLink href="/login" variant="ghost" size="sm">
+          <ButtonLink href="/login" variant="outline" size="sm" className="px-4 font-semibold">
             Log in
           </ButtonLink>
-          <ButtonLink href="/demo" size="sm">
-            Request a demo
+          <ButtonLink href="/demo" size="sm" className="px-4 font-semibold">
+            Request a Demo
           </ButtonLink>
         </div>
         <button
@@ -92,13 +91,13 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          <Link href="/managed-services" className="border-b border-line py-4 font-display text-2xl tracking-tight text-ink">
-            Managed services
+          <Link href="/ai" className="border-b border-line py-4 font-display text-2xl tracking-tight text-ink">
+            Brexoo AI
           </Link>
         </nav>
         <div className="mt-6 grid gap-3">
           <ButtonLink href="/demo" size="lg">
-            Request a demo
+            Request a Demo
           </ButtonLink>
           <ButtonLink href="/login" variant="secondary" size="lg">
             Log in

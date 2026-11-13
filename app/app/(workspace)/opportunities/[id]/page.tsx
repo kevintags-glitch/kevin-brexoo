@@ -44,7 +44,7 @@ export default async function OpportunityPage({ params }: { params: Promise<{ id
         <div className="flex min-w-0 items-start gap-4">
           <Avatar name={contact.full_name} className="size-12 text-[15px]" />
           <div className="min-w-0">
-            <h1 className="text-[26px] font-medium leading-tight tracking-[-0.02em] sm:text-[30px]">{contact.full_name}</h1>
+            <h1 className="text-[26px] font-semibold leading-tight tracking-[-0.02em] sm:text-[30px]">{contact.full_name}</h1>
             <p className="mt-1 text-[15px] text-ink-2">
               {service?.name ?? project?.title ?? opp.title}
               {project?.location_text ? ` · ${project.location_text}` : ""}

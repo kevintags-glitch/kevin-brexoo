@@ -12,7 +12,7 @@ export function FitCard({ fit, confidence }: { fit: FitResult; confidence: Confi
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-[12px] text-ink-3">Fit</p>
-          <p className="font-display text-[22px] font-medium tracking-tight">
+          <p className="font-display text-[22px] font-semibold tracking-tight">
             {fit.label}
             {fit.score !== null ? <span className="text-ink-3 tabular"> · {fit.score}</span> : null}
           </p>

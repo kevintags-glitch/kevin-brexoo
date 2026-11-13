@@ -35,7 +35,7 @@ export default async function PlanPage() {
     <div className="grid gap-6">
       <Card className="p-5">
         <p className="text-[13px] text-ink-3">Current plan</p>
-        <p className="mt-1 font-display text-[26px] font-medium tracking-tight">{plan?.name ?? org.plan_code}</p>
+        <p className="mt-1 font-display text-[26px] font-semibold tracking-tight">{plan?.name ?? org.plan_code}</p>
         {plan ? (
           <p className="text-[14px] text-ink-3">
             {formatMoney(plan.monthlyPriceMinor, plan.currency)} / month · {formatMoney(plan.setupFeeMinor, plan.currency)} setup (illustrative)
