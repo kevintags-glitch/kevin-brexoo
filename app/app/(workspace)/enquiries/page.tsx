@@ -1,126 +1,159 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Inbox, Search } from "lucide-react";
-import { Page, PageHeader } from "@/components/app/PageHeader";
+import { BadgeCheck, CircleX, Download, Inbox, EllipsisVertical, ScanSearch, Sparkles } from "lucide-react";
+import { Page } from "@/components/app/PageHeader";
+import { DataTable, IconTile, Pagination, StatusPill } from "@/components/app/dash";
+import { FilterBar } from "@/components/app/dash/FilterBar";
 import { fitTone } from "@/components/app/crm/FitCard";
 import { NewOpportunity } from "@/components/app/crm/NewOpportunity";
-import { Avatar, Badge, ButtonLink, Card, EmptyState, Input } from "@/components/ui";
-import { fitFor, getFitContext } from "@/features/crm/queries";
+import { Avatar, EmptyState } from "@/components/ui";
+import { getMembers } from "@/features/crm/queries";
+import { FIT_LABELS, listEnquiries } from "@/features/crm/lists";
 import { QUAL_LABEL, STAGE_BY_ID } from "@/features/crm/stages";
 import { requireOrg } from "@/lib/auth/session";
-import { cn } from "@/lib/cn";
 import { formatRelative } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Enquiries" };
 
-const TABS = [
-  { id: "unreviewed", label: "To review" },
-  { id: "qualifying", label: "Qualifying" },
-  { id: "qualified", label: "Qualified" },
-  { id: "disqualified", label: "Disqualified" },
-  { id: "all", label: "All" },
-] as const;
+const PAGE_SIZE = 20;
 
-export default async function EnquiriesPage({ searchParams }: { searchParams: Promise<{ status?: string; q?: string }> }) {
+export default async function EnquiriesPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
-  const status = (TABS.find((t) => t.id === sp.status)?.id ?? "unreviewed") as (typeof TABS)[number]["id"];
-  const q = (sp.q ?? "").trim().slice(0, 80);
+  const filters = { q: sp.q ?? "", status: sp.status === "all" ? "" : (sp.status ?? ""), service: sp.service ?? "", owner: sp.owner ?? "", fit: sp.fit ?? "" };
   const ctx = await requireOrg();
-  const { supabase, org } = ctx;
+  const { supabase, org, isOwner } = ctx;
+  const [{ rows, fc }, members, statusRows] = await Promise.all([listEnquiries(ctx, filters), getMembers(ctx), supabase.from("enquiries").select("status").eq("organization_id", org.id)]);
 
-  let query = supabase
-    .from("enquiries")
-    .select(
-      "id, reference, status, source, received_at, answers, duplicate_count, contact:contacts!inner(full_name, email, phone, do_not_contact), project:projects(category_code, location_text, postcode, start_timing, budget_label, details, title), opportunities!opportunities_enquiry_id_organization_id_fkey(id, stage, owner:profiles!opportunities_owner_id_fkey(full_name, email))",
-    )
-    .eq("organization_id", org.id)
-    .order("received_at", { ascending: false })
-    .limit(100);
-  if (status !== "all") query = query.eq("status", status);
-  if (q) {
-    const safe = q.replace(/[%,()]/g, " ");
-    query = query.or(`full_name.ilike.%${safe}%,email.ilike.%${safe}%,phone.ilike.%${safe}%`, { referencedTable: "contacts" });
-  }
-  const [{ data: rows }, fc, counts] = await Promise.all([
-    query,
-    getFitContext(ctx),
-    supabase.from("enquiries").select("status").eq("organization_id", org.id),
-  ]);
-  const countBy = (s: string) => (counts.data ?? []).filter((r) => s === "all" || r.status === s).length;
+  const all = statusRows.data ?? [];
+  const count = (s?: string) => all.filter((r) => !s || r.status === s).length;
+  const stats = [
+    { label: "All enquiries", n: count(), icon: <Inbox />, status: "" },
+    { label: "To review", n: count("unreviewed"), icon: <Sparkles />, status: "unreviewed" },
+    { label: "Qualifying", n: count("qualifying"), icon: <ScanSearch />, status: "qualifying" },
+    { label: "Qualified", n: count("qualified"), icon: <BadgeCheck />, status: "qualified" },
+    { label: "Disqualified", n: count("disqualified"), icon: <CircleX />, status: "disqualified" },
+  ];
+
+  const page = Math.max(1, Number(sp.page) || 1);
+  const shown = rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const qs = (extra: Record<string, string>) => {
+    const p = new URLSearchParams();
+    for (const [k, v] of Object.entries({ ...sp, ...extra })) if (v) p.set(k, v);
+    return `/app/enquiries?${p.toString()}`;
+  };
+  const exportHref = `/app/enquiries/export?${new URLSearchParams(Object.entries(filters).filter(([, v]) => v)).toString()}`;
+  const tz = org.timezone;
 
   return (
-    <Page wide>
-      <PageHeader title="Enquiries" description="Every enquiry from your pages and chat, plus anything you add yourself." actions={<NewOpportunity services={fc.orgServices} />} className="mb-6" />
-      <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <nav aria-label="Filter by status" className="-mx-1 flex gap-1 overflow-x-auto px-1 scrollbar-none">
-          {TABS.map((t) => (
-            <Link
-              key={t.id}
-              href={`/app/enquiries?status=${t.id}${q ? `&q=${encodeURIComponent(q)}` : ""}`}
-              aria-current={status === t.id ? "page" : undefined}
-              className={cn("inline-flex h-9 shrink-0 items-center gap-2 rounded-lg px-3 text-[14px]", status === t.id ? "bg-surface font-medium shadow-xs ring-1 ring-line" : "text-ink-3 hover:bg-surface-2 hover:text-ink")}
-            >
-              {t.label}
-              <span className="text-[12px] tabular text-ink-3">{countBy(t.id)}</span>
-            </Link>
-          ))}
-        </nav>
-        <form className="relative md:w-72" role="search">
-          <input type="hidden" name="status" value={status} />
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-ink-3" aria-hidden />
-          <Input name="q" defaultValue={q} placeholder="Search name, email or phone" aria-label="Search enquiries" className="pl-9" />
-        </form>
+    <Page wide className="grid gap-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-[26px] font-medium tracking-[-0.02em] sm:text-[28px]">Enquiries</h1>
+          <p className="text-[14px] text-ink-3">Every enquiry from your pages and chat, plus anything you add yourself.</p>
+        </div>
+        <div className="flex gap-2">
+            <>
+              <NewOpportunity services={fc.orgServices} />
+              {isOwner ? (
+                <a href={exportHref} className="pressable grid size-10 place-items-center rounded-[10px] bg-[#0b2347] text-white hover:bg-[#06326a] dark:bg-blue dark:text-on-blue" aria-label="Export these enquiries as CSV" title="Export CSV (owners only, recorded in the audit log)">
+                  <Download className="size-4" />
+                </a>
+              ) : null}
+            </>
+        </div>
       </div>
 
-      <Card className="overflow-hidden">
-        {rows?.length ? (
-          <ul className="divide-y divide-line">
-            {rows.map((r) => {
-              const opp = r.opportunities?.[0];
-              const fit = fitFor(fc, r.project, r.answers);
-              const svc = fc.orgServices.find((s) => s.code === r.project?.category_code)?.name;
-              const stage = opp ? STAGE_BY_ID[opp.stage] : null;
-              return (
-                <li key={r.id}>
-                  <Link href={opp ? `/app/opportunities/${opp.id}` : "#"} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1 px-4 py-3.5 transition-colors hover:bg-surface-2/60 sm:px-5 md:grid-cols-[auto_minmax(0,1.4fr)_minmax(0,1fr)_120px_130px_96px]">
-                    <Avatar name={r.contact.full_name} />
-                    <div className="min-w-0">
-                      <p className="flex items-center gap-2 truncate text-[14px] font-medium">
-                        {r.status === "unreviewed" ? <span className="size-1.5 shrink-0 rounded-full bg-blue" aria-label="Unreviewed" /> : null}
-                        <span className="truncate">{r.contact.full_name}</span>
-                        {r.contact.do_not_contact ? <Badge tone="red">DNC</Badge> : null}
-                      </p>
-                      <p className="truncate text-[13px] text-ink-3">
-                        {svc ?? r.project?.title ?? "Enquiry"}
-                        {r.project?.location_text ? ` · ${r.project.location_text}` : ""}
-                      </p>
-                    </div>
-                    <div className="hidden min-w-0 md:block">
-                      <Badge tone={fitTone(fit.label)}>{fit.score !== null ? `${fit.label} · ${fit.score}` : fit.label}</Badge>
-                    </div>
-                    <div className="hidden md:block">{stage ? <Badge tone={stage.tone}>{stage.label}</Badge> : <Badge tone={QUAL_LABEL[r.status].tone}>{QUAL_LABEL[r.status].label}</Badge>}</div>
-                    <p className="hidden truncate text-[13px] text-ink-3 md:block">{opp?.owner?.full_name || opp?.owner?.email || "Unassigned"}</p>
-                    <p className="text-right text-[12px] tabular text-ink-3">{formatRelative(r.received_at, org.timezone)}</p>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+      <section aria-label="Enquiries by status" className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line shadow-xs sm:grid-cols-3 lg:grid-cols-5 max-sm:[&>*:last-child]:col-span-2">
+        {stats.map((s) => {
+          const active = (filters.status || "") === s.status;
+          return (
+            <Link key={s.label} href={qs({ status: s.status || "all", page: "" })} aria-current={active ? "true" : undefined} className={active ? "flex items-center gap-3 bg-surface p-4 ring-2 ring-inset ring-blue/30" : "flex items-center gap-3 bg-surface p-4 hover:bg-surface-2/60"}>
+              <IconTile tone="dark">{s.icon}</IconTile>
+              <span className="min-w-0">
+                <span className="block truncate text-[13px] text-ink-3">{s.label}</span>
+                <span className="block font-display text-[22px] font-medium leading-tight tabular">{s.n.toLocaleString("en-AU")}</span>
+              </span>
+            </Link>
+          );
+        })}
+      </section>
+
+      <section className="overflow-hidden rounded-2xl border border-line bg-surface shadow-xs">
+        <FilterBar
+          search={{ name: "q", label: "Search", placeholder: "Name, email or phone" }}
+          filters={[
+            { name: "status", label: "Status", options: [{ value: "", label: "All status" }, ...Object.entries(QUAL_LABEL).map(([value, v]) => ({ value, label: v.label }))] },
+            { name: "service", label: "Service", options: [{ value: "", label: "All services" }, ...fc.orgServices.map((s) => ({ value: s.code, label: s.name }))] },
+            { name: "fit", label: "Fit", options: [{ value: "", label: "Any fit" }, ...FIT_LABELS.map((f) => ({ value: f, label: f }))] },
+            { name: "owner", label: "Owner", options: [{ value: "", label: "Anyone" }, { value: "me", label: "Me" }, { value: "unassigned", label: "Unassigned" }, ...members.map((m) => ({ value: m.id, label: m.name }))] },
+          ]}
+        />
+        {shown.length ? (
+          <>
+            <div className="border-t border-line">
+              <DataTable
+                minWidth={980}
+                head={[{ label: "Contact" }, { label: "Contact details" }, { label: "Service" }, { label: "Fit" }, { label: "Stage" }, { label: "Owner" }, { label: "Received" }, { label: <span className="sr-only">Actions</span>, className: "w-12" }]}
+              >
+                {shown.map((r) => {
+                  const opp = r.opportunities?.[0];
+                  const stage = opp ? STAGE_BY_ID[opp.stage] : null;
+                  const svc = fc.orgServices.find((s) => s.code === r.project?.category_code)?.name;
+                  const href = opp ? `/app/opportunities/${opp.id}` : "#";
+                  return (
+                    <tr key={r.id} className="group hover:bg-surface-2/50">
+                      <td className="py-3 pl-5 pr-4">
+                        <Link href={href} className="flex items-center gap-3">
+                          <Avatar name={r.contact.full_name} className="size-9" />
+                          <span className="min-w-0">
+                            <span className="flex items-center gap-1.5 font-semibold">
+                              {r.status === "unreviewed" ? <span className="size-1.5 shrink-0 rounded-full bg-blue" aria-label="Unreviewed" /> : null}
+                              <span className="truncate group-hover:text-blue">{r.contact.full_name}</span>
+                            </span>
+                            <span className="block text-[12px] tabular text-ink-3">#{r.reference}</span>
+                          </span>
+                        </Link>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="block whitespace-nowrap text-[13px] font-medium">{r.contact.phone ?? "—"}</span>
+                        <span className="block max-w-[200px] truncate text-[12px] text-ink-3">{r.contact.email ?? ""}</span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="block text-[13px] font-medium">{svc ?? r.project?.title ?? "Enquiry"}</span>
+                        <span className="block max-w-[180px] truncate text-[12px] text-ink-3">{r.project?.location_text ?? "No location"}</span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <StatusPill tone={fitTone(r.fit.label)}>{r.fit.score !== null ? `${r.fit.label.replace(" fit", "")} · ${r.fit.score}` : "Needs info"}</StatusPill>
+                      </td>
+                      <td className="px-4 py-3">
+                        {r.contact.do_not_contact ? <StatusPill tone="red">Do not contact</StatusPill> : stage ? <StatusPill tone={stage.tone}>{stage.label}</StatusPill> : null}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3 text-[13px] text-ink-2">{opp?.owner?.full_name || opp?.owner?.email || <span className="text-ink-3">Unassigned</span>}</td>
+                      <td className="whitespace-nowrap px-4 py-3 text-[13px] tabular text-ink-3">{formatRelative(r.received_at, tz)}</td>
+                      <td className="py-3 pl-2 pr-5 text-right">
+                        <Link href={href} className="grid size-8 place-items-center rounded-lg text-ink-3 hover:bg-surface-2 hover:text-ink" aria-label={`Open ${r.contact.full_name}`}>
+                          <EllipsisVertical className="size-4" />
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </DataTable>
+            </div>
+            <div className="border-t border-line">
+              <Pagination page={page} pageSize={PAGE_SIZE} total={rows.length} noun={rows.length === 1 ? "enquiry" : "enquiries"} hrefFor={(p) => qs({ page: String(p) })} />
+            </div>
+          </>
         ) : (
-          <EmptyState
-            icon={<Inbox />}
-            title={q ? "No matches" : status === "unreviewed" ? "You're all caught up" : "Nothing here yet"}
-            description={q ? "Try another name, email or phone number." : "New enquiries from your landing page and chat appear here the moment they're sent."}
-            action={
-              !q && status === "unreviewed" ? (
-                <ButtonLink href="/app/landing-pages" variant="secondary">
-                  Check your landing page
-                </ButtonLink>
-              ) : null
-            }
-          />
+          <div className="border-t border-line">
+            <EmptyState
+              icon={<Inbox />}
+              title={Object.values(filters).some(Boolean) ? "No enquiries match these filters" : "No enquiries yet"}
+              description={Object.values(filters).some(Boolean) ? "Try clearing a filter or searching for something else." : "New enquiries from your landing page and chat appear here the moment they're sent."}
+            />
+          </div>
         )}
-      </Card>
+      </section>
     </Page>
   );
 }

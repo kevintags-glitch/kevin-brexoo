@@ -100,7 +100,18 @@ do $$ begin
 exception when insufficient_privilege then raise notice 'ok - members cannot approve pages';
 end $$;
 
+select pg_temp.as_admin();
+update public.profiles set active_organization_id = (select v from ids where k = 'acme') where id = '00000000-0000-0000-0000-0000000000c1';
+select pg_temp.as_user('00000000-0000-0000-0000-0000000000c1');
+do $$ begin
+  perform public.record_export('enquiries', 1);
+  raise exception 'FAILED: member exported data';
+exception when insufficient_privilege then raise notice 'ok - only owners can export';
+end $$;
+
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000a1');
+select public.record_export('enquiries', 3);
+select pg_temp.check((select count(*) from public.audit_events where action = 'enquiries.exported') = 1, 'exports are audited');
 select public.approve_landing_page(:'page_id');
 select public.publish_landing_page(:'page_id');
 select pg_temp.check((select status from public.landing_pages where id = :'page_id') = 'published', 'owner publishes approved page');

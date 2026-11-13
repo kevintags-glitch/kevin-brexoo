@@ -16,6 +16,8 @@ const LABEL: Record<string, string> = {
   "opportunity.stage_changed": "Changed an opportunity's stage",
   "appointment.created": "Booked an appointment",
   "contact.do_not_contact": "Changed a do-not-contact flag",
+  "enquiries.exported": "Exported enquiries",
+  "contacts.exported": "Exported contacts",
 };
 
 export default async function AuditPage() {

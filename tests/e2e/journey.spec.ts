@@ -212,7 +212,14 @@ test.describe.serial("builder journey", () => {
   test("reports and audit reflect the outcome", async () => {
     await page.goto("/app/reports");
     await expect(page.getByText("100%").first()).toBeVisible();
+    // Owners can export the enquiry list; the export is written to the audit log.
+    const csv = await page.request.get("/app/enquiries/export");
+    expect(csv.status()).toBe(200);
+    expect(csv.headers()["content-type"]).toContain("text/csv");
+    expect(await csv.text()).toContain(reference);
+
     await page.goto("/app/settings/audit");
+    await expect(page.getByText("exported enquiries")).toBeVisible();
     await expect(page.getByText("published a page")).toBeVisible();
     await expect(page.getByText("approved a page version")).toBeVisible();
   });

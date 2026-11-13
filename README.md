@@ -31,7 +31,7 @@ Sign-up sends a real confirmation email; open it in the mail catcher at http://1
 
 | Command | What it checks |
 | --- | --- |
-| `npm run db:test` | 49 database assertions: tenant isolation (cross-tenant reads, writes, ID substitution, composite-key references), anonymous access, onboarding and page state machines, publish-needs-approval, enquiry validation, dedupe, rate limits, activity history |
+| `npm run db:test` | 51 database assertions: tenant isolation (cross-tenant reads, writes, ID substitution, composite-key references), anonymous access, onboarding and page state machines, publish-needs-approval, enquiry validation, dedupe, rate limits, activity history |
 | `npm test` | Unit tests: fit and confidence scoring, time zones across daylight saving, money, visitor assistant guardrails, Xoo AI writers (do-not-contact refusal, prompt-injection text treated as data) |
 | `npm run test:e2e` | The full builder journey in a browser against a production build and the local stack, plus access-control checks |
 | `npm run lint` / `npm run typecheck` / `npm run build` | Static checks |

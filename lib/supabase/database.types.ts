@@ -866,6 +866,9 @@ isOneToOne: false
 "publish_landing_page":
 { Args: { "p_page": string }; Returns: undefined
                            },
+"record_export":
+{ Args: { "p_count": number,"p_entity": string,"p_filters"?: Json }; Returns: undefined
+                           },
 "review_onboarding":
 { Args: { "p_org": string }; Returns: Database["public"]['Enums']["onboarding_status"]
                            },

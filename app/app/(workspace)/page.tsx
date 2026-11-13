@@ -1,224 +1,351 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, CalendarDays, CircleCheck, Circle, ExternalLink, Inbox } from "lucide-react";
+import { ArrowRight, CalendarCheck, CircleCheck, Circle, Clock, Funnel, Inbox, Trophy } from "lucide-react";
 import { Page } from "@/components/app/PageHeader";
-import { fitTone } from "@/components/app/crm/FitCard";
-import { Avatar, Badge, ButtonLink, Card, CardHeader, EmptyState } from "@/components/ui";
+import { AreaChart } from "@/components/app/dash/AreaChart";
+import { DataTable, Delta, Panel, PanelHeader, StatCard, StatusPill } from "@/components/app/dash";
+import { Avatar, ButtonLink, EmptyState } from "@/components/ui";
+import { PLAN_BY_CODE } from "@/config/plans";
 import { activationChecklist } from "@/features/onboarding/steps";
-import { fitFor, getFitContext } from "@/features/crm/queries";
-import { OPEN_STAGES } from "@/features/crm/stages";
-import { APPT_TYPE_LABEL } from "@/features/crm/stages";
+import { getFitContext } from "@/features/crm/queries";
+import { APPT_TYPE_LABEL, STAGE_BY_ID } from "@/features/crm/stages";
 import { requireOrg } from "@/lib/auth/session";
-import { formatDateTime, formatMoney, formatRelative } from "@/lib/format";
+import { formatDateTime, formatMoney, formatRelative, plural } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Overview" };
 
+const DAY = 86_400_000;
+const PERIOD = 30;
+
+function median(xs: number[]) {
+  if (!xs.length) return null;
+  const s = [...xs].sort((a, b) => a - b);
+  const m = Math.floor(s.length / 2);
+  return s.length % 2 ? s[m]! : (s[m - 1]! + s[m]!) / 2;
+}
+
+const hours = (mins: number | null) => (mins === null ? "—" : mins < 60 ? `${Math.round(mins)}m` : mins < 48 * 60 ? `${(mins / 60).toFixed(1)}h` : `${(mins / 1440).toFixed(1)}d`);
+
 export default async function OverviewPage() {
   const ctx = await requireOrg();
-  const { supabase, org, user, profile } = ctx;
-  const now = new Date();
-  const weekAgo = new Date(now.getTime() - 7 * 86_400_000).toISOString();
-  const weekAhead = new Date(now.getTime() + 7 * 86_400_000).toISOString();
+  const { supabase, org, user } = ctx;
+  const now = Date.now();
+  const start = new Date(now - PERIOD * DAY);
+  const prevStart = new Date(now - 2 * PERIOD * DAY);
+  const inCur = (iso: string) => +new Date(iso) >= +start;
 
-  const [recent, newCount, unassigned, dueTasks, appts, opps, pages, ob, svcCount, areaCount, qCount, members, fc, usage] = await Promise.all([
+  const [enq, opps, appts, recent, dueTasks, pages, ob, counts, fc, usage, plan] = await Promise.all([
+    supabase.from("enquiries").select("id, received_at, first_response_at, status").eq("organization_id", org.id).gte("received_at", prevStart.toISOString()),
+    supabase.from("opportunities").select("id, stage, value_minor, closed_at, enquiry_id, appointments(count)").eq("organization_id", org.id),
+    supabase.from("appointments").select("id, created_at, starts_at, status, type, opportunity_id, contact:contacts(full_name)").eq("organization_id", org.id).gte("starts_at", prevStart.toISOString()).order("starts_at"),
     supabase
       .from("enquiries")
-      .select("id, status, received_at, answers, contact:contacts(full_name), project:projects(category_code, location_text, postcode, start_timing, budget_label, details), opportunities!opportunities_enquiry_id_organization_id_fkey(id)")
+      .select("id, status, received_at, answers, contact:contacts(full_name, email, phone), project:projects(category_code, location_text, postcode, start_timing, budget_label, details), opportunities!opportunities_enquiry_id_organization_id_fkey(id, stage)")
       .eq("organization_id", org.id)
       .order("received_at", { ascending: false })
-      .limit(6),
-    supabase.from("enquiries").select("id", { count: "exact", head: true }).eq("organization_id", org.id).gte("received_at", weekAgo),
-    supabase.from("opportunities").select("id", { count: "exact", head: true }).eq("organization_id", org.id).is("owner_id", null).in("stage", OPEN_STAGES),
-    supabase
-      .from("tasks")
-      .select("id, title, due_at, opportunity_id")
-      .eq("organization_id", org.id)
-      .eq("status", "open")
-      .eq("assignee_id", user.id)
-      .lte("due_at", new Date(now.getTime() + 86_400_000).toISOString())
-      .order("due_at")
-      .limit(6),
-    supabase.from("appointments").select("id, type, starts_at, opportunity_id, contact:contacts(full_name)").eq("organization_id", org.id).in("status", ["scheduled", "confirmed", "rescheduled"]).gte("starts_at", now.toISOString()).lte("starts_at", weekAhead).order("starts_at").limit(5),
-    supabase.from("opportunities").select("stage, value_minor").eq("organization_id", org.id),
+      .limit(5),
+    supabase.from("tasks").select("id, title, due_at, opportunity_id").eq("organization_id", org.id).eq("status", "open").eq("assignee_id", user.id).lte("due_at", new Date(now + DAY).toISOString()).order("due_at").limit(5),
     supabase.from("landing_pages").select("id, slug, status").eq("organization_id", org.id),
     supabase.from("onboarding").select("status").eq("organization_id", org.id).single(),
-    supabase.from("org_services").select("category_code", { count: "exact", head: true }).eq("organization_id", org.id),
-    supabase.from("service_areas").select("id", { count: "exact", head: true }).eq("organization_id", org.id),
-    supabase.from("org_questions").select("id", { count: "exact", head: true }).eq("organization_id", org.id),
-    supabase.from("memberships").select("user_id", { count: "exact", head: true }).eq("organization_id", org.id),
+    Promise.all([
+      supabase.from("org_services").select("category_code", { count: "exact", head: true }).eq("organization_id", org.id),
+      supabase.from("service_areas").select("id", { count: "exact", head: true }).eq("organization_id", org.id),
+      supabase.from("org_questions").select("id", { count: "exact", head: true }).eq("organization_id", org.id),
+      supabase.from("memberships").select("user_id", { count: "exact", head: true }).eq("organization_id", org.id),
+    ]),
     getFitContext(ctx),
-    supabase.rpc("usage_remaining", { p_org: org.id, p_kind: "xoo_ai" }),
+    supabase.from("usage_events").select("quantity").eq("organization_id", org.id).eq("kind", "xoo_ai").gte("created_at", new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()),
+    supabase.from("plan_entitlements").select("key, limit_value").eq("plan_code", org.plan_code),
   ]);
 
+  const E = enq.data ?? [];
+  const O = opps.data ?? [];
+  const A = appts.data ?? [];
+  const cur = E.filter((e) => inCur(e.received_at));
+  const prev = E.filter((e) => !inCur(e.received_at));
+  const resp = (xs: typeof E) => median(xs.filter((e) => e.first_response_at).map((e) => (+new Date(e.first_response_at!) - +new Date(e.received_at)) / 60_000));
+  const respCur = resp(cur);
+  const respPrev = resp(prev);
+  const booked = (from: number, to: number) => A.filter((a) => +new Date(a.created_at) >= from && +new Date(a.created_at) < to).length;
+  const bookedCur = booked(+start, now + 1);
+  const bookedPrev = booked(+prevStart, +start);
+  const wonIn = (from: number, to: number) => O.filter((o) => o.stage === "won" && o.closed_at && +new Date(o.closed_at) >= from && +new Date(o.closed_at) < to);
+  const wonCur = wonIn(+start, now + 1);
+  const wonPrev = wonIn(+prevStart, +start);
+  const sum = (xs: typeof O) => xs.reduce((s, o) => s + (o.value_minor ?? 0), 0);
+  const closed = O.filter((o) => o.stage === "won" || o.stage === "lost");
+  const winRate = closed.length ? Math.round((O.filter((o) => o.stage === "won").length / closed.length) * 100) : null;
+  const upcoming = A.filter((a) => +new Date(a.starts_at) >= now && ["scheduled", "confirmed", "rescheduled"].includes(a.status));
+
+  // Daily series, aligned day-by-day with the previous period.
+  const fmtDay = new Intl.DateTimeFormat("en-AU", { timeZone: org.timezone, day: "numeric", month: "short" });
+  const labels: string[] = [];
+  const curSeries: number[] = [];
+  const prevSeries: number[] = [];
+  // Rolling 7-day totals read as a trend; raw daily counts are too spiky at small-business volumes.
+  const inWindow = (end: number) => E.filter((e) => +new Date(e.received_at) > end - 7 * DAY && +new Date(e.received_at) <= end).length;
+  for (let i = PERIOD - 1; i >= 0; i--) {
+    const dayEnd = now - i * DAY;
+    labels.push(fmtDay.format(new Date(dayEnd)));
+    curSeries.push(inWindow(dayEnd));
+    prevSeries.push(inWindow(dayEnd - PERIOD * DAY));
+  }
+
+  // Funnel for enquiries received this period.
+  const curIds = new Set(cur.map((e) => e.id));
+  const curOpps = O.filter((o) => o.enquiry_id && curIds.has(o.enquiry_id));
+  const qualified = cur.filter((e) => e.status === "qualified").length + curOpps.filter((o) => o.stage === "won" && cur.find((e) => e.id === o.enquiry_id)?.status !== "qualified").length;
+  const withAppt = curOpps.filter((o) => (o.appointments?.[0]?.count ?? 0) > 0).length;
+  const won = curOpps.filter((o) => o.stage === "won").length;
+  const funnel = [
+    { label: "Enquiries received", n: cur.length },
+    { label: "Qualified", n: qualified },
+    { label: "Appointment booked", n: withAppt },
+    { label: "Won", n: won },
+  ];
+  const conversion = cur.length ? ((won / cur.length) * 100).toFixed(1) : "0.0";
+
+  const [svc, areas, qs, members] = counts;
   const checklist = activationChecklist({
     org: { phone: org.phone, website: org.website, contact_name: org.contact_name, settings: (org.settings ?? {}) as Record<string, unknown> },
-    servicesCount: svcCount.count ?? 0,
-    areasCount: areaCount.count ?? 0,
-    questionsCount: qCount.count ?? 0,
+    servicesCount: svc.count ?? 0,
+    areasCount: areas.count ?? 0,
+    questionsCount: qs.count ?? 0,
     pages: pages.data ?? [],
     membersCount: members.count ?? 1,
     onboardingStatus: ob.data?.status ?? "not_started",
   });
-  const doneCount = checklist.filter((c) => c.done).length;
-  const openOpps = (opps.data ?? []).filter((o) => OPEN_STAGES.includes(o.stage));
-  const openValue = openOpps.reduce((s, o) => s + (o.value_minor ?? 0), 0);
-  const overdue = (dueTasks.data ?? []).filter((t) => t.due_at && new Date(t.due_at) < now).length;
-  const live = (pages.data ?? []).find((p) => p.status === "published");
-  const hour = Number(new Intl.DateTimeFormat("en-AU", { timeZone: org.timezone, hour: "numeric", hourCycle: "h23" }).format(now));
-  const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
-  const first = profile?.full_name?.split(" ")[0];
-
-  const kpis = [
-    { label: "New enquiries", value: newCount.count ?? 0, sub: "last 7 days", href: "/app/enquiries?status=all" },
-    { label: "Unassigned", value: unassigned.count ?? 0, sub: "open opportunities", href: "/app/pipeline" },
-    { label: "Your follow-ups", value: dueTasks.data?.length ?? 0, sub: overdue ? `${overdue} overdue` : "due by tomorrow", href: "/app/tasks", alert: overdue > 0 },
-    { label: "Open pipeline", value: openValue ? formatMoney(openValue, org.currency, { compact: true }) : String(openOpps.length), sub: openValue ? `${openOpps.length} open` : "open opportunities", href: "/app/pipeline" },
+  const todo = checklist.filter((c) => !c.done);
+  const planInfo = PLAN_BY_CODE[org.plan_code as keyof typeof PLAN_BY_CODE];
+  const limit = (k: string) => plan.data?.find((p) => p.key === k)?.limit_value ?? null;
+  const used = { xoo: (usage.data ?? []).reduce((s, r) => s + r.quantity, 0), pages: (pages.data ?? []).filter((p) => p.status === "published").length, seats: members.count ?? 1 };
+  const meters = [
+    { label: "Xoo AI this month", used: used.xoo, limit: limit("xoo_ai_requests_month") },
+    { label: "Published pages", used: used.pages, limit: limit("published_pages") },
+    { label: "Team seats", used: used.seats, limit: limit("seats") },
   ];
+  const tz = org.timezone;
 
   return (
-    <Page wide>
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+    <Page wide className="grid gap-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-[13px] text-ink-3">{new Intl.DateTimeFormat("en-AU", { timeZone: org.timezone, weekday: "long", day: "numeric", month: "long" }).format(now)}</p>
-          <h1 className="mt-1 text-[28px] font-medium tracking-[-0.02em] sm:text-[32px]">
-            {greeting}
-            {first ? `, ${first}` : ""}
-          </h1>
+          <h1 className="text-[26px] font-medium tracking-[-0.02em] sm:text-[28px]">Overview</h1>
+          <p className="text-[14px] text-ink-3">Last {PERIOD} days, compared with the {PERIOD} before.</p>
         </div>
-        {live ? (
-          <a href={`/p/${live.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 self-start rounded-full bg-green-soft px-3 py-1.5 text-[13px] font-medium text-green-ink sm:self-auto">
-            <span className="size-1.5 rounded-full bg-current" /> Page live <ExternalLink className="size-3.5" aria-hidden />
-          </a>
-        ) : null}
+        <ButtonLink href="/app/enquiries?status=all" variant="secondary" size="sm">
+          <Inbox className="size-4" aria-hidden /> All enquiries
+        </ButtonLink>
       </div>
 
-      {doneCount < checklist.length ? (
-        <Card className="mt-6 overflow-hidden">
-          <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
+      {todo.length ? (
+        <div className="flex flex-col gap-3 rounded-2xl border border-line bg-surface p-4 shadow-xs sm:flex-row sm:items-center">
+          <div className="flex items-center gap-3">
+            <span className="relative grid size-11 place-items-center">
+              <svg viewBox="0 0 36 36" className="size-11 -rotate-90" aria-hidden>
+                <circle cx="18" cy="18" r="15" fill="none" stroke="var(--surface-2)" strokeWidth="4" />
+                <circle cx="18" cy="18" r="15" fill="none" stroke="var(--teal)" strokeWidth="4" strokeLinecap="round" strokeDasharray={`${((checklist.length - todo.length) / checklist.length) * 94.2} 94.2`} />
+              </svg>
+              <span className="absolute text-[11px] font-semibold tabular">
+                {checklist.length - todo.length}/{checklist.length}
+              </span>
+            </span>
             <div>
-              <h2 className="font-sans text-[15px] font-semibold tracking-normal">Get ready to receive enquiries</h2>
-              <p className="text-[13px] text-ink-3">
-                {doneCount} of {checklist.length} done
-              </p>
-            </div>
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface-2 sm:w-48" role="progressbar" aria-valuenow={doneCount} aria-valuemin={0} aria-valuemax={checklist.length} aria-label="Setup progress">
-              <div className="h-full rounded-full bg-teal" style={{ width: `${(doneCount / checklist.length) * 100}%` }} />
+              <p className="text-[14px] font-semibold">Finish setting up</p>
+              <p className="text-[13px] text-ink-3">Next: {todo[0]!.label.toLowerCase()}</p>
             </div>
           </div>
-          <ul className="grid border-t border-line sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="flex flex-1 flex-wrap gap-2 sm:justify-end">
             {checklist.map((c) => (
-              <li key={c.id} className="border-b border-line sm:odd:border-r lg:border-r lg:[&:nth-child(4n)]:border-r-0">
-                <Link href={c.href} className="flex items-center gap-2.5 px-5 py-3 text-[13px] hover:bg-surface-2/60">
-                  {c.done ? <CircleCheck className="size-4 shrink-0 text-teal-ink" aria-label="Done" /> : <Circle className="size-4 shrink-0 text-ink-3" aria-label="To do" />}
-                  <span className={c.done ? "text-ink-3" : "text-ink"}>{c.label}</span>
+              <li key={c.id}>
+                <Link href={c.href} className={c.done ? "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] text-ink-3" : "inline-flex items-center gap-1.5 rounded-full border border-line-strong px-2.5 py-1 text-[12px] text-ink hover:bg-surface-2"}>
+                  {c.done ? <CircleCheck className="size-3.5 text-teal-ink" aria-label="Done" /> : <Circle className="size-3.5 text-ink-3" aria-label="To do" />}
+                  {c.label}
                 </Link>
               </li>
             ))}
           </ul>
-        </Card>
+        </div>
       ) : null}
 
-      <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {kpis.map((k) => (
-          <Link key={k.label} href={k.href} className="pressable rounded-2xl border border-line bg-surface p-4 shadow-xs hover:border-line-strong">
-            <p className="text-[13px] text-ink-3">{k.label}</p>
-            <p className="mt-2 font-display text-[30px] font-medium leading-none tracking-tight tabular">{k.value}</p>
-            <p className={k.alert ? "mt-1.5 text-[12px] font-medium text-red-ink" : "mt-1.5 text-[12px] text-ink-3"}>{k.sub}</p>
-          </Link>
-        ))}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard label="New enquiries" value={cur.length} current={cur.length} previous={prev.length} icon={<Inbox />} href="/app/enquiries?status=all" footer={`${cur.length - prev.length >= 0 ? "+" : ""}${cur.length - prev.length} from previous period`} />
+        <StatCard label="First response" value={hours(respCur)} current={respCur ?? 0} previous={respPrev ?? 0} invert icon={<Clock />} href="/app/reports" footer={respPrev !== null ? `${hours(respPrev)} previous period (median)` : "Median time to first reply"} />
+        <StatCard label="Appointments booked" value={bookedCur} current={bookedCur} previous={bookedPrev} icon={<CalendarCheck />} href="/app/appointments" footer={`${upcoming.length} upcoming`} />
+        <StatCard
+          label="Won"
+          value={sum(wonCur) ? formatMoney(sum(wonCur), org.currency, { compact: true }) : wonCur.length}
+          current={sum(wonCur) || wonCur.length}
+          previous={sum(wonPrev) || wonPrev.length}
+          icon={<Trophy />}
+          href="/app/pipeline"
+          footer={winRate !== null ? `Win rate ${winRate}% overall` : "No closed opportunities yet"}
+        />
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-        <Card>
-          <CardHeader
-            title="Newest enquiries"
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)]">
+        <Panel>
+          <PanelHeader eyebrow="Enquiries" title={cur.length} badge={<Delta current={cur.length} previous={prev.length} />} />
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-y border-line px-5 py-3">
+            <p className="text-[13px] text-ink-3">Rolling 7-day total, from your pages and chat</p>
+            <div className="flex items-center gap-4 text-[12px] text-ink-3">
+              <span className="flex items-center gap-1.5">
+                <span className="size-2.5 rounded-sm bg-teal" /> This period
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="size-2.5 rounded-sm bg-[#3d78d6]" /> Previous period
+              </span>
+            </div>
+          </div>
+          <div className="px-3 pb-3 pt-2">
+            <AreaChart
+              labels={labels}
+              series={[
+                { label: "This period", values: curSeries, color: "var(--teal)" },
+                { label: "Previous", values: prevSeries, color: "#3d78d6" },
+              ]}
+              ariaLabel={`Rolling 7-day enquiries: ${cur.length} in the last ${PERIOD} days against ${prev.length} in the previous ${PERIOD}.`}
+            />
+          </div>
+        </Panel>
+
+        <Panel>
+          <PanelHeader eyebrow="Conversion rate" title={`${conversion}%`} icon={<Funnel />} />
+          <p className="px-5 pt-1 text-[12px] text-ink-3">Enquiries this period that became won work</p>
+          <ul className="m-3 mt-4 divide-y divide-line rounded-xl border border-line">
+            {funnel.map((f, i) => {
+              const pct = funnel[0]!.n ? (f.n / funnel[0]!.n) * 100 : 0;
+              return (
+                <li key={f.label} className="px-4 py-3.5">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <p className="text-[14px] font-medium">{f.label}</p>
+                    <p className="text-[15px] font-semibold tabular">{f.n.toLocaleString("en-AU")}</p>
+                  </div>
+                  <div className="mt-2 flex items-center gap-3">
+                    <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-2">
+                      <span className="block h-full rounded-full bg-teal" style={{ width: `${pct}%`, opacity: 1 - i * 0.18 }} />
+                    </span>
+                    <span className="w-10 text-right text-[12px] tabular text-ink-3">{i === 0 ? "100%" : `${pct.toFixed(0)}%`}</span>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </Panel>
+      </div>
+
+      <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.75fr)]">
+        <Panel inner="flex flex-col">
+          <div className="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-ink-3">Your plan</p>
+              <p className="mt-1 font-display text-[22px] font-medium tracking-tight">{planInfo?.name ?? org.plan_code}</p>
+            </div>
+            <ButtonLink href="/app/settings/plan" size="sm" className="bg-[#0b2347] text-white hover:bg-[#06326a] dark:bg-blue dark:text-on-blue">
+              Manage
+            </ButtonLink>
+          </div>
+          <p className="px-5 pt-4 text-[14px] leading-relaxed text-ink-2">{planInfo?.positioning}</p>
+          <div className="m-3 mt-4 grid grid-cols-3 divide-x divide-line rounded-xl border border-line bg-surface-2/50">
+            {meters.map((m) => (
+              <div key={m.label} className="px-3 py-3 text-center">
+                <p className="text-[11px] text-ink-3">{m.label}</p>
+                <p className="mt-1 text-[16px] font-semibold tabular">
+                  {m.used}
+                  <span className="text-[12px] font-normal text-ink-3">{m.limit === null ? "" : ` / ${m.limit}`}</span>
+                </p>
+              </div>
+            ))}
+          </div>
+        </Panel>
+
+        <Panel>
+          <PanelHeader
+            eyebrow="Newest enquiries"
+            title={E.length ? cur.length : 0}
+            badge={cur.length ? <span className="rounded-full border border-green-ink/20 bg-green-soft px-1.5 py-0.5 text-[11px] font-semibold text-green-ink">+{E.filter((e) => +new Date(e.received_at) > now - 7 * DAY).length} this week</span> : null}
             action={
-              <Link href="/app/enquiries?status=all" className="inline-flex items-center gap-1 text-[13px] font-medium text-blue hover:underline">
-                All enquiries <ArrowRight className="size-3.5" aria-hidden />
+              <Link href="/app/enquiries?status=all" className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-line px-3 text-[13px] font-medium text-ink-2 hover:bg-surface-2">
+                View all <ArrowRight className="size-3.5" aria-hidden />
               </Link>
             }
           />
           {recent.data?.length ? (
-            <ul className="mt-3 divide-y divide-line">
-              {recent.data.map((e) => {
-                const fit = fitFor(fc, e.project, e.answers);
-                const svc = fc.orgServices.find((s) => s.code === e.project?.category_code)?.name;
-                return (
-                  <li key={e.id}>
-                    <Link href={e.opportunities?.[0] ? `/app/opportunities/${e.opportunities[0].id}` : "/app/enquiries"} className="flex items-center gap-3 px-5 py-3 hover:bg-surface-2/60">
-                      <Avatar name={e.contact?.full_name ?? "?"} />
-                      <div className="min-w-0 flex-1">
-                        <p className="flex items-center gap-1.5 truncate text-[14px] font-medium">
-                          {e.status === "unreviewed" ? <span className="size-1.5 shrink-0 rounded-full bg-blue" aria-label="Unreviewed" /> : null}
-                          {e.contact?.full_name}
-                        </p>
-                        <p className="truncate text-[13px] text-ink-3">
-                          {svc ?? "Enquiry"}
-                          {e.project?.location_text ? ` · ${e.project.location_text}` : ""}
-                        </p>
-                      </div>
-                      <Badge tone={fitTone(fit.label)} className="max-sm:hidden">
-                        {fit.label}
-                      </Badge>
-                      <span className="w-24 shrink-0 whitespace-nowrap text-right text-[12px] tabular text-ink-3">{formatRelative(e.received_at, org.timezone)}</span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+            <div className="mt-3">
+              <DataTable
+                minWidth={560}
+                head={[{ label: "Contact" }, { label: "Service" }, { label: "Stage" }, { label: "Received", className: "text-right" }]}
+              >
+                {recent.data.map((e) => {
+                  const opp = e.opportunities?.[0];
+                  const stage = opp ? STAGE_BY_ID[opp.stage] : null;
+                  return (
+                    <tr key={e.id} className="hover:bg-surface-2/50">
+                      <td className="py-3 pl-5 pr-4">
+                        <Link href={opp ? `/app/opportunities/${opp.id}` : "/app/enquiries"} className="flex items-center gap-3">
+                          <Avatar name={e.contact?.full_name ?? "?"} className="size-8" />
+                          <span className="min-w-0">
+                            <span className="flex items-center gap-1.5 font-medium">
+                              {e.status === "unreviewed" ? <span className="size-1.5 rounded-full bg-blue" aria-label="Unreviewed" /> : null}
+                              {e.contact?.full_name}
+                            </span>
+                            <span className="block max-w-[200px] truncate text-[12px] text-ink-3">{e.contact?.email ?? e.contact?.phone}</span>
+                          </span>
+                        </Link>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="block text-[13px]">{fc.orgServices.find((s) => s.code === e.project?.category_code)?.name ?? "—"}</span>
+                        <span className="block max-w-[180px] truncate text-[12px] text-ink-3">{e.project?.location_text}</span>
+                      </td>
+                      <td className="px-4 py-3">{stage ? <StatusPill tone={stage.tone}>{stage.label}</StatusPill> : null}</td>
+                      <td className="whitespace-nowrap py-3 pl-4 pr-5 text-right text-[12px] tabular text-ink-3">{formatRelative(e.received_at, tz)}</td>
+                    </tr>
+                  );
+                })}
+              </DataTable>
+            </div>
           ) : (
-            <EmptyState
-              icon={<Inbox />}
-              title="No enquiries yet"
-              description={live ? "Share your landing page link to start receiving enquiries." : "Publish your landing page to start receiving enquiries."}
-              action={<ButtonLink href="/app/landing-pages" variant="secondary">{live ? "Open landing pages" : "Set up your page"}</ButtonLink>}
-            />
+            <EmptyState icon={<Inbox />} title="No enquiries yet" description="Publish your landing page and share its link to start receiving enquiries." action={<ButtonLink href="/app/landing-pages" variant="secondary">Landing pages</ButtonLink>} />
           )}
-          <div className="h-2" />
-        </Card>
+        </Panel>
+      </div>
 
-        <div className="grid content-start gap-6">
-          <Card>
-            <CardHeader title="Your follow-ups" description="Due by tomorrow" action={<Link href="/app/tasks" className="text-[13px] font-medium text-blue hover:underline">All tasks</Link>} />
-            <ul className="mt-2 divide-y divide-line">
-              {(dueTasks.data ?? []).length === 0 ? <li className="px-5 py-4 text-[14px] text-ink-3">Nothing due. You're on top of it.</li> : null}
-              {(dueTasks.data ?? []).map((t) => {
-                const late = t.due_at && new Date(t.due_at) < now;
-                return (
-                  <li key={t.id}>
-                    <Link href={t.opportunity_id ? `/app/opportunities/${t.opportunity_id}` : "/app/tasks"} className="flex items-center justify-between gap-3 px-5 py-3 hover:bg-surface-2/60">
-                      <span className="min-w-0 truncate text-[14px]">{t.title}</span>
-                      <span className={late ? "shrink-0 text-[12px] font-medium text-red-ink" : "shrink-0 text-[12px] text-ink-3"}>{formatRelative(t.due_at, org.timezone)}</span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-            <div className="h-2" />
-          </Card>
-          <Card>
-            <CardHeader title="Coming up" description="Next 7 days" action={<Link href="/app/appointments" className="text-[13px] font-medium text-blue hover:underline">Calendar</Link>} />
-            <ul className="mt-2 divide-y divide-line">
-              {(appts.data ?? []).length === 0 ? (
-                <li className="flex items-center gap-3 px-5 py-4 text-[14px] text-ink-3">
-                  <CalendarDays className="size-4" aria-hidden /> No appointments booked.
-                </li>
-              ) : null}
-              {(appts.data ?? []).map((a) => (
-                <li key={a.id}>
-                  <Link href={a.opportunity_id ? `/app/opportunities/${a.opportunity_id}` : "/app/appointments"} className="block px-5 py-3 hover:bg-surface-2/60">
-                    <p className="text-[14px] font-medium">{a.contact?.full_name}</p>
-                    <p className="text-[12px] text-ink-3">
-                      {APPT_TYPE_LABEL[a.type]} · {formatDateTime(a.starts_at, org.timezone)}
-                    </p>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <Panel>
+          <PanelHeader eyebrow="Your follow-ups" title={dueTasks.data?.length ?? 0} badge={<span className="text-[12px] text-ink-3">due by tomorrow</span>} action={<Link href="/app/tasks" className="text-[13px] font-medium text-blue hover:underline">All tasks</Link>} />
+          <ul className="mt-3 divide-y divide-line border-t border-line">
+            {(dueTasks.data ?? []).length === 0 ? <li className="px-5 py-4 text-[14px] text-ink-3">Nothing due. You&apos;re on top of it.</li> : null}
+            {(dueTasks.data ?? []).map((t) => {
+              const late = t.due_at && +new Date(t.due_at) < now;
+              return (
+                <li key={t.id}>
+                  <Link href={t.opportunity_id ? `/app/opportunities/${t.opportunity_id}` : "/app/tasks"} className="flex items-center justify-between gap-3 px-5 py-3 hover:bg-surface-2/50">
+                    <span className="min-w-0 truncate text-[14px]">{t.title}</span>
+                    {late ? <StatusPill tone="red">Overdue</StatusPill> : <span className="shrink-0 whitespace-nowrap text-[12px] text-ink-3">{formatRelative(t.due_at, tz)}</span>}
                   </Link>
                 </li>
-              ))}
-            </ul>
-            <div className="h-2" />
-          </Card>
-          <p className="px-1 text-[12px] text-ink-3">Xoo AI: {usage.data === null || usage.data === undefined ? "no monthly limit" : `${usage.data} requests left this month`}.</p>
-        </div>
+              );
+            })}
+          </ul>
+        </Panel>
+        <Panel>
+          <PanelHeader eyebrow="Coming up" title={upcoming.length} badge={<span className="text-[12px] text-ink-3">{plural(upcoming.length, "appointment")}</span>} action={<Link href="/app/appointments" className="text-[13px] font-medium text-blue hover:underline">Calendar</Link>} />
+          <ul className="mt-3 divide-y divide-line border-t border-line">
+            {upcoming.length === 0 ? <li className="px-5 py-4 text-[14px] text-ink-3">No appointments booked.</li> : null}
+            {upcoming.slice(0, 5).map((a) => (
+              <li key={a.id}>
+                <Link href={a.opportunity_id ? `/app/opportunities/${a.opportunity_id}` : "/app/appointments"} className="flex items-center gap-3 px-5 py-3 hover:bg-surface-2/50">
+                  <Avatar name={a.contact?.full_name ?? "?"} className="size-8" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-[14px] font-medium">{a.contact?.full_name}</span>
+                    <span className="block text-[12px] text-ink-3">{APPT_TYPE_LABEL[a.type]}</span>
+                  </span>
+                  <span className="shrink-0 text-right text-[12px] text-ink-2">{formatDateTime(a.starts_at, tz)}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Panel>
       </div>
     </Page>
   );
