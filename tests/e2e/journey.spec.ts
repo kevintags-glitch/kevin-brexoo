@@ -77,8 +77,10 @@ test.describe.serial("builder journey", () => {
     await expect(page.getByRole("heading", { name: "Services and coverage" })).toBeVisible();
     await page.getByText("Home builders", { exact: true }).click();
     await page.getByText("Renovation contractors", { exact: true }).click();
-    await page.getByLabel("Area 1", { exact: true }).fill("Newcastle NSW");
+    await page.getByLabel("State or territory for area 1").selectOption("NSW");
+    await page.getByLabel("City or town for area 1").fill("Newcastle");
     await page.getByLabel("Postcode for area 1").fill("2300");
+    await expect(page.getByText("Shows as: Newcastle NSW 2300")).toBeVisible();
     await saveStep(page);
 
     await expect(page.getByRole("heading", { name: "Ideal work" })).toBeVisible();

@@ -109,6 +109,7 @@ export default async function EnquiriesPage({ searchParams }: { searchParams: Pr
                             <span className="flex items-center gap-1.5 font-semibold">
                               {r.status === "unreviewed" ? <span className="size-1.5 shrink-0 rounded-full bg-blue" aria-label="Unreviewed" /> : null}
                               <span className="truncate group-hover:text-blue">{r.contact.full_name}</span>
+                              {r.contact.is_sample ? <span className="shrink-0 rounded-md bg-amber-soft px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-ink">Sample</span> : null}
                             </span>
                             <span className="block text-[12px] tabular text-ink-3">#{r.reference}</span>
                           </span>

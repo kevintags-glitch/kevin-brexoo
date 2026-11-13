@@ -9,7 +9,7 @@ import { PageHero } from "@/components/marketing/PageHero";
 import { Container, CtaBand, Eyebrow } from "@/components/marketing/Section";
 import { cn } from "@/lib/cn";
 
-export const metadata: Metadata = { title: "Industries", description: "Brexoo is built for builders, trades and home service businesses, with qualification questions for each." };
+export const metadata: Metadata = { alternates: { canonical: "/industries" }, title: "Industries", description: "Brexoo is built for builders, trades and home service businesses, with qualification questions for each." };
 
 /** The eight launch groups from the master plan, as a bento grid. */
 const GROUPS = [
@@ -52,7 +52,7 @@ export default function IndustriesPage() {
       <section className="bg-white py-16 sm:py-24">
         <Container>
           <Eyebrow>Eight launch industries</Eyebrow>
-          <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[52px]">Start with the work you do.</h2>
+          <h2 className="mt-4 max-w-[20ch] text-[38px] font-semibold leading-[1.05] tracking-[-0.025em] sm:text-[52px]">Start with the work you do.</h2>
           <div className="mt-12 grid auto-rows-[minmax(210px,auto)] grid-cols-1 gap-4 md:grid-cols-4">
             {GROUPS.map((g, i) => {
               const Icon = INDUSTRY_ICON[g.codes[0]!]!;
@@ -64,8 +64,8 @@ export default function IndustriesPage() {
                       <ArrowUpRight className="size-5 opacity-50 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:opacity-100" aria-hidden />
                     </div>
                     <div>
-                      <h3 className={cn("font-light leading-[1.05] tracking-[-0.03em]", i === 0 ? "text-[40px] sm:text-[56px]" : "text-[26px]")}>{g.title}</h3>
-                      <p className="mt-2 max-w-md text-[15px] font-light leading-relaxed opacity-75">{g.body}</p>
+                      <h3 className={cn(" leading-[1.05] tracking-[-0.03em]", i === 0 ? "text-[40px] sm:text-[56px]" : "text-[26px]")}>{g.title}</h3>
+                      <p className="mt-2 max-w-md text-[15px] leading-relaxed opacity-75">{g.body}</p>
                     </div>
                   </Link>
                 </WipeIn>
@@ -79,7 +79,7 @@ export default function IndustriesPage() {
         <p className="mb-6 text-center text-[13px] uppercase tracking-[0.24em] text-ink-3">Opportunities Brexoo is set up to qualify</p>
         <Marquee speed={60}>
           {INDUSTRY_TEMPLATES.flatMap((t) => t.opportunityTypes.slice(0, 2)).map((o, i) => (
-            <span key={`${o}-${i}`} className="shrink-0 text-[28px] font-extralight tracking-[-0.03em] text-ink">
+            <span key={`${o}-${i}`} className="shrink-0 text-[28px] font-semibold tracking-[-0.03em] text-ink">
               {o} <span className="px-3 text-teal">·</span>
             </span>
           ))}
@@ -89,7 +89,7 @@ export default function IndustriesPage() {
       <section className="bg-white py-16 sm:py-24">
         <Container>
           <Eyebrow>Every service we support</Eyebrow>
-          <h2 className="mt-4 text-[38px] font-light tracking-[-0.025em] sm:text-[52px]">{INDUSTRY_TEMPLATES.length} service templates, and growing.</h2>
+          <h2 className="mt-4 text-[38px] font-semibold tracking-[-0.025em] sm:text-[52px]">{INDUSTRY_TEMPLATES.length} service templates, and growing.</h2>
           <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {INDUSTRY_TEMPLATES.map((t, i) => {
               const Icon = INDUSTRY_ICON[t.code]!;
@@ -102,7 +102,7 @@ export default function IndustriesPage() {
                       </span>
                       <span>
                         <span className="block text-[17px] font-normal group-hover:text-blue">{t.name}</span>
-                        <span className="mt-1 block text-[14px] font-light text-ink-3">{t.opportunityTypes.join(" · ")}</span>
+                        <span className="mt-1 block text-[14px] text-ink-3">{t.opportunityTypes.join(" · ")}</span>
                       </span>
                     </Link>
                   </TiltIn>

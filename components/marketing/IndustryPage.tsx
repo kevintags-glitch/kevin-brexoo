@@ -2,6 +2,7 @@ import { INDUSTRY_BY_CODE } from "@/config/industry-templates";
 import { ButtonLink } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { INDUSTRY_ICON } from "./industry-icons";
+import { SAMPLE_BY_KEY, type SampleBusiness } from "@/config/samples";
 import { FitCardMock, PhonePageMock } from "./mocks";
 import { HorizontalPin, Marquee, Parallax, SlideIn, TiltIn } from "./motion";
 import { PageHero } from "./PageHero";
@@ -21,6 +22,7 @@ export function IndustryPage({
   workflow,
   layout,
   accent,
+  sample = "builders",
 }: {
   eyebrow: string;
   title: string;
@@ -29,10 +31,11 @@ export function IndustryPage({
   workflow: { t: string; b: string }[];
   layout: "zigzag" | "tiles";
   accent?: string[];
+  sample?: SampleBusiness["key"];
 }) {
   return (
     <>
-      <PageHero variant={layout === "zigzag" ? "split" : "left"} eyebrow={eyebrow} title={title} accent={accent} body={body} aside={<PhonePageMock />}>
+      <PageHero variant={layout === "zigzag" ? "split" : "left"} eyebrow={eyebrow} title={title} accent={accent} body={body} aside={<PhonePageMock business={SAMPLE_BY_KEY[sample]} />}>
         <ButtonLink href="/demo" size="lg">
           Request a Demo
         </ButtonLink>
@@ -47,15 +50,15 @@ export function IndustryPage({
         <section className="bg-surface-2/50">
           <Container className="pt-20 sm:pt-28">
             <Eyebrow>How it works for you</Eyebrow>
-            <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[52px]">A clear path from enquiry to site visit.</h2>
+            <h2 className="mt-4 max-w-[20ch] text-[38px] font-semibold leading-[1.05] tracking-[-0.025em] sm:text-[52px]">A clear path from enquiry to site visit.</h2>
           </Container>
           <HorizontalPin>
             {workflow.map((s, i) => (
               <div key={s.t} className="flex w-full max-w-[880px] flex-col justify-between gap-10 rounded-[32px] border border-line bg-white p-10 shadow-sm md:min-h-[420px] md:p-14">
-                <p className="text-[120px] font-extralight leading-none tracking-[-0.025em] text-blue/20 tabular">{String(i + 1).padStart(2, "0")}</p>
+                <p className="text-[120px] font-semibold leading-none tracking-[-0.025em] text-blue/20 tabular">{String(i + 1).padStart(2, "0")}</p>
                 <div>
-                  <h3 className="text-[32px] font-light leading-[1.1] tracking-[-0.03em] md:text-[44px]">{s.t}</h3>
-                  <p className="mt-4 max-w-xl text-[17px] font-light leading-relaxed text-ink-2">{s.b}</p>
+                  <h3 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.03em] md:text-[44px]">{s.t}</h3>
+                  <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-ink-2">{s.b}</p>
                 </div>
               </div>
             ))}
@@ -66,7 +69,7 @@ export function IndustryPage({
           <Container className="grid items-start gap-14 lg:grid-cols-[1fr_0.8fr]">
             <div>
               <Eyebrow>How it works for you</Eyebrow>
-              <h2 className="mt-4 max-w-[18ch] text-[38px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[52px]">From the first message to the booked visit.</h2>
+              <h2 className="mt-4 max-w-[18ch] text-[38px] font-semibold leading-[1.05] tracking-[-0.025em] sm:text-[52px]">From the first message to the booked visit.</h2>
               <ol className="mt-12 grid gap-4">
                 {workflow.map((s, i) => (
                   <li key={s.t}>
@@ -74,7 +77,7 @@ export function IndustryPage({
                       <span className="grid size-10 shrink-0 place-items-center rounded-full bg-blue text-[14px] font-medium text-white tabular">{i + 1}</span>
                       <div>
                         <p className="text-[19px] font-normal">{s.t}</p>
-                        <p className="mt-1 text-[15px] font-light leading-relaxed text-ink-3">{s.b}</p>
+                        <p className="mt-1 text-[15px] leading-relaxed text-ink-3">{s.b}</p>
                       </div>
                     </SlideIn>
                   </li>
@@ -104,7 +107,7 @@ function ZigzagServices({ codes }: { codes: string[] }) {
     <section className="bg-white py-20 sm:py-28">
       <Container>
         <Eyebrow>Your services</Eyebrow>
-        <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[52px]">Questions that fit the work.</h2>
+        <h2 className="mt-4 max-w-[20ch] text-[38px] font-semibold leading-[1.05] tracking-[-0.025em] sm:text-[52px]">Questions that fit the work.</h2>
         <div className="mt-16 grid gap-20">
           {codes.map((code, i) => {
             const t = INDUSTRY_BY_CODE[code]!;
@@ -114,15 +117,15 @@ function ZigzagServices({ codes }: { codes: string[] }) {
               <div key={code} className="grid items-center gap-10 md:grid-cols-2 md:gap-20">
                 <SlideIn from={flip ? "right" : "left"} className={cn(flip && "md:order-last")}>
                   <Icon className="size-10 text-blue" strokeWidth={1.2} aria-hidden />
-                  <h3 className="mt-5 text-[40px] font-extralight leading-none tracking-[-0.025em] sm:text-[56px]">{t.name}</h3>
-                  <p className="mt-4 text-[17px] font-light leading-relaxed text-ink-2">{t.opportunityTypes.join(" · ")}</p>
+                  <h3 className="mt-5 text-[40px] font-semibold leading-none tracking-[-0.025em] sm:text-[56px]">{t.name}</h3>
+                  <p className="mt-4 text-[17px] leading-relaxed text-ink-2">{t.opportunityTypes.join(" · ")}</p>
                 </SlideIn>
                 <SlideIn from={flip ? "left" : "right"} delay={0.1}>
                   <div className="rounded-[26px] border border-line bg-surface-2/40 p-7">
                     <p className="text-[13px] font-medium uppercase tracking-[0.18em] text-ink-3">We ask</p>
                     <ul className="mt-4 grid gap-2">
                       {t.questions.slice(0, 5).map((q, k) => (
-                        <li key={q.key} className="flex items-baseline gap-3 border-b border-line pb-2 text-[16px] font-light text-ink-2 last:border-0">
+                        <li key={q.key} className="flex items-baseline gap-3 border-b border-line pb-2 text-[16px] text-ink-2 last:border-0">
                           <span className="text-[12px] text-ink-3 tabular">{String(k + 1).padStart(2, "0")}</span>
                           {q.label}
                         </li>
@@ -145,7 +148,7 @@ function TileServices({ codes }: { codes: string[] }) {
     <section className="overflow-hidden bg-white py-20 sm:py-28">
       <Container>
         <Eyebrow>Your services</Eyebrow>
-        <h2 className="mt-4 max-w-[20ch] text-[38px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[52px]">Every trade, its own questions.</h2>
+        <h2 className="mt-4 max-w-[20ch] text-[38px] font-semibold leading-[1.05] tracking-[-0.025em] sm:text-[52px]">Every trade, its own questions.</h2>
         <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {codes.map((code, i) => {
             const t = INDUSTRY_BY_CODE[code]!;
@@ -157,8 +160,8 @@ function TileServices({ codes }: { codes: string[] }) {
                     <span className="grid size-12 place-items-center rounded-2xl bg-blue-soft text-blue transition-colors group-hover:bg-blue group-hover:text-white">
                       <Icon className="size-6" strokeWidth={1.5} aria-hidden />
                     </span>
-                    <h3 className="mt-6 text-[22px] font-light tracking-[-0.02em]">{t.name}</h3>
-                    <p className="mt-2 text-[14px] font-light leading-relaxed text-ink-3">{t.opportunityTypes.join(" · ")}</p>
+                    <h3 className="mt-6 text-[22px] font-semibold tracking-[-0.02em]">{t.name}</h3>
+                    <p className="mt-2 text-[14px] leading-relaxed text-ink-3">{t.opportunityTypes.join(" · ")}</p>
                   </div>
                 </TiltIn>
               </li>
@@ -170,7 +173,7 @@ function TileServices({ codes }: { codes: string[] }) {
         <p className="text-center text-[13px] uppercase tracking-[0.24em] text-ink-3">Questions your customers answer</p>
         <Marquee speed={70}>
           {questions.map((q, i) => (
-            <span key={`${q}-${i}`} className="shrink-0 rounded-full border border-line bg-surface-2/60 px-5 py-3 text-[15px] font-light text-ink-2">
+            <span key={`${q}-${i}`} className="shrink-0 rounded-full border border-line bg-surface-2/60 px-5 py-3 text-[15px] text-ink-2">
               {q}
             </span>
           ))}

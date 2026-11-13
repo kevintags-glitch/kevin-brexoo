@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { Check, X } from "lucide-react";
 import { ButtonLink } from "@/components/ui";
 import { BrexMock, FitCardMock, PhonePageMock } from "@/components/marketing/mocks";
-import { ScrollChat, SlideIn, WipeIn, WordsReveal, ZoomIn } from "@/components/marketing/motion";
+import { SlideIn, WipeIn, WordsReveal, ZoomIn } from "@/components/marketing/motion";
+import { ProductVideo } from "@/components/marketing/ProductVideo";
+import { BREX_AI_DEMO } from "@/config/media";
 import { PageHero } from "@/components/marketing/PageHero";
 import { Reveal } from "@/components/marketing/Reveal";
 import { Container, CtaBand, Eyebrow, SectionHeading } from "@/components/marketing/Section";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = { alternates: { canonical: "/ai" },
   title: "Brex AI",
   description: "Brex AI summarises enquiries, explains fit and drafts replies for your approval. The visitor assistant answers only from content you've approved.",
 };
@@ -34,21 +36,10 @@ export default function AiPage() {
         <Container className="grid items-start gap-14 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="lg:sticky lg:top-28">
             <Eyebrow>Watch it work</Eyebrow>
-            <WordsReveal text="Ask in plain words. Get answers from your records." className="mt-4 max-w-[16ch] text-[38px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[52px]" />
-            <p className="mt-5 max-w-md text-[17px] font-light leading-relaxed text-ink-2">Scroll to play the conversation. Every answer cites the record it came from, and anything inferred says so.</p>
+            <WordsReveal text="Ask in plain words. Get answers from your records." className="mt-4 max-w-[16ch] text-[38px] font-semibold leading-[1.05] tracking-[-0.025em] sm:text-[52px]" />
+            <p className="mt-5 max-w-md text-[17px] leading-relaxed text-ink-2">An 18-second look at Brex AI on a real sample lead. Every answer cites the record it came from, and anything inferred says so.</p>
           </div>
-          <div className="rounded-[28px] border border-line bg-white p-6 shadow-lg sm:p-8">
-            <ScrollChat
-              messages={[
-                { from: "user", text: "Which leads should I call first today?" },
-                { from: "ai", text: "Three new enquiries are inside your service area and haven't been contacted. Sarah Chen's new build is the strongest match: service, area and timing all fit.", meta: "From 3 enquiries · fit factors shown" },
-                { from: "user", text: "How likely is Sarah to go ahead?" },
-                { from: "ai", text: "Buying intent looks high: she asked for a site visit, gave a start date within three months and owns the land. This is inferred from her answers, not something she told us.", meta: "Inferred · 3 pieces of evidence" },
-                { from: "user", text: "Draft a reply and a site-visit brief." },
-                { from: "ai", text: "Done. The draft and brief are on the enquiry for you to review. I haven't sent anything.", meta: "Waiting for your approval" },
-              ]}
-            />
-          </div>
+          <ProductVideo {...BREX_AI_DEMO} />
         </Container>
       </section>
 
@@ -129,8 +120,8 @@ export default function AiPage() {
             ].map(([t, b], i) => (
               <WipeIn key={t} delay={(i % 3) * 0.1} className="rounded-[24px] border border-line bg-white p-7 shadow-xs">
                 <p className="text-[13px] text-ink-3 tabular">{String(i + 1).padStart(2, "0")}</p>
-                <p className="mt-4 text-[20px] font-light">{t}</p>
-                <p className="mt-2 text-[15px] font-light leading-relaxed text-ink-3">{b}</p>
+                <p className="mt-4 text-[20px]">{t}</p>
+                <p className="mt-2 text-[15px] leading-relaxed text-ink-3">{b}</p>
               </WipeIn>
             ))}
           </div>

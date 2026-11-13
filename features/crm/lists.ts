@@ -16,7 +16,7 @@ export async function listEnquiries(ctx: OrgContext, f: EnquiryFilters, cap = 10
   let query = supabase
     .from("enquiries")
     .select(
-      "id, reference, status, source, received_at, answers, duplicate_count, contact:contacts!inner(id, full_name, email, phone, do_not_contact), project:projects(category_code, location_text, postcode, start_timing, budget_label, details, title), opportunities!opportunities_enquiry_id_organization_id_fkey!inner(id, stage, owner_id, owner:profiles!opportunities_owner_id_fkey(full_name, email))",
+      "id, reference, status, source, received_at, answers, duplicate_count, contact:contacts!inner(id, full_name, email, phone, do_not_contact, is_sample), project:projects(category_code, location_text, postcode, start_timing, budget_label, details, title), opportunities!opportunities_enquiry_id_organization_id_fkey!inner(id, stage, owner_id, owner:profiles!opportunities_owner_id_fkey(full_name, email))",
     )
     .eq("organization_id", org.id)
     .order("received_at", { ascending: false })

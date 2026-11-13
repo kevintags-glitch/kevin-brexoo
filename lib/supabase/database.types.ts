@@ -115,14 +115,14 @@ isOneToOne: false
                   ]
                 },"contacts": {
                   Row: {
-                    "company": string | null,"created_at": string,"do_not_contact": boolean,"email": string | null,"full_name": string,"id": string,"merged_into": string | null,"opted_out_at": string | null,"organization_id": string,"owner_id": string | null,"phone": string | null,"phone_normalized": string | null,"preferred_contact": string | null,"restriction_note": string | null,"source": string,"updated_at": string
+                    "company": string | null,"created_at": string,"do_not_contact": boolean,"email": string | null,"full_name": string,"id": string,"is_sample": boolean,"merged_into": string | null,"opted_out_at": string | null,"organization_id": string,"owner_id": string | null,"phone": string | null,"phone_normalized": string | null,"preferred_contact": string | null,"restriction_note": string | null,"source": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "company"?: string | null,"created_at"?: string,"do_not_contact"?: boolean,"email"?: string | null,"full_name": string,"id"?: string,"merged_into"?: string | null,"opted_out_at"?: string | null,"organization_id": string,"owner_id"?: string | null,"phone"?: string | null,"phone_normalized"?: never,"preferred_contact"?: string | null,"restriction_note"?: string | null,"source"?: string,"updated_at"?: string
+                    "company"?: string | null,"created_at"?: string,"do_not_contact"?: boolean,"email"?: string | null,"full_name": string,"id"?: string,"is_sample"?: boolean,"merged_into"?: string | null,"opted_out_at"?: string | null,"organization_id": string,"owner_id"?: string | null,"phone"?: string | null,"phone_normalized"?: never,"preferred_contact"?: string | null,"restriction_note"?: string | null,"source"?: string,"updated_at"?: string
                   }
                   Update: {
-                    "company"?: string | null,"created_at"?: string,"do_not_contact"?: boolean,"email"?: string | null,"full_name"?: string,"id"?: string,"merged_into"?: string | null,"opted_out_at"?: string | null,"organization_id"?: string,"owner_id"?: string | null,"phone"?: string | null,"phone_normalized"?: never,"preferred_contact"?: string | null,"restriction_note"?: string | null,"source"?: string,"updated_at"?: string
+                    "company"?: string | null,"created_at"?: string,"do_not_contact"?: boolean,"email"?: string | null,"full_name"?: string,"id"?: string,"is_sample"?: boolean,"merged_into"?: string | null,"opted_out_at"?: string | null,"organization_id"?: string,"owner_id"?: string | null,"phone"?: string | null,"phone_normalized"?: never,"preferred_contact"?: string | null,"restriction_note"?: string | null,"source"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -167,14 +167,14 @@ isOneToOne: false
                   ]
                 },"discovery_sources": {
                   Row: {
-                    "attribution_url": string | null,"created_at": string,"created_by": string | null,"id": string,"limitations": string | null,"name": string,"organization_id": string,"permitted_use": string,"provider": string | null,"refresh_note": string | null,"source_type": string
+                    "attribution_url": string | null,"created_at": string,"created_by": string | null,"id": string,"is_sample": boolean,"limitations": string | null,"name": string,"organization_id": string,"permitted_use": string,"provider": string | null,"refresh_note": string | null,"source_type": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "attribution_url"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"limitations"?: string | null,"name": string,"organization_id": string,"permitted_use": string,"provider"?: string | null,"refresh_note"?: string | null,"source_type": string
+                    "attribution_url"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_sample"?: boolean,"limitations"?: string | null,"name": string,"organization_id": string,"permitted_use": string,"provider"?: string | null,"refresh_note"?: string | null,"source_type": string
                   }
                   Update: {
-                    "attribution_url"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"limitations"?: string | null,"name"?: string,"organization_id"?: string,"permitted_use"?: string,"provider"?: string | null,"refresh_note"?: string | null,"source_type"?: string
+                    "attribution_url"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_sample"?: boolean,"limitations"?: string | null,"name"?: string,"organization_id"?: string,"permitted_use"?: string,"provider"?: string | null,"refresh_note"?: string | null,"source_type"?: string
                   }
                   Relationships: [
                     {
@@ -193,14 +193,14 @@ isOneToOne: false
                   ]
                 },"enquiries": {
                   Row: {
-                    "answers": NonNullable<Json>,"consent_at": string | null,"consent_text": string | null,"contact_id": string,"created_at": string,"dedupe_hash": string | null,"duplicate_count": number,"first_response_at": string | null,"id": string,"landing_page_id": string | null,"message": string | null,"organization_id": string,"project_id": string | null,"received_at": string,"reference": string,"source": string,"status": Database["public"]['Enums']["qual_status"]
+                    "answers": NonNullable<Json>,"booking_status": string | null,"consent_at": string | null,"consent_text": string | null,"contact_id": string,"created_at": string,"dedupe_hash": string | null,"duplicate_count": number,"first_response_at": string | null,"id": string,"landing_page_id": string | null,"message": string | null,"organization_id": string,"project_id": string | null,"received_at": string,"reference": string,"requested_start": string | null,"requested_type": Database["public"]['Enums']["appt_type"] | null,"source": string,"status": Database["public"]['Enums']["qual_status"]
                   }
                   ComputedFields: never
                   Insert: {
-                    "answers"?: NonNullable<Json>,"consent_at"?: string | null,"consent_text"?: string | null,"contact_id": string,"created_at"?: string,"dedupe_hash"?: string | null,"duplicate_count"?: number,"first_response_at"?: string | null,"id"?: string,"landing_page_id"?: string | null,"message"?: string | null,"organization_id": string,"project_id"?: string | null,"received_at"?: string,"reference"?: string,"source"?: string,"status"?: Database["public"]['Enums']["qual_status"]
+                    "answers"?: NonNullable<Json>,"booking_status"?: string | null,"consent_at"?: string | null,"consent_text"?: string | null,"contact_id": string,"created_at"?: string,"dedupe_hash"?: string | null,"duplicate_count"?: number,"first_response_at"?: string | null,"id"?: string,"landing_page_id"?: string | null,"message"?: string | null,"organization_id": string,"project_id"?: string | null,"received_at"?: string,"reference"?: string,"requested_start"?: string | null,"requested_type"?: Database["public"]['Enums']["appt_type"] | null,"source"?: string,"status"?: Database["public"]['Enums']["qual_status"]
                   }
                   Update: {
-                    "answers"?: NonNullable<Json>,"consent_at"?: string | null,"consent_text"?: string | null,"contact_id"?: string,"created_at"?: string,"dedupe_hash"?: string | null,"duplicate_count"?: number,"first_response_at"?: string | null,"id"?: string,"landing_page_id"?: string | null,"message"?: string | null,"organization_id"?: string,"project_id"?: string | null,"received_at"?: string,"reference"?: string,"source"?: string,"status"?: Database["public"]['Enums']["qual_status"]
+                    "answers"?: NonNullable<Json>,"booking_status"?: string | null,"consent_at"?: string | null,"consent_text"?: string | null,"contact_id"?: string,"created_at"?: string,"dedupe_hash"?: string | null,"duplicate_count"?: number,"first_response_at"?: string | null,"id"?: string,"landing_page_id"?: string | null,"message"?: string | null,"organization_id"?: string,"project_id"?: string | null,"received_at"?: string,"reference"?: string,"requested_start"?: string | null,"requested_type"?: Database["public"]['Enums']["appt_type"] | null,"source"?: string,"status"?: Database["public"]['Enums']["qual_status"]
                   }
                   Relationships: [
                     {
@@ -587,14 +587,14 @@ isOneToOne: false
                   ]
                 },"organizations": {
                   Row: {
-                    "contact_name": string | null,"country": string,"created_at": string,"created_by": string | null,"currency": string,"id": string,"name": string,"phone": string | null,"plan_code": string,"settings": NonNullable<Json>,"slug": string,"timezone": string,"updated_at": string,"website": string | null
+                    "address_city": string | null,"address_county": string | null,"address_postcode": string | null,"address_state": string | null,"contact_name": string | null,"country": string,"created_at": string,"created_by": string | null,"currency": string,"id": string,"name": string,"phone": string | null,"plan_code": string,"settings": NonNullable<Json>,"slug": string,"timezone": string,"updated_at": string,"website": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "contact_name"?: string | null,"country"?: string,"created_at"?: string,"created_by"?: string | null,"currency"?: string,"id"?: string,"name": string,"phone"?: string | null,"plan_code"?: string,"settings"?: NonNullable<Json>,"slug": string,"timezone"?: string,"updated_at"?: string,"website"?: string | null
+                    "address_city"?: string | null,"address_county"?: string | null,"address_postcode"?: string | null,"address_state"?: string | null,"contact_name"?: string | null,"country"?: string,"created_at"?: string,"created_by"?: string | null,"currency"?: string,"id"?: string,"name": string,"phone"?: string | null,"plan_code"?: string,"settings"?: NonNullable<Json>,"slug": string,"timezone"?: string,"updated_at"?: string,"website"?: string | null
                   }
                   Update: {
-                    "contact_name"?: string | null,"country"?: string,"created_at"?: string,"created_by"?: string | null,"currency"?: string,"id"?: string,"name"?: string,"phone"?: string | null,"plan_code"?: string,"settings"?: NonNullable<Json>,"slug"?: string,"timezone"?: string,"updated_at"?: string,"website"?: string | null
+                    "address_city"?: string | null,"address_county"?: string | null,"address_postcode"?: string | null,"address_state"?: string | null,"contact_name"?: string | null,"country"?: string,"created_at"?: string,"created_by"?: string | null,"currency"?: string,"id"?: string,"name"?: string,"phone"?: string | null,"plan_code"?: string,"settings"?: NonNullable<Json>,"slug"?: string,"timezone"?: string,"updated_at"?: string,"website"?: string | null
                   }
                   Relationships: [
                     {
@@ -699,14 +699,14 @@ isOneToOne: false
                   ]
                 },"projects": {
                   Row: {
-                    "budget_label": string | null,"budget_max_minor": number | null,"budget_min_minor": number | null,"category_code": string | null,"contact_id": string | null,"created_at": string,"currency": string | null,"description": string | null,"details": NonNullable<Json>,"id": string,"location_text": string | null,"organization_id": string,"postcode": string | null,"start_timing": string | null,"template_version": number | null,"title": string,"updated_at": string
+                    "budget_label": string | null,"budget_max_minor": number | null,"budget_min_minor": number | null,"category_code": string | null,"contact_id": string | null,"created_at": string,"currency": string | null,"description": string | null,"details": NonNullable<Json>,"id": string,"is_sample": boolean,"location_text": string | null,"organization_id": string,"postcode": string | null,"start_timing": string | null,"template_version": number | null,"title": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "budget_label"?: string | null,"budget_max_minor"?: number | null,"budget_min_minor"?: number | null,"category_code"?: string | null,"contact_id"?: string | null,"created_at"?: string,"currency"?: string | null,"description"?: string | null,"details"?: NonNullable<Json>,"id"?: string,"location_text"?: string | null,"organization_id": string,"postcode"?: string | null,"start_timing"?: string | null,"template_version"?: number | null,"title": string,"updated_at"?: string
+                    "budget_label"?: string | null,"budget_max_minor"?: number | null,"budget_min_minor"?: number | null,"category_code"?: string | null,"contact_id"?: string | null,"created_at"?: string,"currency"?: string | null,"description"?: string | null,"details"?: NonNullable<Json>,"id"?: string,"is_sample"?: boolean,"location_text"?: string | null,"organization_id": string,"postcode"?: string | null,"start_timing"?: string | null,"template_version"?: number | null,"title": string,"updated_at"?: string
                   }
                   Update: {
-                    "budget_label"?: string | null,"budget_max_minor"?: number | null,"budget_min_minor"?: number | null,"category_code"?: string | null,"contact_id"?: string | null,"created_at"?: string,"currency"?: string | null,"description"?: string | null,"details"?: NonNullable<Json>,"id"?: string,"location_text"?: string | null,"organization_id"?: string,"postcode"?: string | null,"start_timing"?: string | null,"template_version"?: number | null,"title"?: string,"updated_at"?: string
+                    "budget_label"?: string | null,"budget_max_minor"?: number | null,"budget_min_minor"?: number | null,"category_code"?: string | null,"contact_id"?: string | null,"created_at"?: string,"currency"?: string | null,"description"?: string | null,"details"?: NonNullable<Json>,"id"?: string,"is_sample"?: boolean,"location_text"?: string | null,"organization_id"?: string,"postcode"?: string | null,"start_timing"?: string | null,"template_version"?: number | null,"title"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -775,16 +775,30 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
-                },"service_areas": {
+                },"sample_businesses": {
                   Row: {
-                    "created_at": string,"id": string,"label": string,"organization_id": string,"postcode": string | null,"radius_km": number | null,"region": string | null
+                    "data": NonNullable<Json>,"key": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"id"?: string,"label": string,"organization_id": string,"postcode"?: string | null,"radius_km"?: number | null,"region"?: string | null
+                    "data": NonNullable<Json>,"key": string
                   }
                   Update: {
-                    "created_at"?: string,"id"?: string,"label"?: string,"organization_id"?: string,"postcode"?: string | null,"radius_km"?: number | null,"region"?: string | null
+                    "data"?: NonNullable<Json>,"key"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"service_areas": {
+                  Row: {
+                    "city": string | null,"country": string | null,"county": string | null,"created_at": string,"id": string,"label": string,"lat": number | null,"lng": number | null,"organization_id": string,"postcode": string | null,"radius_km": number | null,"region": string | null,"slug": string | null,"state": string | null,"suburb": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "city"?: string | null,"country"?: string | null,"county"?: string | null,"created_at"?: string,"id"?: string,"label": string,"lat"?: number | null,"lng"?: number | null,"organization_id": string,"postcode"?: string | null,"radius_km"?: number | null,"region"?: string | null,"slug"?: string | null,"state"?: string | null,"suburb"?: string | null
+                  }
+                  Update: {
+                    "city"?: string | null,"country"?: string | null,"county"?: string | null,"created_at"?: string,"id"?: string,"label"?: string,"lat"?: number | null,"lng"?: number | null,"organization_id"?: string,"postcode"?: string | null,"radius_km"?: number | null,"region"?: string | null,"slug"?: string | null,"state"?: string | null,"suburb"?: string | null
                   }
                   Relationships: [
                     {
@@ -900,6 +914,9 @@ isOneToOne: false
 "appt_label":
 { Args: { "t": Database["public"]['Enums']["appt_type"] }; Returns: string
                            },
+"booking_slots":
+{ Args: { "p_days"?: number,"p_org": string }; Returns: string[]
+                           },
 "claim_notifications":
 { Args: { "p_limit"?: number }; Returns: {
               "attempts": number,
@@ -920,6 +937,9 @@ isOneToOne: false
         isOneToOne: false
         isSetofReturn: true
       } },
+"clear_sample_data":
+{ Args: { "p_org": string }; Returns: Json
+                           },
 "create_organization":
 { Args: { "p_country"?: string,"p_currency"?: string,"p_name": string,"p_slug": string,"p_timezone"?: string }; Returns: string
                            },
@@ -929,17 +949,31 @@ isOneToOne: false
 "finish_notification":
 { Args: { "p_error"?: string,"p_id": string,"p_ok": boolean,"p_skipped"?: boolean }; Returns: undefined
                            },
+"get_public_availability":
+{ Args: { "p_days"?: number,"p_slug": string }; Returns: Json
+                           },
 "get_public_page":
 { Args: { "p_slug": string }; Returns: Json
                            },
 "hit_rate_limit":
 { Args: { "p_key": string,"p_max": number,"p_window": string }; Returns: boolean
                            },
+"is_loading_samples":
+{ Args: Record<PropertyKey, never>; Returns: boolean
+                           },
 "is_org_member":
 { Args: { "org": string }; Returns: boolean
                            },
 "is_org_owner":
 { Args: { "org": string }; Returns: boolean
+                           },
+"list_public_places":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "area_slug": string,"page_slug": string,"updated_at": string
+            }[]
+                           },
+"load_sample_data":
+{ Args: { "p_key": string,"p_org": string }; Returns: Json
                            },
 "log_audit":
 { Args: { "org": string,"p_action": string,"p_data"?: Json,"p_entity": string,"p_entity_id": string }; Returns: undefined
@@ -958,6 +992,9 @@ isOneToOne: false
                            },
 "record_integration_delivery":
 { Args: { "p_id": string,"p_status": string }; Returns: undefined
+                           },
+"request_public_booking":
+{ Args: { "p_reference": string,"p_slug": string,"p_start": string,"p_type": string }; Returns: Json
                            },
 "review_onboarding":
 { Args: { "p_org": string }; Returns: Database["public"]['Enums']["onboarding_status"]

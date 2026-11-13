@@ -20,6 +20,7 @@ import {
 import type { ReactNode } from "react";
 import { LogoMark } from "@/components/brand/Logo";
 import { Avatar, Badge } from "@/components/ui";
+import { SAMPLE_BY_KEY, ago, type SampleBusiness, type SampleLead } from "@/config/samples";
 import { cn } from "@/lib/cn";
 
 export function AppWindow({ children, className, url = "app.brexoo.com" }: { children: ReactNode; className?: string; url?: string }) {
@@ -49,21 +50,27 @@ const SIDEBAR = [
   { icon: Sparkles, label: "Brex AI" },
 ];
 
-export const SAMPLE_ENQUIRIES = [
-  { name: "Sarah Mitchell", project: "Double-storey new build", where: "Merewether", fit: "Strong fit", tone: "green" as const, when: "4 min ago", unread: true },
-  { name: "Daniel Okafor", project: "Kitchen renovation", where: "Charlestown", fit: "Possible fit", tone: "amber" as const, when: "38 min ago", unread: true },
-  { name: "Priya Raman", project: "Granny flat", where: "Adamstown", fit: "Strong fit", tone: "green" as const, when: "2 h ago" },
-  { name: "Tom Becker", project: "Extension, rear deck", where: "Maitland", fit: "Needs info", tone: "neutral" as const, when: "Yesterday" },
-];
+const BUILDERS = SAMPLE_BY_KEY.builders;
+const FIT_TONE = { "Strong fit": "green", "Possible fit": "amber", "Weak fit": "neutral" } as const;
+const open = (l: SampleLead) => l.stage !== "won" && l.stage !== "lost";
+const money = (minor: number, currency: string) => new Intl.NumberFormat("en-US", { style: "currency", currency, maximumFractionDigits: 0, notation: minor >= 100_000_000 ? "compact" : "standard" }).format(minor / 100);
 
-export function OverviewMock({ className }: { className?: string }) {
+/** The newest open enquiries for a sample business, as the website and the sample workspace show them. */
+export function sampleEnquiries(b: SampleBusiness = BUILDERS) {
+  return b.leads.filter(open).slice(0, 4).map((l) => ({ name: l.name, project: l.title, where: l.suburb || l.city, fit: l.fit, tone: FIT_TONE[l.fit], when: ago(l.hoursAgo), unread: l.stage === "new" }));
+}
+
+export function OverviewMock({ className, business = BUILDERS }: { className?: string; business?: SampleBusiness }) {
+  const enquiries = sampleEnquiries(business);
+  const openLeads = business.leads.filter(open);
+  const visits = business.leads.filter((l) => l.appointment).length;
   return (
     <AppWindow className={className}>
       <div className="grid grid-cols-[180px_minmax(0,1fr)] max-lg:grid-cols-1">
         <aside className="border-r border-line bg-surface-2/40 p-3 max-lg:hidden" aria-hidden>
           <div className="flex items-center gap-2 px-2 pb-4 pt-1">
             <LogoMark className="h-5 w-auto" knockout="var(--surface-2)" />
-            <span className="truncate text-[13px] font-semibold">Coastline Homes</span>
+            <span className="truncate text-[13px] font-semibold">{business.name}</span>
           </div>
           <ul className="grid gap-0.5">
             {SIDEBAR.map(({ icon: Icon, label, active, count }) => (
@@ -87,9 +94,9 @@ export function OverviewMock({ className }: { className?: string }) {
           </div>
           <div className="mt-4 grid grid-cols-3 gap-3">
             {[
-              { k: "New enquiries", v: "6", d: "+2 today" },
-              { k: "Follow-ups due", v: "3", d: "1 overdue" },
-              { k: "Visits this week", v: "2", d: "Tue, Thu" },
+              { k: "Open leads", v: String(openLeads.length), d: `+${business.leads.filter((l) => l.hoursAgo < 24).length} today` },
+              { k: "Follow-ups due", v: String(openLeads.filter((l) => l.stage !== "appointment_booked").length), d: "Due today" },
+              { k: "Visits booked", v: String(visits), d: "This week" },
             ].map((s) => (
               <div key={s.k} className="rounded-xl border border-line p-3">
                 <p className="truncate text-[11px] text-ink-3">{s.k}</p>
@@ -104,7 +111,7 @@ export function OverviewMock({ className }: { className?: string }) {
               <p className="text-[11px] text-ink-3">Sorted by received</p>
             </div>
             <ul>
-              {SAMPLE_ENQUIRIES.map((e) => (
+              {enquiries.map((e) => (
                 <li key={e.name} className="flex items-center gap-3 border-b border-line px-3 py-2.5 last:border-0">
                   <Avatar name={e.name} />
                   <div className="min-w-0 flex-1">
@@ -132,13 +139,14 @@ export function OverviewMock({ className }: { className?: string }) {
 
 type FactorRow = { label: string; status: "match" | "partial" | "unknown"; detail: string };
 
+/** Fit for Sarah Mitchell's enquiry (sample lead B-01), matching what the sample workspace shows. */
 export const SAMPLE_FACTORS: FactorRow[] = [
-  { label: "Service match", status: "match", detail: "You offer new builds" },
-  { label: "Location coverage", status: "match", detail: "Inside Newcastle & Lake Macquarie" },
+  { label: "Service match", status: "match", detail: "You offer home builders" },
+  { label: "Location coverage", status: "match", detail: "Inside Merewether, Newcastle NSW 2291" },
   { label: "Timing", status: "match", detail: "Wants to start in 1–3 months" },
-  { label: "Budget fit", status: "partial", detail: "Stated $500k+ (no minimum set)" },
-  { label: "Required answers", status: "unknown", detail: "Land ownership not answered" },
-];
+  { label: "Budget fit", status: "unknown", detail: "Budget not stated" },
+  { label: "Required answers", status: "match", detail: "Owns the land: Yes" },
+]
 
 export function FactorIcon({ status }: { status: FactorRow["status"] | "mismatch" }) {
   const map = {
@@ -161,7 +169,7 @@ export function FitCardMock({ className }: { className?: string }) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-[12px] text-ink-3">Why it fits</p>
-          <p className="mt-0.5 font-display text-xl font-semibold tracking-tight">Strong fit · 86</p>
+          <p className="mt-0.5 font-display text-xl font-semibold tracking-tight">Strong fit · 82</p>
         </div>
         <div className="text-right">
           <p className="text-[12px] text-ink-3">Confidence</p>
@@ -180,7 +188,7 @@ export function FitCardMock({ className }: { className?: string }) {
         ))}
       </ul>
       <div className="mt-4 rounded-xl bg-surface-2 px-3 py-2.5 text-[12px] text-ink-2">
-        <span className="font-medium text-ink">Missing:</span> land ownership, decision-maker. Ask before quoting.
+        <span className="font-medium text-ink">Missing:</span> budget range, decision-maker. Ask before quoting.
       </div>
     </div>
   );
@@ -201,13 +209,13 @@ export function BrexMock({ className }: { className?: string }) {
       <div className="mt-4 ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-blue px-3.5 py-2 text-[13px] text-on-blue">Draft a reply to Sarah asking what we still need.</div>
       <div className="mt-3 rounded-2xl rounded-bl-md border border-line bg-surface-2/60 p-3.5 text-[13px] leading-relaxed text-ink-2">
         <p>
-          Sarah wants a <strong className="font-medium text-ink">double-storey new build in Merewether</strong>, starting in 1–3 months{" "}
-          <span className="rounded bg-blue-soft px-1 text-[11px] text-blue">Enquiry 7F3A21C0</span>. Land ownership and the decision-maker are{" "}
+          Sarah wants a <strong className="font-medium text-ink">double-storey new build in Merewether</strong> on land she owns, starting in 1–3 months{" "}
+          <span className="rounded bg-blue-soft px-1 text-[11px] text-blue">Enquiry B-01</span>. Budget and the decision-maker are{" "}
           <em className="not-italic text-amber-ink">not recorded</em>.
         </p>
         <div className="mt-3 rounded-xl border border-line bg-surface p-3">
           <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-ink-3">Draft email</p>
-          <p className="mt-1.5 text-ink">Hi Sarah, thanks for getting in touch about your new build in Merewether. Before we prepare anything, could you let us know whether you already own the land, and who else is involved in the decision?</p>
+          <p className="mt-1.5 text-ink">Hi Sarah, thanks for getting in touch about your new build in Merewether. Before your site visit, could you share a rough budget range, and let us know who else is involved in the decision?</p>
         </div>
       </div>
       <div className="mt-3 flex items-center justify-between gap-3">
@@ -218,17 +226,17 @@ export function BrexMock({ className }: { className?: string }) {
   );
 }
 
-export function DiscoverMock({ className }: { className?: string }) {
+export function DiscoverMock({ className, business = BUILDERS }: { className?: string; business?: SampleBusiness }) {
+  const lead = business.leads.find((l) => l.stage === "new") ?? business.leads[0]!;
   const rows = [
-    { title: "Duplex, 2 lots — DA lodged", where: "Lambton", src: "Council DA register", seen: "Observed 3 days ago", cat: "Project opportunity" },
-    { title: "Rear extension enquiry", where: "Hamilton", src: "Your landing page", seen: "Received today", cat: "Enquiry" },
-    { title: "Townhouse package — tender", where: "Wallsend", src: "Licensed tender feed", seen: "Closes 28 Nov", cat: "Project opportunity" },
-  ];
+    ...business.projects.map((p) => ({ title: p.title, where: p.location.split(",")[0]!, src: p.source, seen: p.observedDaysAgo <= 1 ? "Observed yesterday" : `Observed ${p.observedDaysAgo} days ago`, cat: "Project opportunity" })),
+    { title: `${lead.title} enquiry`, where: lead.suburb || lead.city, src: lead.source === "visitor_chat" ? "Your website chat" : "Your landing page", seen: `Received ${ago(lead.hoursAgo)}`, cat: "Enquiry" },
+  ].slice(0, 3);
   return (
     <div className={cn("rounded-2xl border border-line bg-surface p-4 shadow-md", className)}>
       <div className="flex h-10 items-center gap-2 rounded-xl border border-line-strong px-3 text-[13px] text-ink-3">
         <Search className="size-4" aria-hidden />
-        New builds · Newcastle · next 6 months
+        {business.industry} · {business.city} · next 6 months
       </div>
       <ul className="mt-3 grid gap-2">
         {rows.map((r) => (
@@ -255,14 +263,15 @@ export function DiscoverMock({ className }: { className?: string }) {
   );
 }
 
-export function BookingMock({ className }: { className?: string }) {
+export function BookingMock({ className, business = BUILDERS }: { className?: string; business?: SampleBusiness }) {
+  const booked = business.leads.find((l) => l.appointment)!;
   const days = ["Mon 17", "Tue 18", "Wed 19", "Thu 20", "Fri 21"];
   const slots = ["8:00", "10:30", "13:00", "15:30"];
   return (
     <div className={cn("rounded-2xl border border-line bg-surface p-5 shadow-md", className)}>
       <div className="flex items-center justify-between">
-        <p className="text-[13px] font-semibold">Site visit · 60 min</p>
-        <p className="text-[11px] text-ink-3">Times in Australia/Sydney</p>
+        <p className="text-[13px] font-semibold">Site visit · {booked.appointment!.minutes} min</p>
+        <p className="text-[11px] text-ink-3">Times in {business.timezone.replace("_", " ")}</p>
       </div>
       <div className="mt-4 grid grid-cols-5 gap-2">
         {days.map((d, i) => (
@@ -288,24 +297,26 @@ export function BookingMock({ className }: { className?: string }) {
       </div>
       <div className="mt-4 flex items-center gap-3 rounded-xl bg-green-soft px-3 py-2.5 text-[12px] text-green-ink">
         <Check className="size-4 shrink-0" aria-hidden />
-        Booked Tue 18 Nov, 10:30 · confirmation needs your approval to send
+        {booked.name} requested Tue 18 Nov, 10:30 · confirm to book it
       </div>
     </div>
   );
 }
 
-export function PipelineMock({ className }: { className?: string }) {
+export function PipelineMock({ className, business = BUILDERS }: { className?: string; business?: SampleBusiness }) {
+  const card = (l: SampleLead) => ({ t: l.title, v: l.valueMinor ? money(l.valueMinor, business.currency) : "Value not set" });
   const cols = [
-    { name: "Qualified", tone: "teal" as const, cards: [{ t: "Granny flat", v: "$165k" }] },
-    { name: "Proposal", tone: "green" as const, cards: [{ t: "Kitchen renovation", v: "$48k" }, { t: "Rear extension", v: "$92k" }] },
-    { name: "Won", tone: "green" as const, cards: [{ t: "Double-storey build", v: "$612k" }] },
+    { name: "Qualified", cards: business.leads.filter((l) => l.stage === "qualified" || l.stage === "appointment_booked").map(card) },
+    { name: "Proposal", cards: business.leads.filter((l) => l.stage === "proposal").map(card) },
+    { name: "Won", cards: business.leads.filter((l) => l.stage === "won").map(card) },
   ];
+  const wonTotal = business.leads.filter((l) => l.stage === "won").reduce((t, l) => t + (l.valueMinor ?? 0), 0);
   return (
     <div className={cn("rounded-2xl border border-line bg-surface p-4 shadow-md", className)}>
       <div className="flex items-end justify-between px-1">
         <div>
           <p className="text-[12px] text-ink-3">Won this quarter</p>
-          <p className="font-display text-2xl font-semibold tabular">$612,000</p>
+          <p className="font-display text-2xl font-semibold tabular">{money(wonTotal, business.currency)}</p>
         </div>
         <div className="flex h-12 items-end gap-1.5" aria-hidden>
           {[30, 42, 38, 55, 48, 70, 88].map((h, i) => (
@@ -318,6 +329,7 @@ export function PipelineMock({ className }: { className?: string }) {
           <div key={c.name} className="min-w-0 rounded-xl bg-surface-2/70 p-2">
             <p className="px-1 pb-2 text-[11px] font-medium text-ink-3">{c.name}</p>
             <div className="grid gap-1.5">
+              {c.cards.length === 0 ? <p className="px-1 text-[11px] text-ink-3">—</p> : null}
               {c.cards.map((card) => (
                 <div key={card.t} className="min-w-0 rounded-lg border border-line bg-surface p-2 shadow-xs">
                   <p className="truncate text-[12px] font-medium">{card.t}</p>
@@ -332,7 +344,7 @@ export function PipelineMock({ className }: { className?: string }) {
   );
 }
 
-export function PhonePageMock({ className }: { className?: string }) {
+export function PhonePageMock({ className, business = BUILDERS }: { className?: string; business?: SampleBusiness }) {
   return (
     <div className={cn("relative mx-auto w-[280px] rounded-[44px] border-[10px] border-[#0b1626] bg-[#0b1626] shadow-lg", className)}>
       <div className="overflow-hidden rounded-[34px] bg-white text-[#0f2742]">
@@ -342,8 +354,8 @@ export function PhonePageMock({ className }: { className?: string }) {
           <span>100%</span>
         </div>
         <div className="bg-[linear-gradient(160deg,#0f2742_0%,#1f5fd0_130%)] px-5 pb-6 pt-4 text-white">
-          <p className="text-[10px] font-medium uppercase tracking-[0.14em] opacity-70">Coastline Homes</p>
-          <p className="mt-2 font-display text-[22px] font-semibold leading-[1.1] tracking-tight">New homes across Newcastle & the Lake</p>
+          <p className="text-[10px] font-medium uppercase tracking-[0.14em] opacity-70">{business.name}</p>
+          <p className="mt-2 font-display text-[20px] font-semibold leading-[1.15] tracking-tight">{business.tagline}</p>
           <p className="mt-2 text-[11px] leading-relaxed opacity-80">Tell us what you have in mind. We reply within 4 business hours.</p>
         </div>
         <div className="grid gap-2.5 p-4">
@@ -360,8 +372,83 @@ export function PhonePageMock({ className }: { className?: string }) {
             ))}
           </div>
           <div className="mt-1 h-10 rounded-lg bg-[#2f6fe4] text-center text-[12px] font-semibold leading-10 text-white">Request a quote</div>
-          <p className="text-center text-[9px] text-[#5f6e85]">Your details go only to Coastline Homes.</p>
+          <p className="text-center text-[9px] text-[#5f6e85]">Your details go only to {business.name}.</p>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The business's week, built from sample bookings across trades: confirmed visits, a visitor's
+ * pending request, and the confirm step. Used on the home page and How it works.
+ */
+export function CalendarMock({ className }: { className?: string }) {
+  const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+  const hours = [8, 9, 10, 11, 12, 13, 14, 15, 16];
+  const events = [
+    { day: 0, start: 8, len: 1, who: SAMPLE_BY_KEY.hvac.leads[2]!.name, what: "Service", tone: "teal" },
+    { day: 1, start: 10, len: 1, who: SAMPLE_BY_KEY.builders.leads[1]!.name, what: "Site visit", tone: "teal" },
+    { day: 1, start: 14, len: 0.75, who: SAMPLE_BY_KEY.electricians.leads[1]!.name, what: "Site visit", tone: "teal" },
+    { day: 2, start: 9, len: 0.5, who: SAMPLE_BY_KEY.plumbers.leads[3]!.name, what: "Call", tone: "blue" },
+    { day: 3, start: 11, len: 1, who: SAMPLE_BY_KEY.renovation.leads[1]!.name, what: "Site visit", tone: "teal" },
+    { day: 3, start: 15, len: 0.5, who: SAMPLE_BY_KEY.landscaping.leads[3]!.name, what: "Video", tone: "violet" },
+    { day: 4, start: 13, len: 0.75, who: SAMPLE_BY_KEY.roofing.leads[1]!.name, what: "Site visit", tone: "teal" },
+  ];
+  const tone = { teal: "border-l-teal bg-teal-soft text-teal-ink", blue: "border-l-blue bg-blue-soft text-blue", violet: "border-l-violet-ink bg-violet-soft text-violet-ink" } as const;
+  const sarah = SAMPLE_BY_KEY.builders.leads[0]!;
+  return (
+    <div className={cn("rounded-2xl border border-line bg-surface p-4 shadow-md", className)}>
+      <div className="flex items-center justify-between px-1">
+        <p className="text-[13px] font-semibold">This week</p>
+        <span className="rounded-full bg-blue-soft px-2 py-0.5 text-[11px] font-medium text-blue">1 request to confirm</span>
+      </div>
+      <div className="mt-3 grid grid-cols-[32px_repeat(5,minmax(0,1fr))] gap-x-1.5 text-[10px]">
+        <span />
+        {days.map((d, i) => (
+          <span key={d} className={cn("pb-1.5 text-center font-medium", i === 1 ? "text-blue" : "text-ink-3")}>
+            {d}
+          </span>
+        ))}
+        <div className="relative col-span-6 grid grid-cols-[32px_repeat(5,minmax(0,1fr))] gap-x-1.5" style={{ height: hours.length * 26 }}>
+          <div className="relative">
+            {hours.map((h, k) => (
+              <span key={h} className="absolute right-1 text-ink-3 tabular" style={{ top: k * 26 - 5 }}>
+                {h > 12 ? h - 12 : h}
+                {h >= 12 ? "p" : "a"}
+              </span>
+            ))}
+          </div>
+          {days.map((d, di) => (
+            <div key={d} className="relative rounded-md bg-surface-2/50">
+              {hours.map((h, k) => (
+                <span key={h} className="absolute inset-x-0 border-t border-line/70" style={{ top: k * 26 }} />
+              ))}
+              {events
+                .filter((e) => e.day === di)
+                .map((e) => (
+                  <span key={e.who} className={cn("absolute inset-x-0.5 overflow-hidden rounded-[5px] border-l-[3px] px-1 py-0.5 leading-tight", tone[e.tone as keyof typeof tone])} style={{ top: (e.start - 8) * 26 + 1, height: e.len * 26 - 2 }}>
+                    <span className="block truncate font-semibold">{e.what}</span>
+                    <span className="block truncate opacity-80">{e.who.split(" ")[0]}</span>
+                  </span>
+                ))}
+              {di === 2 ? (
+                <span className="absolute inset-x-0.5 overflow-hidden rounded-[5px] border border-dashed border-blue bg-white/80 px-1 py-0.5 leading-tight text-blue" style={{ top: (13 - 8) * 26 + 1, height: 26 * 1 - 2 }}>
+                  <span className="block truncate font-semibold">Requested</span>
+                  <span className="block truncate">{sarah.name.split(" ")[0]}</span>
+                </span>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="mt-3 flex items-center gap-3 rounded-xl border border-line px-3 py-2.5">
+        <Avatar name={sarah.name} />
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-[12px] font-medium">{sarah.name} asked for a site visit</p>
+          <p className="truncate text-[11px] text-ink-3">Wed 1:00 pm · {sarah.suburb}</p>
+        </div>
+        <span className="h-7 shrink-0 rounded-lg bg-blue px-2.5 text-[11px] font-medium leading-7 text-on-blue">Confirm</span>
       </div>
     </div>
   );

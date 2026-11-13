@@ -58,6 +58,7 @@ export default async function OpportunityPage({ params }: { params: Promise<{ id
               </Badge>
               {enquiry ? <Badge tone={QUAL_LABEL[enquiry.status].tone}>{QUAL_LABEL[enquiry.status].label}</Badge> : null}
               {contact.do_not_contact ? <Badge tone="red">Do not contact</Badge> : null}
+              {contact.is_sample ? <Badge tone="amber">Sample data</Badge> : null}
               <span className="text-[12px] text-ink-3">Received {formatRelative(enquiry?.received_at ?? opp.created_at, tz)}</span>
             </div>
           </div>

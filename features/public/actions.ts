@@ -19,9 +19,21 @@ const schema = z.object({
   // Anti-spam: honeypot must be empty; real people take more than a couple of seconds.
   company_website: z.string().max(0).optional(),
   started_at: z.number().optional(),
+  // Optional time request (confirmed later by the business).
+  requested_start: z.string().datetime({ offset: true }).optional(),
+  requested_type: z.enum(["phone", "video", "site_visit"]).optional(),
 });
 
-export type EnquiryResult = { ok: true; reference: string; duplicate: boolean } | { ok: false; error: string };
+export type EnquiryResult = { ok: true; reference: string; duplicate: boolean; requested?: string | null; bookingError?: string } | { ok: false; error: string };
+
+export type Availability = { ok: boolean; timezone?: string; minutes?: number; types?: string[]; slots?: string[] };
+
+/** Free times for a published page. Only start times are returned, never other bookings. */
+export async function getAvailability(slug: string): Promise<Availability> {
+  const { data, error } = await createAnonClient().rpc("get_public_availability", { p_slug: slug, p_days: 14 });
+  if (error || !data) return { ok: false };
+  return data as Availability;
+}
 
 const ERRORS: Record<string, string> = {
   name_required: "Please add your name.",
@@ -38,7 +50,7 @@ const ERRORS: Record<string, string> = {
 export async function submitEnquiry(slug: string, input: unknown): Promise<EnquiryResult> {
   const parsed = schema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "Please check the form and try again." };
-  const { company_website, started_at, ...payload } = parsed.data;
+  const { company_website, started_at, requested_start, requested_type, ...payload } = parsed.data;
   if (company_website || (started_at && Date.now() - started_at < 2500)) {
     // Looks automated: accept silently without saving.
     return { ok: true, reference: "RECEIVED", duplicate: false };
@@ -51,5 +63,13 @@ export async function submitEnquiry(slug: string, input: unknown): Promise<Enqui
   if (error) return { ok: false, error: "We couldn't send that just now. Please try again in a minute." };
   const res = data as { ok: boolean; reference?: string; duplicate?: boolean; error?: string };
   if (!res.ok) return { ok: false, error: ERRORS[res.error ?? ""] ?? "Please check the form and try again." };
+  if (requested_start && requested_type && !res.duplicate) {
+    const { data: b } = await createAnonClient().rpc("request_public_booking", { p_slug: slug, p_reference: res.reference!, p_start: requested_start, p_type: requested_type });
+    const booking = (b ?? {}) as { ok?: boolean; error?: string };
+    if (!booking.ok) {
+      return { ok: true, reference: res.reference!, duplicate: false, requested: null, bookingError: booking.error === "slot_taken" ? "That time was just taken, so we've sent your enquiry without it. The business will suggest a time." : "We couldn't add your preferred time, so the business will suggest one." };
+    }
+    return { ok: true, reference: res.reference!, duplicate: false, requested: requested_start };
+  }
   return { ok: true, reference: res.reference!, duplicate: Boolean(res.duplicate) };
 }

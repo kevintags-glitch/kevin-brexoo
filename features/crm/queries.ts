@@ -15,13 +15,13 @@ export async function getMembers(ctx: OrgContext) {
 export async function getFitContext(ctx: OrgContext) {
   const [services, areas, questions] = await Promise.all([
     ctx.supabase.from("org_services").select("category_code, category:service_categories(name)").eq("organization_id", ctx.org.id),
-    ctx.supabase.from("service_areas").select("label, postcode").eq("organization_id", ctx.org.id),
+    ctx.supabase.from("service_areas").select("label, postcode, county, city, suburb").eq("organization_id", ctx.org.id),
     ctx.supabase.from("org_questions").select("key, label, kind, options, required, is_public, active").eq("organization_id", ctx.org.id).order("sort"),
   ]);
   const settings = (ctx.org.settings ?? {}) as { ideal?: { min_budget?: string } };
   return {
     orgServices: (services.data ?? []).map((s) => ({ code: s.category_code, name: s.category?.name ?? s.category_code })),
-    serviceAreas: (areas.data ?? []).map((a) => ({ label: a.label, postcode: a.postcode })),
+    serviceAreas: (areas.data ?? []).map((a) => ({ label: a.label, postcode: a.postcode, county: a.county, city: a.city, suburb: a.suburb })),
     questions: (questions.data ?? []).filter((q) => q.active),
     idealMinBudget: settings.ideal?.min_budget || null,
   };

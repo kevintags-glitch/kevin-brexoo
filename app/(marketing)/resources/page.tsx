@@ -7,7 +7,7 @@ import { PageHero } from "@/components/marketing/PageHero";
 import { Reveal } from "@/components/marketing/Reveal";
 import { Container, CtaBand, Eyebrow } from "@/components/marketing/Section";
 
-export const metadata: Metadata = { title: "Resources", description: "Guides to how Brexoo works, its AI, record types, managed services, pricing and policies." };
+export const metadata: Metadata = { alternates: { canonical: "/resources" }, title: "Resources", description: "Guides to how Brexoo works, its AI, record types, managed services, pricing and policies." };
 
 const START = [
   { icon: BookOpen, title: "How Brexoo works", body: "The workflow from first enquiry to won work, step by step.", href: "/how-it-works" },
@@ -47,8 +47,8 @@ export default function ResourcesPage() {
                 <span className="grid size-12 place-items-center rounded-2xl bg-blue-soft text-blue transition-colors group-hover:bg-blue group-hover:text-white">
                   <Icon className="size-5" aria-hidden />
                 </span>
-                <span className="mt-8 text-[26px] font-light tracking-[-0.02em]">{title}</span>
-                <span className="mt-2 flex-1 text-[15px] font-light leading-relaxed text-ink-3">{body}</span>
+                <span className="mt-8 text-[26px] font-semibold tracking-[-0.02em]">{title}</span>
+                <span className="mt-2 flex-1 text-[15px] leading-relaxed text-ink-3">{body}</span>
                 <span className="mt-6 inline-flex items-center gap-1.5 text-[14px] font-medium text-blue">
                   Read <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden />
                 </span>
@@ -61,13 +61,13 @@ export default function ResourcesPage() {
       <section id="record-types" className="scroll-mt-24 bg-[#0f2742] py-24 text-white sm:py-32">
         <Container>
           <p className="text-[13px] font-medium uppercase tracking-[0.24em] text-[#5fd4ea]">Know your records</p>
-          <WordsReveal text="Four kinds of record. Never mixed up." className="mt-4 max-w-[18ch] text-[40px] font-extralight leading-[1.05] tracking-[-0.025em] sm:text-[60px]" />
+          <WordsReveal text="Four kinds of record. Never mixed up." className="mt-4 max-w-[18ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.025em] sm:text-[60px]" />
           <div className="mt-14 grid gap-px overflow-hidden rounded-[28px] bg-white/10 md:grid-cols-2">
             {RECORD_TYPES.map(({ icon: Icon, name, body }, i) => (
               <SlideIn key={name} from={i % 2 === 0 ? "left" : "right"} delay={Math.floor(i / 2) * 0.1} className="bg-[#0f2742] p-8 sm:p-10">
                 <Icon className="size-7 text-[#5fd4ea]" strokeWidth={1.4} aria-hidden />
-                <h3 className="mt-6 text-[26px] font-light tracking-[-0.02em]">{name}</h3>
-                <p className="mt-3 text-[16px] font-light leading-relaxed text-white/70">{body}</p>
+                <h3 className="mt-6 text-[26px] font-semibold tracking-[-0.02em]">{name}</h3>
+                <p className="mt-3 text-[16px] leading-relaxed text-white/70">{body}</p>
               </SlideIn>
             ))}
           </div>
@@ -78,10 +78,10 @@ export default function ResourcesPage() {
         <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
           <div className="lg:sticky lg:top-28 lg:h-fit">
             <Eyebrow>Guides</Eyebrow>
-            <h2 className="mt-4 text-[38px] font-light leading-[1.05] tracking-[-0.025em] sm:text-[48px]">Practical habits that win work.</h2>
+            <h2 className="mt-4 text-[38px] font-semibold leading-[1.05] tracking-[-0.025em] sm:text-[48px]">Practical habits that win work.</h2>
             <nav aria-label="Guides" className="mt-8 grid gap-2">
               {GUIDES.map((g) => (
-                <a key={g.id} href={`#${g.id}`} className="text-[15px] font-light text-ink-3 hover:text-blue">
+                <a key={g.id} href={`#${g.id}`} className="text-[15px] text-ink-3 hover:text-blue">
                   {g.title}
                 </a>
               ))}
@@ -92,8 +92,8 @@ export default function ResourcesPage() {
               <Reveal key={g.id} delay={0.04 * i}>
                 <article id={g.id} className="scroll-mt-28 rounded-[24px] border border-line p-7 sm:p-9">
                   <p className="text-[12px] text-ink-3 tabular">Guide {String(i + 1).padStart(2, "0")}</p>
-                  <h3 className="mt-2 text-[24px] font-light tracking-[-0.02em]">{g.title}</h3>
-                  <p className="mt-3 text-[16px] font-light leading-relaxed text-ink-2">{g.body}</p>
+                  <h3 className="mt-2 text-[24px] font-semibold tracking-[-0.02em]">{g.title}</h3>
+                  <p className="mt-3 text-[16px] leading-relaxed text-ink-2">{g.body}</p>
                 </article>
               </Reveal>
             ))}

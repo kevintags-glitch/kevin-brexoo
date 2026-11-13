@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/marketing/LegalPage";
 
-export const metadata: Metadata = { title: "Acceptable use" };
+export const metadata: Metadata = { alternates: { canonical: "/legal/acceptable-use" }, title: "Acceptable use" };
 
 export default function AcceptableUsePage() {
   return (

@@ -3,6 +3,7 @@ import { Page, PageHeader } from "@/components/app/PageHeader";
 import { Wizard, type WizardData } from "@/components/app/onboarding/Wizard";
 import { Badge } from "@/components/ui";
 import { ONBOARDING_STATUS_LABEL, STEPS, type StepId } from "@/features/onboarding/steps";
+import { asCountry } from "@/config/locations";
 import { requireOrg } from "@/lib/auth/session";
 import { allTimezones } from "@/lib/timezones";
 
@@ -14,7 +15,7 @@ export default async function OnboardingPage({ searchParams }: { searchParams: P
   const [ob, services, areas, questions, members] = await Promise.all([
     supabase.from("onboarding").select("*").eq("organization_id", org.id).single(),
     supabase.from("org_services").select("category_code, focus").eq("organization_id", org.id),
-    supabase.from("service_areas").select("label, postcode, radius_km").eq("organization_id", org.id).order("created_at"),
+    supabase.from("service_areas").select("label, state, county, city, suburb, postcode, radius_km").eq("organization_id", org.id).order("created_at"),
     supabase.from("org_questions").select("*").eq("organization_id", org.id).order("sort"),
     supabase.from("memberships").select("user_id, profile:profiles(full_name, email)").eq("organization_id", org.id),
   ]);
@@ -29,10 +30,27 @@ export default async function OnboardingPage({ searchParams }: { searchParams: P
     status: ob.data?.status ?? "not_started",
     reviewNote: ob.data?.review_note ?? null,
     completed,
-    org: { name: org.name, website: org.website, phone: org.phone, contact_name: org.contact_name, timezone: org.timezone, settings: (org.settings ?? {}) as WizardData["org"]["settings"] },
+    org: {
+      name: org.name,
+      website: org.website,
+      phone: org.phone,
+      contact_name: org.contact_name,
+      timezone: org.timezone,
+      country: asCountry(org.country),
+      address: { city: org.address_city ?? "", state: org.address_state ?? "", county: org.address_county ?? "", postcode: org.address_postcode ?? "" },
+      settings: (org.settings ?? {}) as WizardData["org"]["settings"],
+    },
     services: (services.data ?? []).map((s) => s.category_code),
     focus: services.data?.[0]?.focus ?? "both",
-    areas: (areas.data ?? []).map((a) => ({ label: a.label, postcode: a.postcode ?? "", radius_km: a.radius_km ?? undefined })),
+    areas: (areas.data ?? []).map((a) => ({
+      label: a.label,
+      state: a.state ?? "",
+      county: a.county ?? "",
+      city: a.city ?? (a.state ? "" : a.label),
+      suburb: a.suburb ?? "",
+      postcode: a.postcode ?? "",
+      radius_km: a.radius_km ?? undefined,
+    })),
     questions: (questions.data ?? []).map((q) => ({
       key: q.key,
       label: q.label,

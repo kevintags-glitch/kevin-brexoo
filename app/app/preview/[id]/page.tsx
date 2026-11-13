@@ -24,6 +24,7 @@ export default async function PreviewPage({ params }: { params: Promise<{ id: st
         business: { name: org.name, website: org.website, phone: org.phone, timezone: org.timezone, country: org.country, description: settings.brand?.description ?? null, logo_url: settings.brand?.logo_url ?? null },
         services: (services.data ?? []).sort((a, b) => (a.category?.sort ?? 0) - (b.category?.sort ?? 0)).map((s) => ({ code: s.category_code, name: s.category?.name ?? s.category_code })),
         areas: (areas.data ?? []).map((a) => a.label),
+        places: [],
         questions: (questions.data ?? []).map((q) => ({ key: q.key, label: q.label, kind: q.kind as "text", options: Array.isArray(q.options) ? (q.options as string[]) : [], required: q.required })),
       }}
     />

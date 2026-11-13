@@ -6,6 +6,8 @@
  * as unknown. Nothing is inferred: budget only counts when the prospect stated it.
  */
 
+import { areaMatches } from "@/config/locations";
+
 export type FactorStatus = "match" | "partial" | "mismatch" | "unknown";
 
 export type FitFactor = {
@@ -18,7 +20,7 @@ export type FitFactor = {
 
 export type FitInput = {
   orgServices: { code: string; name: string }[];
-  serviceAreas: { label: string; postcode?: string | null }[];
+  serviceAreas: { label: string; postcode?: string | null; county?: string | null; city?: string | null; suburb?: string | null }[];
   idealMinBudget?: string | null;
   requiredQuestions: { key: string; label: string }[];
   project: {
@@ -72,11 +74,8 @@ export function computeFit(input: FitInput): FitResult {
     factors.push({ key: "location", label: "Location coverage", weight: 25, status: "unknown", detail: "No location given" });
     missing.push("Project location");
   } else {
-    const hit = input.serviceAreas.find(
-      (a) =>
-        (a.postcode && project.postcode && a.postcode.trim() === project.postcode.trim()) ||
-        loc.includes(a.label.toLowerCase().split(/[,(]/)[0]!.trim()),
-    );
+    // Most specific match first: postcode, then suburb, city, county, then the area's label.
+    const hit = input.serviceAreas.find((a) => areaMatches({ country: "AU", ...a }, loc, project.postcode));
     factors.push(
       hit
         ? { key: "location", label: "Location coverage", weight: 25, status: "match", detail: `Inside ${hit.label}` }

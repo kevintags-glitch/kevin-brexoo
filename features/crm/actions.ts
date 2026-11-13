@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireOrg } from "@/lib/auth/session";
-import { parseMoneyToMinor, zonedTimeToUtc } from "@/lib/format";
+import { parseMoneyToMinor, utcToZonedInputs, zonedTimeToUtc } from "@/lib/format";
 import type { Json as RawJson } from "@/lib/supabase/database.types";
 import type { LossReason, Stage } from "./stages";
 
@@ -314,4 +314,53 @@ export async function updateAppointment(id: string, patch: { status?: string; da
   const { error } = await supabase.from("appointments").update(update).eq("id", id).eq("organization_id", org.id);
   if (error) return dbError(error);
   return done(["/app/appointments", appt.opportunity_id ? `/app/opportunities/${appt.opportunity_id}` : "/app"]);
+}
+
+/** Confirm a visitor's requested time: books the appointment (which marks the request confirmed). */
+export async function confirmBookingRequest(enquiryId: string): Promise<ActionResult> {
+  if (!uuid.safeParse(enquiryId).success) return { error: "Request not found." };
+  const { supabase, org } = await requireOrg();
+  const { data: e } = await supabase
+    .from("enquiries")
+    .select("id, contact_id, requested_start, requested_type, booking_status, project:projects(location_text, title), opportunities!opportunities_enquiry_id_organization_id_fkey(id)")
+    .eq("id", enquiryId)
+    .eq("organization_id", org.id)
+    .single();
+  if (!e || e.booking_status !== "requested" || !e.requested_start || !e.requested_type) return { error: "This request has already been handled." };
+  const minutes = ((org.settings ?? {}) as { appointments?: { meeting_minutes?: number } }).appointments?.meeting_minutes ?? 60;
+  const local = utcToZonedInputs(e.requested_start, org.timezone);
+  return bookAppointment({
+    opportunity_id: e.opportunities?.[0]?.id,
+    contact_id: e.contact_id,
+    type: e.requested_type,
+    date: local.date,
+    time: local.time,
+    minutes,
+    location: e.project?.location_text ?? undefined,
+    purpose: e.project?.title ?? undefined,
+  });
+}
+
+/** Decline a requested time and set a follow-up to suggest another. */
+export async function declineBookingRequest(enquiryId: string): Promise<ActionResult> {
+  if (!uuid.safeParse(enquiryId).success) return { error: "Request not found." };
+  const { supabase, org, user } = await requireOrg();
+  const { data: e } = await supabase
+    .from("enquiries")
+    .select("id, contact_id, booking_status, contact:contacts(full_name), opportunities!opportunities_enquiry_id_organization_id_fkey(id)")
+    .eq("id", enquiryId)
+    .eq("organization_id", org.id)
+    .single();
+  if (!e || e.booking_status !== "requested") return { error: "This request has already been handled." };
+  const { error } = await supabase.from("enquiries").update({ booking_status: "declined" }).eq("id", e.id);
+  if (error) return dbError(error);
+  await supabase.from("tasks").insert({
+    organization_id: org.id,
+    title: `Suggest another time to ${e.contact?.full_name ?? "the customer"}`,
+    due_at: new Date(Date.now() + 2 * 3_600_000).toISOString(),
+    assignee_id: user.id,
+    opportunity_id: e.opportunities?.[0]?.id ?? null,
+    contact_id: e.contact_id,
+  });
+  return done(["/app/appointments", "/app/tasks"]);
 }

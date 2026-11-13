@@ -8,7 +8,7 @@ import { Container, Faq, SectionHeading } from "@/components/marketing/Section";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 
-export const metadata: Metadata = { title: "Pricing", description: "Brexoo plans with clear limits, setup fees and billing terms." };
+export const metadata: Metadata = { alternates: { canonical: "/pricing" }, title: "Pricing", description: "Brexoo plans with clear limits, setup fees and billing terms." };
 
 const ROWS: { key: EntitlementKey; label: string; unit?: string }[] = [
   { key: "published_pages", label: "Published landing pages" },
@@ -47,7 +47,7 @@ export default function PricingPage() {
                   <h2 className="font-sans text-[20px] font-normal tracking-normal">{p.name}</h2>
                   <p className="mt-2 min-h-12 text-[14px] leading-relaxed text-ink-3">{p.positioning}</p>
                   <p className="mt-6 flex items-baseline gap-1.5">
-                    <span className="text-[60px] font-extralight leading-none tracking-[-0.035em] tabular">{formatMoney(p.monthlyPriceMinor, p.currency)}</span>
+                    <span className="text-[60px] font-semibold leading-none tracking-[-0.035em] tabular">{formatMoney(p.monthlyPriceMinor, p.currency)}</span>
                     <span className="text-ink-3">/ month</span>
                   </p>
                   <p className="mt-1 text-[13px] text-ink-3">plus {formatMoney(p.setupFeeMinor, p.currency)} one-off setup</p>

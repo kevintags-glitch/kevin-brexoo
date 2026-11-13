@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { ArrowLeft, CircleCheck } from "lucide-react";
-import { submitEnquiry } from "@/features/public/actions";
+import { getAvailability, submitEnquiry, type Availability } from "@/features/public/actions";
+import { TimePicker, type PickedTime } from "./TimePicker";
 import { Button, Checkbox, Field, Input, Notice, Textarea } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { getTemplate } from "@/config/industry-templates";
@@ -53,12 +54,22 @@ export function EnquiryForm({ data, preview, onDone }: { data: PublicPageData; p
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState<string | null>(null);
-  const [done, setDone] = useState<{ reference: string; duplicate: boolean } | null>(null);
+  const [done, setDone] = useState<{ reference: string; duplicate: boolean; requested?: string | null; bookingError?: string } | null>(null);
+  const [avail, setAvail] = useState<Availability | null>(null);
+  const [picked, setPicked] = useState<PickedTime>(null);
+  const [day, setDay] = useState<string | null>(null);
   const [pending, start] = useTransition();
   const startedAt = useRef(0);
   useEffect(() => {
     startedAt.current = Date.now();
-  }, []);
+    if (preview) return;
+    let live = true;
+    getAvailability(data.slug).then((a) => live && setAvail(a)).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, [data.slug, preview]);
+  const canBook = Boolean(avail?.ok && avail.slots?.length);
   const honeypot = useRef<HTMLInputElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
@@ -68,8 +79,8 @@ export function EnquiryForm({ data, preview, onDone }: { data: PublicPageData; p
   const relevant = questionsFor(data.questions, v.category_code);
   const chunks: PublicQuestion[][] = [];
   for (let k = 0; k < relevant.length; k += PER_STEP) chunks.push(relevant.slice(k, k + PER_STEP));
-  const steps: string[] = ["project", ...chunks.map((_, k) => `details-${k}`), "location", "contact"];
-  type Step = "project" | "details" | "location" | "contact";
+  const steps: string[] = ["project", ...chunks.map((_, k) => `details-${k}`), "location", ...(canBook ? ["time"] : []), "contact"];
+  type Step = "project" | "details" | "location" | "time" | "contact";
   const stepId = steps[Math.min(i, steps.length - 1)]!;
   const step = (stepId.startsWith("details") ? "details" : stepId) as Step;
   const stepQuestions = step === "details" ? chunks[Number(stepId.split("-")[1])] ?? [] : [];
@@ -124,9 +135,11 @@ export function EnquiryForm({ data, preview, onDone }: { data: PublicPageData; p
         source: "landing_page",
         company_website: honeypot.current?.value ?? "",
         started_at: startedAt.current,
+        requested_start: picked?.start,
+        requested_type: picked?.type,
       });
       if (res.ok) {
-        setDone({ reference: res.reference, duplicate: res.duplicate });
+        setDone({ reference: res.reference, duplicate: res.duplicate, requested: res.requested, bookingError: res.bookingError });
         onDone?.(res.reference);
       } else setServerError(res.error);
     });
@@ -141,7 +154,17 @@ export function EnquiryForm({ data, preview, onDone }: { data: PublicPageData; p
           {data.business.name} will review the details and get back to you. Your reference is{" "}
           <strong className="font-semibold tabular text-ink">{done.reference}</strong>.
         </p>
-        <p className="text-[13px] text-ink-3">This isn't a booking. Any appointment will be confirmed with you directly.</p>
+        {done.requested ? (
+          <p className="rounded-xl bg-blue-soft px-3 py-2 text-[14px] text-blue">
+            You asked for{" "}
+            <strong className="font-semibold">
+              {new Intl.DateTimeFormat("en-US", { timeZone: data.business.timezone, weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" }).format(new Date(done.requested))}
+            </strong>
+            . {data.business.name} will confirm it with you.
+          </p>
+        ) : null}
+        {done.bookingError ? <p className="text-[13px] text-amber-ink">{done.bookingError}</p> : null}
+        <p className="text-[13px] text-ink-3">This isn't a booking until {data.business.name} confirms it with you.</p>
       </div>
     );
   }
@@ -151,6 +174,7 @@ export function EnquiryForm({ data, preview, onDone }: { data: PublicPageData; p
     project: "What do you need?",
     details: chunks.length > 1 && stepId !== "details-0" ? "A couple more" : "A few details",
     location: "Where is it?",
+    time: "When suits you?",
     contact: "How can we reach you?",
   };
 
@@ -236,6 +260,10 @@ export function EnquiryForm({ data, preview, onDone }: { data: PublicPageData; p
             </Field>
           </div>
         )}
+
+        {step === "time" && avail?.slots ? (
+          <TimePicker slots={avail.slots} timezone={avail.timezone ?? data.business.timezone} minutes={avail.minutes ?? 60} types={avail.types ?? ["phone", "site_visit"]} value={picked} onChange={setPicked} day={day} setDay={setDay} />
+        ) : null}
 
         {step === "contact" && (
           <>

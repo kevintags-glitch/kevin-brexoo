@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Check } from "lucide-react";
 import { ButtonLink } from "@/components/ui";
-import { BookingMock, BrexMock, DiscoverMock, FitCardMock, PipelineMock } from "@/components/marketing/mocks";
+import { BrexMock, CalendarMock, DiscoverMock, FitCardMock, PipelineMock } from "@/components/marketing/mocks";
 import { DrawLine, ScrollMarquee, SlideIn, SnapCarousel } from "@/components/marketing/motion";
 import { PageHero } from "@/components/marketing/PageHero";
 import { Container, CtaBand, Eyebrow } from "@/components/marketing/Section";
 import { cn } from "@/lib/cn";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = { alternates: { canonical: "/how-it-works" },
   title: "How it works",
   description: "Discover, qualify, engage, book and win: how Brexoo moves an opportunity from first interest to won work.",
 };
@@ -16,7 +16,7 @@ const STEPS = [
   { id: "discover", kicker: "Discover", title: "Every opportunity, with where it came from.", body: "Your landing page and chat assistant send enquiries straight in. Add opportunities you hear about yourself, and import project records from sources you're allowed to use.", points: ["Verified project, direct enquiry, business prospect and inferred signal are labelled differently", "Observed date and import date kept apart"], visual: <DiscoverMock /> },
   { id: "qualify", kicker: "Qualify", title: "Fit you can explain to your team.", body: "Fit compares the opportunity with your services, areas and preferences. Buying intent is inferred from recorded evidence and labelled that way.", points: ["Unknowns are listed, not guessed", "Qualify or disqualify with a recorded reason"], visual: <FitCardMock /> },
   { id: "win", kicker: "Engage", title: "Fast follow-up without losing control.", body: "A follow-up task is created the moment an enquiry arrives. Brex AI drafts the reply; you approve it and send it.", points: ["Do-not-contact blocks outreach", "Every contact attempt is on the timeline"], visual: <BrexMock /> },
-  { id: "book", kicker: "Book", title: "Appointments that stay accurate.", body: "Phone, video or site visit. Times are stored in UTC and shown in your business's time zone, across the USA, Australia and New Zealand.", points: ["Scheduled, confirmed, attended, no-show, cancelled, rescheduled", "Booking advances the pipeline"], visual: <BookingMock /> },
+  { id: "book", kicker: "Book", title: "Appointments that stay accurate.", body: "Visitors pick from your free times on your page; you confirm with one click. Phone, video or site visit, always in your business's time zone across the USA, Australia and New Zealand.", points: ["Scheduled, confirmed, attended, no-show, cancelled, rescheduled", "Booking advances the pipeline"], visual: <CalendarMock /> },
   { id: "grow", kicker: "Win & grow", title: "Outcomes, and what they teach you.", body: "Close opportunities as won or lost with a reason. Reports show response time, lead sources, win rate and pipeline by stage.", points: ["Measured on outcomes, not raw lead volume"], visual: <PipelineMock /> },
 ];
 
@@ -61,8 +61,8 @@ export default function HowItWorksPage() {
                     <span className="text-ink-3 tabular">{String(i + 1).padStart(2, "0")}</span>
                     {s.kicker}
                   </p>
-                  <h2 className="mt-4 text-[34px] font-light leading-[1.08] tracking-[-0.035em] sm:text-[46px]">{s.title}</h2>
-                  <p className="mt-5 text-[17px] font-light leading-relaxed text-ink-2">{s.body}</p>
+                  <h2 className="mt-4 text-[34px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[46px]">{s.title}</h2>
+                  <p className="mt-5 text-[17px] leading-relaxed text-ink-2">{s.body}</p>
                   <ul className="mt-6 grid gap-2.5">
                     {s.points.map((p) => (
                       <li key={p} className="flex gap-2.5 text-[15px] text-ink-2">
@@ -86,14 +86,14 @@ export default function HowItWorksPage() {
         <ScrollMarquee text="Discover · Identify · Score · Capture · Qualify · Engage · Book · Convert · Learn ·" />
         <Container className="-mt-6">
           <Eyebrow>The full lifecycle</Eyebrow>
-          <h2 className="mt-4 text-[38px] font-light tracking-[-0.025em] sm:text-[52px]">Nine stages, one record.</h2>
+          <h2 className="mt-4 text-[38px] font-semibold tracking-[-0.025em] sm:text-[52px]">Nine stages, one record.</h2>
           <SnapCarousel label="lifecycle stages" className="mt-8">
             {LIFECYCLE.map(([t, b], i) => (
               <div key={t} className="flex h-full min-h-[220px] flex-col justify-between rounded-[24px] border border-line bg-white p-7 shadow-xs">
-                <p className="text-[56px] font-extralight leading-none tracking-[-0.035em] text-blue/30 tabular">{String(i + 1).padStart(2, "0")}</p>
+                <p className="text-[56px] font-semibold leading-none tracking-[-0.035em] text-blue/30 tabular">{String(i + 1).padStart(2, "0")}</p>
                 <div>
-                  <p className="text-[22px] font-light">{t}</p>
-                  <p className="mt-1.5 text-[15px] font-light leading-relaxed text-ink-3">{b}</p>
+                  <p className="text-[22px] font-semibold">{t}</p>
+                  <p className="mt-1.5 text-[15px] leading-relaxed text-ink-3">{b}</p>
                 </div>
               </div>
             ))}

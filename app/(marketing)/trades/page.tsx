@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { IndustryPage } from "@/components/marketing/IndustryPage";
 import { TRADE_CODES } from "@/components/marketing/industry-icons";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = { alternates: { canonical: "/trades" },
   title: "For trades and home services",
   description: "Electricians, plumbers, HVAC, roofers, landscapers, cleaners and more: capture jobs, qualify them fast and book the visit.",
 };
@@ -15,6 +15,7 @@ export default function TradesPage() {
       body="Work type, urgency, access and property details, captured on a mobile-friendly page and lined up for your team, with follow-ups that don't slip."
       accent={["first"]}
       layout="tiles"
+      sample="electricians"
       codes={TRADE_CODES}
       workflow={[
         { t: "A customer describes the job", b: "Residential or commercial, what needs doing, how urgent, and how to get on site." },

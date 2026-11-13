@@ -28,7 +28,7 @@ export function SectionHeading({
   return (
     <Reveal className={cn("max-w-2xl", align === "center" && "mx-auto text-center", className)}>
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-      <h2 className="mt-3 text-[34px] font-light leading-[1.08] sm:text-[44px]">{title}</h2>
+      <h2 className="mt-3 text-[34px] font-semibold leading-[1.08] sm:text-[44px]">{title}</h2>
       {body ? <p className="mt-4 text-[17px] leading-relaxed text-ink-2">{body}</p> : null}
     </Reveal>
   );
@@ -62,7 +62,7 @@ export function CtaBand({ title, body, children }: { title: ReactNode; body?: Re
         <Swoosh tone="dark" className="absolute inset-y-0 right-0 h-full w-[75%] opacity-90" />
         <LogoMark color="#fff" className="pointer-events-none absolute right-10 top-1/2 h-[70%] w-auto -translate-y-1/2 opacity-[0.12] max-md:hidden" />
         <div className="relative max-w-2xl">
-          <h2 className="text-[34px] font-light leading-[1.08] sm:text-[48px]">{title}</h2>
+          <h2 className="text-[34px] font-semibold leading-[1.08] sm:text-[48px]">{title}</h2>
           {body ? <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-white/75">{body}</p> : null}
           <div className="mt-8 flex flex-wrap gap-3">{children}</div>
         </div>

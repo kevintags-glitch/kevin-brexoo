@@ -2,6 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getTemplate } from "@/config/industry-templates";
+import { COUNTRIES, areaLabel, areaSlug, asCountry, findRegion, validPostcode } from "@/config/locations";
 import { requireOrg } from "@/lib/auth/session";
 import type { Json as RawJson } from "@/lib/supabase/database.types";
 
@@ -60,15 +61,29 @@ export async function saveBusiness(_: StepState, form: FormData): Promise<StepSt
       phone: z.string().trim().max(40).default(""),
       contact_name: z.string().trim().min(1, "Who should customers deal with?").max(120),
       timezone: z.string().min(1),
+      address_city: z.string().trim().max(80).default(""),
+      address_state: z.string().trim().max(80).default(""),
+      address_county: z.string().trim().max(80).default(""),
+      address_postcode: z.string().trim().max(12).default(""),
     })
     .refine((v) => v.phone || v.website, { message: "Add a phone number or a website", path: ["phone"] })
     .safeParse(Object.fromEntries(form));
   if (!parsed.success) return { fieldErrors: errs(parsed.error) };
   const ctx = await requireOrg();
+  const country = asCountry(ctx.org.country);
+  if (!validPostcode(country, parsed.data.address_postcode)) return { fieldErrors: { address_postcode: country === "US" ? "Enter a 5-digit ZIP code" : "Enter a 4-digit postcode" } };
   const { legal_name, ...cols } = parsed.data;
   const { error } = await ctx.supabase
     .from("organizations")
-    .update({ ...cols, website: cols.website || null, phone: cols.phone || null })
+    .update({
+      ...cols,
+      website: cols.website || null,
+      phone: cols.phone || null,
+      address_city: cols.address_city || null,
+      address_state: cols.address_state || null,
+      address_county: cols.address_county || null,
+      address_postcode: cols.address_postcode || null,
+    })
     .eq("id", ctx.org.id);
   if (!error) await mergeSettings(ctx, { business: { legal_name } });
   if (error) return { error: error.code === "42501" ? "Only an owner can change business details." : "Couldn't save. Please try again." };
@@ -81,7 +96,17 @@ const servicesSchema = z.object({
   services: z.array(z.string()).min(1, "Choose at least one service"),
   focus: z.enum(["residential", "commercial", "both"]),
   areas: z
-    .array(z.object({ label: z.string().trim().min(2).max(80), postcode: z.string().trim().max(12).optional().default(""), radius_km: z.coerce.number().int().min(0).max(500).optional() }))
+    .array(
+      z.object({
+        state: z.string().trim().max(80).optional().default(""),
+        county: z.string().trim().max(80).optional().default(""),
+        city: z.string().trim().max(80).optional().default(""),
+        suburb: z.string().trim().max(80).optional().default(""),
+        postcode: z.string().trim().max(12).optional().default(""),
+        label: z.string().trim().max(80).optional().default(""),
+        radius_km: z.coerce.number().int().min(0).max(500).optional(),
+      }),
+    )
     .min(1, "Add at least one service area"),
   exclusions: z.string().trim().max(500).default(""),
 });
@@ -91,6 +116,26 @@ export async function saveServices(_: StepState, form: FormData): Promise<StepSt
   if (!parsed.success) return { fieldErrors: errs(parsed.error) };
   const ctx = await requireOrg();
   const { supabase, org } = ctx;
+  const country = asCountry(org.country);
+  const areaRows = [];
+  const seen = new Set<string>();
+  for (const [i, a] of parsed.data.areas.entries()) {
+    if (!a.city && !a.suburb && !a.postcode && !a.label) continue;
+    if (!a.state && !a.label) return { fieldErrors: { areas: `Area ${i + 1}: choose a ${COUNTRIES[country].labels.region.toLowerCase()}` } };
+    if (!a.city && !a.suburb && !a.county && !a.label) return { fieldErrors: { areas: `Area ${i + 1}: add a ${COUNTRIES[country].labels.city.toLowerCase()}` } };
+    if (!validPostcode(country, a.postcode)) return { fieldErrors: { areas: `Area ${i + 1}: ${country === "US" ? "ZIP codes have 5 digits" : "postcodes have 4 digits"}` } };
+    const place = { country, state: findRegion(country, a.state)?.code ?? (a.state || null), county: a.county || null, city: a.city || null, suburb: a.suburb || null, postcode: a.postcode || null };
+    const label = (areaLabel(place) || a.label).slice(0, 80);
+    if (label.length < 2) return { fieldErrors: { areas: `Area ${i + 1} needs a place name` } };
+    let slug = areaSlug(place) || null;
+    if (slug) {
+      const base = slug;
+      for (let n = 2; seen.has(slug); n++) slug = `${base}-${n}`;
+      seen.add(slug);
+    }
+    areaRows.push({ organization_id: org.id, label, ...place, slug, radius_km: a.radius_km ?? null });
+  }
+  if (!areaRows.length) return { fieldErrors: { areas: "Add at least one service area" } };
   const codes = parsed.data.services.filter((c) => getTemplate(c));
   const { data: existing } = await supabase.from("org_services").select("category_code").eq("organization_id", org.id);
   const existingCodes = new Set((existing ?? []).map((e) => e.category_code));
@@ -117,9 +162,7 @@ export async function saveServices(_: StepState, form: FormData): Promise<StepSt
   if (rows.length) await supabase.from("org_questions").insert(rows);
 
   await supabase.from("service_areas").delete().eq("organization_id", org.id);
-  await supabase.from("service_areas").insert(
-    parsed.data.areas.map((a) => ({ organization_id: org.id, label: a.label, postcode: a.postcode || null, radius_km: a.radius_km ?? null })),
-  );
+  await supabase.from("service_areas").insert(areaRows);
   await mergeSettings(ctx, { coverage: { exclusions: parsed.data.exclusions } });
   await markStep(ctx, "services");
   revalidatePath("/app", "layout");
@@ -212,12 +255,21 @@ export async function saveOperations(_: StepState, form: FormData): Promise<Step
       meeting_types: z.array(z.enum(["phone", "video", "site_visit"])).default([]),
       meeting_minutes: z.coerce.number().int().min(15).max(240).default(60),
       buffer_minutes: z.coerce.number().int().min(0).max(120).default(15),
+      days: z.array(z.coerce.number().int().min(1).max(7)).default([]),
+      start: z.string().regex(/^\d{2}:\d{2}$/).default("08:00"),
+      end: z.string().regex(/^\d{2}:\d{2}$/).default("17:00"),
+      requests: z.enum(["on"]).optional(),
     })
-    .safeParse({ ...Object.fromEntries(form), channels: form.getAll("channels"), meeting_types: form.getAll("meeting_types") });
+    .refine((v) => v.start < v.end, { message: "The day must end after it starts", path: ["end"] })
+    .safeParse({ ...Object.fromEntries(form), channels: form.getAll("channels"), meeting_types: form.getAll("meeting_types"), days: form.getAll("days") });
   if (!parsed.success) return { fieldErrors: errs(parsed.error) };
   const ctx = await requireOrg();
-  const { channels, meeting_types, meeting_minutes, buffer_minutes, ...ops } = parsed.data;
-  await mergeSettings(ctx, { operations: ops, engagement: { channels }, appointments: { meeting_types, meeting_minutes, buffer_minutes } });
+  const { channels, meeting_types, meeting_minutes, buffer_minutes, days, start, end, requests, ...ops } = parsed.data;
+  await mergeSettings(ctx, {
+    operations: ops,
+    engagement: { channels },
+    appointments: { meeting_types, meeting_minutes, buffer_minutes, days: days.length ? days : [1, 2, 3, 4, 5], start, end, requests: requests === "on" },
+  });
   await markStep(ctx, "operations");
   return { ok: true, savedAt: Date.now() };
 }

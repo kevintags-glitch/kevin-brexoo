@@ -22,9 +22,9 @@ export function WordsReveal({ text, className, as = "h2", delay = 0, accent = []
   const reduce = useReducedMotion();
   const Tag = as;
   const words = text.split(" ");
-  // Accent words are set in the italic serif, the brand's one decorative touch.
+  // Accent words get a hand-drawn marker highlight in brand blue, swept in after the word lands.
   const isAccent = (w: string) => accent.includes(w.replace(/[.,!?]$/, ""));
-  const accentClass = "font-accent font-normal italic tracking-[-0.01em] text-blue";
+  const accentClass = "text-blue bg-[linear-gradient(104deg,transparent_0.4em,rgb(59_130_246/0.16)_0.45em,rgb(6_182_212/0.2)_96%,transparent)] bg-[length:100%_0.42em] bg-[position:0_88%] bg-no-repeat [box-decoration-break:clone]";
   if (reduce)
     return (
       <Tag className={className}>
@@ -42,10 +42,10 @@ export function WordsReveal({ text, className, as = "h2", delay = 0, accent = []
         <span key={i} aria-hidden className="-mb-[0.14em] inline-block overflow-hidden pb-[0.14em] align-bottom">
           <motion.span
             className={cn("inline-block", isAccent(w) && accentClass)}
-            initial={{ y: "105%", opacity: 0, filter: "blur(6px)" }}
-            whileInView={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
+            initial={{ y: "105%", opacity: 0, filter: "blur(6px)", ...(isAccent(w) ? { backgroundSize: "0% 0.42em" } : {}) }}
+            whileInView={{ y: "0%", opacity: 1, filter: "blur(0px)", ...(isAccent(w) ? { backgroundSize: "100% 0.42em" } : {}) }}
             viewport={{ once: true, margin: "0px 0px -10% 0px" }}
-            transition={{ duration: 0.9, ease: EASE, delay: delay + i * 0.06 }}
+            transition={{ duration: 0.9, ease: EASE, delay: delay + i * 0.06, backgroundSize: { duration: 0.7, ease: EASE, delay: delay + i * 0.06 + 0.6 } }}
           >
             {w}
             {i < words.length - 1 ? " " : ""}
@@ -162,7 +162,7 @@ export function ScrollMarquee({ text, className }: { text: string; className?: s
   const x = useTransform(scrollYProgress, [0, 1], ["5%", "-45%"]);
   return (
     <div ref={ref} className={cn("overflow-hidden", className)} aria-hidden>
-      <motion.p style={reduce ? undefined : { x }} className="whitespace-nowrap text-[13vw] font-extralight leading-none tracking-[-0.035em] text-ink/[0.06]">
+      <motion.p style={reduce ? undefined : { x }} className="whitespace-nowrap text-[13vw] font-semibold leading-none tracking-[-0.035em] text-ink/[0.06]">
         {text} {text}
       </motion.p>
     </div>
@@ -223,7 +223,7 @@ function StackCard({ index, total, title, body, tone, icon }: { index: number; t
           <span className="[&_svg]:size-8">{icon}</span>
         </div>
         <div>
-          <h3 className="max-w-[18ch] text-[32px] font-light leading-[1.08] tracking-[-0.03em] sm:text-[48px]">{title}</h3>
+          <h3 className="max-w-[18ch] text-[32px] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[48px]">{title}</h3>
           <p className="mt-4 max-w-xl text-[16px] leading-relaxed opacity-80 sm:text-[18px]">{body}</p>
         </div>
       </motion.div>
@@ -367,7 +367,7 @@ export function StickySteps({ steps, className }: { steps: { title: string; body
               <motion.p
                 key={i}
                 aria-hidden
-                className="absolute inset-0 text-[180px] font-extralight leading-none tracking-[-0.025em] text-blue tabular"
+                className="absolute inset-0 text-[180px] font-semibold leading-none tracking-[-0.025em] text-blue tabular"
                 initial={false}
                 animate={{ y: i === active ? "0%" : i < active ? "-100%" : "100%", opacity: i === active ? 1 : 0 }}
                 transition={{ duration: 0.6, ease: EASE }}
@@ -399,8 +399,8 @@ function StickyStep({ index, title, body, active, onActive }: { index: number; t
   return (
     <li ref={ref} className={cn("rounded-[24px] border p-7 transition-colors duration-500 sm:p-9", active ? "border-blue/40 bg-white shadow-lg" : "border-line bg-surface-2/50")}>
       <p className="text-[13px] font-medium text-ink-3 md:hidden">Step {index + 1}</p>
-      <p className="text-[24px] font-light leading-snug tracking-[-0.02em] sm:text-[28px]">{title}</p>
-      <p className="mt-3 text-[16px] font-light leading-relaxed text-ink-2">{body}</p>
+      <p className="text-[24px] font-semibold leading-snug tracking-[-0.02em] sm:text-[28px]">{title}</p>
+      <p className="mt-3 text-[16px] leading-relaxed text-ink-2">{body}</p>
     </li>
   );
 }

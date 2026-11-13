@@ -1,8 +1,10 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown, Menu as MenuIcon, X } from "lucide-react";
+import { TRADES } from "@/config/trades";
+import { Illustration, type IllustrationName } from "./illustrations";
 import { Logo } from "@/components/brand/Logo";
 import { ButtonLink } from "@/components/ui";
 import { cn } from "@/lib/cn";
@@ -13,6 +15,54 @@ export const NAV = [
   { href: "/pricing", label: "Pricing" },
   { href: "/resources", label: "Resources" },
 ];
+
+const PRODUCT_MENU: { href: string; label: string; body: string; icon: IllustrationName }[] = [
+  { href: "/how-it-works", label: "How it works", body: "From first enquiry to won work", icon: "magnifier" },
+  { href: "/ai", label: "Brex AI", body: "Summaries, intent and drafts", icon: "spark" },
+  { href: "/#calendar", label: "Calendar & bookings", body: "Visitors request, you confirm", icon: "calendar" },
+  { href: "/managed-services", label: "Managed services", body: "People who qualify for you", icon: "chat" },
+];
+
+function Menu({ label, active, children }: { label: string; active: boolean; children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const onDoc = (e: MouseEvent) => !ref.current?.contains(e.target as Node) && setOpen(false);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  return (
+    <div ref={ref} className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+      <button type="button" aria-expanded={open} onClick={() => setOpen((o) => !o)} className={cn("flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-blue", active ? "text-blue" : "text-ink")}>
+        {label}
+        <ChevronDown className={cn("size-3.5 transition-transform", open && "rotate-180")} aria-hidden />
+      </button>
+      {open ? (
+        <div className="absolute left-0 top-full z-50 pt-2" onClick={(e) => (e.target as HTMLElement).closest("a") && setOpen(false)}>
+          <div className="rounded-2xl border border-line bg-white p-2 shadow-lg">{children}</div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function MenuItem({ href, label, body, icon }: { href: string; label: string; body?: string; icon: IllustrationName }) {
+  return (
+    <Link href={href} className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-surface-2">
+      <Illustration name={icon} className="size-9 shrink-0" />
+      <span>
+        <span className="block text-[14px] font-semibold text-ink">{label}</span>
+        {body ? <span className="block text-[13px] text-ink-3">{body}</span> : null}
+      </span>
+    </Link>
+  );
+}
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -50,7 +100,24 @@ export function SiteHeader() {
           <Logo knockout="var(--canvas)" />
         </Link>
         <nav aria-label="Main" className="hidden flex-1 items-center gap-1 md:flex">
-          {NAV.map((item) => (
+          <Menu label="Product" active={["/how-it-works", "/ai", "/managed-services"].includes(pathname)}>
+            <div className="grid w-[300px] gap-0.5">
+              {PRODUCT_MENU.map((m) => (
+                <MenuItem key={m.href} {...m} />
+              ))}
+            </div>
+          </Menu>
+          <Menu label="Industries" active={pathname.startsWith("/leads") || ["/industries", "/builders", "/trades"].includes(pathname)}>
+            <div className="grid w-[540px] grid-cols-2 gap-0.5">
+              {TRADES.map((t) => (
+                <MenuItem key={t.slug} href={`/leads/${t.slug}`} label={t.name} icon={t.illustration} />
+              ))}
+            </div>
+            <Link href="/industries" className="mt-1 flex items-center justify-between rounded-xl border-t border-line px-3 pb-1.5 pt-3 text-[13px] font-semibold text-blue hover:underline">
+              All industries and service templates <span aria-hidden>→</span>
+            </Link>
+          </Menu>
+          {NAV.slice(2).map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -77,7 +144,7 @@ export function SiteHeader() {
           aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen((v) => !v)}
         >
-          {open ? <X className="size-5" /> : <Menu className="size-5" />}
+          {open ? <X className="size-5" /> : <MenuIcon className="size-5" />}
         </button>
       </div>
       <div
@@ -94,6 +161,15 @@ export function SiteHeader() {
           <Link href="/ai" className="border-b border-line py-4 font-display text-2xl tracking-tight text-ink">
             Brex AI
           </Link>
+          <p className="pt-5 text-[12px] font-semibold uppercase tracking-[0.12em] text-ink-3">Industries</p>
+          <div className="grid grid-cols-2 gap-1 py-2">
+            {TRADES.map((t) => (
+              <Link key={t.slug} href={`/leads/${t.slug}`} className="flex items-center gap-2 rounded-lg py-2 text-[15px] text-ink-2">
+                <Illustration name={t.illustration} className="size-7" />
+                {t.name}
+              </Link>
+            ))}
+          </div>
         </nav>
         <div className="mt-6 grid gap-3">
           <ButtonLink href="/demo" size="lg">

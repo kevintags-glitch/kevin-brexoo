@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import { Page } from "@/components/app/PageHeader";
 import { AppointmentItem, NewAppointment } from "@/components/app/crm/widgets";
+import { BookingRequests, type BookingRequest } from "@/components/app/crm/BookingRequests";
 import { EmptyState } from "@/components/ui";
 import { APPT_TYPE_LABEL, OPEN_STAGES } from "@/features/crm/stages";
 import { requireOrg } from "@/lib/auth/session";
@@ -39,10 +40,28 @@ export default async function AppointmentsPage({ searchParams }: { searchParams:
     .eq("organization_id", org.id)
     .limit(300);
   listQuery = view === "calendar" ? listQuery.gte("starts_at", from).lt("starts_at", to).order("starts_at") : view === "list" ? listQuery.gte("ends_at", nowIso).order("starts_at") : listQuery.lt("ends_at", nowIso).order("starts_at", { ascending: false });
-  const [{ data }, opps] = await Promise.all([
+  const [{ data }, opps, reqs] = await Promise.all([
     listQuery,
     supabase.from("opportunities").select("id, title, contact_id, project:projects(location_text)").eq("organization_id", org.id).in("stage", OPEN_STAGES).order("updated_at", { ascending: false }).limit(200),
+    supabase
+      .from("enquiries")
+      .select("id, requested_start, requested_type, contact:contacts(full_name, is_sample), project:projects(location_text), opportunities!opportunities_enquiry_id_organization_id_fkey(id)")
+      .eq("organization_id", org.id)
+      .eq("booking_status", "requested")
+      .gte("requested_start", nowIso)
+      .order("requested_start")
+      .limit(50),
   ]);
+  const whenFmt = new Intl.DateTimeFormat("en-AU", { timeZone: tz, weekday: "short", day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
+  const requests: BookingRequest[] = (reqs.data ?? []).map((r) => ({
+    id: r.id,
+    name: r.contact?.full_name ?? "Visitor",
+    when: whenFmt.format(new Date(r.requested_start!)),
+    type: APPT_TYPE_LABEL[r.requested_type ?? "phone"],
+    where: r.project?.location_text ?? null,
+    oppId: r.opportunities?.[0]?.id ?? null,
+    sample: Boolean(r.contact?.is_sample),
+  }));
   const appts = data ?? [];
   const byDay = new Map<string, typeof appts>();
   for (const a of appts) {
@@ -85,6 +104,7 @@ export default async function AppointmentsPage({ searchParams }: { searchParams:
           />
         </div>
       </div>
+      <BookingRequests requests={requests} />
 
       {view === "calendar" ? (
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">

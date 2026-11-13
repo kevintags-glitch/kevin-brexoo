@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { IndustryPage } from "@/components/marketing/IndustryPage";
 import { BUILDER_CODES } from "@/components/marketing/industry-icons";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = { alternates: { canonical: "/builders" },
   title: "For builders and developers",
   description: "Capture and qualify new-build, extension and renovation enquiries, and keep every project moving to a site visit and a decision.",
 };

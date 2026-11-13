@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, CalendarCheck, CircleCheck, Circle, Clock, Funnel, Gauge, Inbox, Magnet, Trophy } from "lucide-react";
+import { ArrowRight, CalendarCheck, CalendarDays, CircleCheck, Circle, Clock, Funnel, Gauge, Inbox, Magnet, Trophy } from "lucide-react";
 import { Page } from "@/components/app/PageHeader";
 import { AreaChart } from "@/components/app/dash/AreaChart";
+import { WeekCalendar } from "@/components/app/dash/WeekCalendar";
 import { DataTable, Delta, Panel, PanelHeader, StatCard, StatusPill } from "@/components/app/dash";
 import { Avatar, ButtonLink, EmptyState } from "@/components/ui";
 import { PLAN_BY_CODE } from "@/config/plans";
+import { sampleForServices } from "@/config/samples";
+import { ExploreSamples, SampleBanner } from "@/components/app/SampleControls";
 import { activationChecklist } from "@/features/onboarding/steps";
 import { INTENT_LABEL, computeIntent } from "@/features/crm/intent";
 import { getFitContext } from "@/features/crm/queries";
@@ -35,7 +38,8 @@ export default async function OverviewPage() {
   const prevStart = new Date(now - 2 * PERIOD * DAY);
   const inCur = (iso: string) => +new Date(iso) >= +start;
 
-  const [enq, opps, appts, recent, dueTasks, pages, ob, counts, fc, usage, plan, openOpps, found] = await Promise.all([
+  const weekEnd = new Date(now + 7 * DAY).toISOString();
+  const [enq, opps, appts, recent, dueTasks, pages, ob, counts, fc, usage, plan, openOpps, found, samples, anyLeads, weekAppts, weekTasks, weekReqs] = await Promise.all([
     supabase.from("enquiries").select("id, received_at, first_response_at, status, source").eq("organization_id", org.id).gte("received_at", prevStart.toISOString()),
     supabase.from("opportunities").select("id, stage, value_minor, closed_at, enquiry_id, appointments(count)").eq("organization_id", org.id),
     supabase.from("appointments").select("id, created_at, starts_at, status, type, opportunity_id, contact:contacts(full_name)").eq("organization_id", org.id).gte("starts_at", prevStart.toISOString()).order("starts_at"),
@@ -65,7 +69,14 @@ export default async function OverviewPage() {
       .order("created_at", { ascending: false })
       .limit(200),
     supabase.from("project_records").select("status, imported_at, saved_at").eq("organization_id", org.id).gte("imported_at", start.toISOString()),
+    supabase.from("contacts").select("id", { count: "exact", head: true }).eq("organization_id", org.id).eq("is_sample", true),
+    supabase.from("contacts").select("id", { count: "exact", head: true }).eq("organization_id", org.id),
+    supabase.from("appointments").select("id, starts_at, type, status, opportunity_id, contact:contacts(full_name)").eq("organization_id", org.id).gte("starts_at", new Date(now - DAY).toISOString()).lt("starts_at", weekEnd).order("starts_at"),
+    supabase.from("tasks").select("id, due_at").eq("organization_id", org.id).eq("status", "open").gte("due_at", new Date(now - DAY).toISOString()).lt("due_at", weekEnd),
+    supabase.from("enquiries").select("requested_start").eq("organization_id", org.id).eq("booking_status", "requested").gte("requested_start", new Date(now).toISOString()).lt("requested_start", weekEnd),
   ]);
+  const sampleCount = samples.count ?? 0;
+  const sampleBiz = sampleForServices(fc.orgServices.map((s) => s.code));
 
   const E = enq.data ?? [];
   const O = opps.data ?? [];
@@ -175,6 +186,9 @@ export default async function OverviewPage() {
           <Inbox className="size-4" aria-hidden /> All leads
         </ButtonLink>
       </div>
+
+      {sampleCount ? <SampleBanner count={sampleCount} isOwner={ctx.isOwner} /> : null}
+      {!anyLeads.count ? <ExploreSamples businessName={sampleBiz.name} industry={sampleBiz.industry} isOwner={ctx.isOwner} /> : null}
 
       {todo.length ? (
         <div className="flex flex-col gap-3 rounded-2xl border border-line bg-surface p-4 shadow-xs sm:flex-row sm:items-center">
@@ -405,6 +419,19 @@ export default async function OverviewPage() {
           )}
         </Panel>
       </div>
+
+      <Panel>
+        <PanelHeader
+          eyebrow="This week"
+          title={(weekAppts.data ?? []).filter((a) => ["scheduled", "confirmed", "rescheduled"].includes(a.status)).length}
+          icon={<CalendarDays />}
+          badge={<span className="text-[12px] text-ink-3">bookings · {(weekReqs.data ?? []).length} requested · {(weekTasks.data ?? []).length} follow-ups</span>}
+          action={<Link href="/app/appointments" className="text-[13px] font-medium text-blue hover:underline">Open calendar</Link>}
+        />
+        <div className="mt-3">
+          <WeekCalendar appts={weekAppts.data ?? []} tasks={weekTasks.data ?? []} requests={weekReqs.data ?? []} timezone={tz} now={now} />
+        </div>
+      </Panel>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Panel>

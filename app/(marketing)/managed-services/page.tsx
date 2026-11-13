@@ -4,7 +4,7 @@ import { PageHero } from "@/components/marketing/PageHero";
 import { CountUp, StickySteps, TiltIn } from "@/components/marketing/motion";
 import { Container, CtaBand, Faq, SectionHeading } from "@/components/marketing/Section";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = { alternates: { canonical: "/managed-services" },
   title: "Managed services",
   description: "Optional, separately scoped human qualification and follow-up, run inside your Brexoo workspace.",
 };
@@ -30,9 +30,9 @@ export default function ManagedServicesPage() {
             { to: 0, label: "Guaranteed outcomes", sub: "We guarantee effort, not results" },
           ].map((s) => (
             <div key={s.label}>
-              <CountUp to={s.to} className="block text-[60px] font-extralight leading-none tracking-[-0.025em]" />
+              <CountUp to={s.to} className="block text-[60px] font-semibold leading-none tracking-[-0.025em]" />
               <p className="mt-3 text-[15px] font-medium">{s.label}</p>
-              <p className="text-[14px] font-light text-ink-3">{s.sub}</p>
+              <p className="text-[14px] text-ink-3">{s.sub}</p>
             </div>
           ))}
         </Container>
@@ -48,8 +48,8 @@ export default function ManagedServicesPage() {
               ["Service levels", "Response expectations, escalation rules and exclusions."],
             ].map(([t, b], i) => (
               <TiltIn key={t} delay={i * 0.08} className="rounded-[24px] border border-line bg-white p-7 shadow-xs">
-                <p className="text-[20px] font-light">{t}</p>
-                <p className="mt-2 text-[15px] font-light leading-relaxed text-ink-3">{b}</p>
+                <p className="text-[20px]">{t}</p>
+                <p className="mt-2 text-[15px] leading-relaxed text-ink-3">{b}</p>
               </TiltIn>
             ))}
           </div>

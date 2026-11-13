@@ -14,7 +14,7 @@ export function budgetBucket(minor: number | null | undefined): string | null {
 
 export type MatchInput = {
   orgServices: { code: string; name: string }[];
-  serviceAreas: { label: string; postcode?: string | null }[];
+  serviceAreas: { label: string; postcode?: string | null; county?: string | null; city?: string | null; suburb?: string | null }[];
   idealMinBudget?: string | null;
 };
 

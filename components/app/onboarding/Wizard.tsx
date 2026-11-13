@@ -19,6 +19,7 @@ import { BUDGET_ORDER } from "@/features/crm/fit";
 import { INDUSTRY_ICON } from "@/components/marketing/industry-icons";
 import { Badge, Button, ButtonLink, Checkbox, Field, Input, Notice, Select, Textarea } from "@/components/ui";
 import { createClient } from "@/lib/supabase/client";
+import { COUNTRIES, areaLabel, type CountryCode } from "@/config/locations";
 import { cn } from "@/lib/cn";
 
 export type WizardData = {
@@ -27,10 +28,19 @@ export type WizardData = {
   status: string;
   reviewNote: string | null;
   completed: string[];
-  org: { name: string; website: string | null; phone: string | null; contact_name: string | null; timezone: string; settings: Record<string, Record<string, unknown> | undefined> };
+  org: {
+    name: string;
+    website: string | null;
+    phone: string | null;
+    contact_name: string | null;
+    timezone: string;
+    country: CountryCode;
+    address: { city: string; state: string; county: string; postcode: string };
+    settings: Record<string, Record<string, unknown> | undefined>;
+  };
   services: string[];
   focus: string;
-  areas: { label: string; postcode: string; radius_km?: number }[];
+  areas: AreaInput[];
   questions: Question[];
   members: { id: string; name: string }[];
   zones: string[];
@@ -48,6 +58,9 @@ type Question = {
 };
 
 const s = (v: unknown) => (typeof v === "string" ? v : "");
+
+export type AreaInput = { label: string; state: string; county: string; city: string; suburb: string; postcode: string; radius_km?: number };
+const EMPTY_AREA: AreaInput = { label: "", state: "", county: "", city: "", suburb: "", postcode: "" };
 
 export function Wizard({ data, step }: { data: WizardData; step: StepId | "review" }) {
   const router = useRouter();
@@ -178,6 +191,7 @@ function BusinessStep({ data, onDone }: { data: WizardData; onDone: () => void }
         <Field label="Contact person" htmlFor="contact_name" error={fe?.contact_name}>
           <Input id="contact_name" name="contact_name" defaultValue={data.org.contact_name ?? ""} {...ep(fe, "contact_name")} />
         </Field>
+        <AddressFields data={data} fe={fe} />
         <Field label="Time zone" htmlFor="timezone" hint="Appointments and reminders use this.">
           <Select id="timezone" name="timezone" defaultValue={data.org.timezone}>
             {data.zones.map((z) => (
@@ -197,11 +211,11 @@ function ServicesStep({ data, onDone }: { data: WizardData; onDone: () => void }
   const [state, run, pending] = useStep(saveServices, onDone);
   const [services, setServices] = useState<string[]>(data.services);
   const [focus, setFocus] = useState(data.focus || "both");
-  const [areas, setAreas] = useState(data.areas.length ? data.areas : [{ label: "", postcode: "" }]);
+  const [areas, setAreas] = useState<AreaInput[]>(data.areas.length ? data.areas : [{ ...EMPTY_AREA, state: data.org.address.state }]);
   const [exclusions, setExclusions] = useState(s(data.org.settings.coverage?.exclusions));
   const fe = state.fieldErrors;
   const toggle = (code: string) => setServices((cur) => (cur.includes(code) ? cur.filter((c) => c !== code) : [...cur, code]));
-  const payload = JSON.stringify({ services, focus, areas: areas.filter((a) => a.label.trim()), exclusions });
+  const payload = JSON.stringify({ services, focus, areas: areas.filter((a) => a.city.trim() || a.suburb.trim() || a.postcode.trim() || a.county.trim() || a.label.trim()), exclusions });
 
   return (
     <form action={run} noValidate>
@@ -250,27 +264,7 @@ function ServicesStep({ data, onDone }: { data: WizardData; onDone: () => void }
           </div>
         </div>
         <div>
-          <p className="text-[13px] font-medium text-ink-2">Service areas</p>
-          <p className="text-[13px] text-ink-3">Suburbs, towns or regions. Add a postcode to match enquiries precisely.</p>
-          {fe?.areas ? (
-            <p className="mt-1 text-[13px] text-red-ink" role="alert">
-              {fe.areas}
-            </p>
-          ) : null}
-          <ul className="mt-3 grid gap-2">
-            {areas.map((a, i) => (
-              <li key={i} className="grid grid-cols-[minmax(0,1fr)_96px_auto] gap-2">
-                <Input aria-label={`Area ${i + 1}`} placeholder="e.g. Newcastle NSW" value={a.label} onChange={(e) => setAreas((cur) => cur.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))} />
-                <Input aria-label={`Postcode for area ${i + 1}`} placeholder="Postcode" value={a.postcode} onChange={(e) => setAreas((cur) => cur.map((x, j) => (j === i ? { ...x, postcode: e.target.value } : x)))} />
-                <Button variant="ghost" className="w-10 px-0" aria-label={`Remove area ${i + 1}`} onClick={() => setAreas((cur) => (cur.length > 1 ? cur.filter((_, j) => j !== i) : [{ label: "", postcode: "" }]))}>
-                  <Trash className="size-4" />
-                </Button>
-              </li>
-            ))}
-          </ul>
-          <Button variant="secondary" size="sm" className="mt-2" onClick={() => setAreas((cur) => [...cur, { label: "", postcode: "" }])}>
-            <Plus className="size-4" aria-hidden /> Add area
-          </Button>
+          <AreaBuilder country={data.org.country} areas={areas} setAreas={setAreas} error={fe?.areas} />
         </div>
         <Field label="Exclusions" htmlFor="exclusions" optional hint="Work or places you don't take on.">
           <Textarea id="exclusions" rows={2} value={exclusions} onChange={(e) => setExclusions(e.target.value)} />
@@ -523,6 +517,32 @@ function OperationsStep({ data, onDone }: { data: WizardData; onDone: () => void
         <Field label="Buffer between (minutes)" htmlFor="buffer_minutes">
           <Input id="buffer_minutes" name="buffer_minutes" type="number" min={0} max={120} step={5} defaultValue={String(appt.buffer_minutes ?? 15)} />
         </Field>
+        <fieldset className="grid gap-2 sm:col-span-2">
+          <legend className="mb-1 text-[13px] font-medium text-ink-2">Bookable days and hours</legend>
+          <div className="flex flex-wrap gap-2">
+            {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d, k) => (
+              <label key={d} className="flex items-center gap-2 rounded-lg border border-line px-3 py-2 text-[14px] text-ink-2">
+                <Checkbox name="days" value={String(k + 1)} defaultChecked={((appt.days as number[] | undefined) ?? [1, 2, 3, 4, 5]).includes(k + 1)} />
+                {d}
+              </label>
+            ))}
+          </div>
+          <div className="mt-2 grid grid-cols-2 gap-3 sm:max-w-sm">
+            <Field label="From" htmlFor="start">
+              <Input id="start" name="start" type="time" step={1800} defaultValue={s(appt.start) || "08:00"} />
+            </Field>
+            <Field label="To" htmlFor="end" error={fe?.end}>
+              <Input id="end" name="end" type="time" step={1800} defaultValue={s(appt.end) || "17:00"} />
+            </Field>
+          </div>
+          <label className="mt-2 flex items-start gap-2.5 text-[14px] text-ink-2">
+            <Checkbox name="requests" value="on" defaultChecked={appt.requests !== false} />
+            <span>
+              Let visitors request a time on your page
+              <span className="block text-[13px] text-ink-3">They pick from your free slots; nothing is booked until you confirm.</span>
+            </span>
+          </label>
+        </fieldset>
       </div>
       <StepFooter pending={pending} state={state} />
     </form>
@@ -592,6 +612,84 @@ function ReviewStep({ data }: { data: WizardData }) {
           </>
         )}
       </div>
+    </div>
+  );
+}
+
+function AddressFields({ data, fe }: { data: WizardData; fe?: Record<string, string> }) {
+  const c = COUNTRIES[data.org.country];
+  return (
+    <div className="grid gap-5 sm:col-span-2 sm:grid-cols-4">
+      <Field label={`Business ${c.labels.city.toLowerCase()}`} htmlFor="address_city" optional className="sm:col-span-2">
+        <Input id="address_city" name="address_city" autoComplete="address-level2" defaultValue={data.org.address.city} />
+      </Field>
+      <Field label={c.labels.region} htmlFor="address_state" optional>
+        <Select id="address_state" name="address_state" defaultValue={data.org.address.state}>
+          <option value="">Choose…</option>
+          {c.regions.map((r) => (
+            <option key={r.code} value={r.code}>
+              {r.name}
+            </option>
+          ))}
+        </Select>
+      </Field>
+      <Field label={c.labels.postcode} htmlFor="address_postcode" optional error={fe?.address_postcode}>
+        <Input id="address_postcode" name="address_postcode" inputMode="numeric" autoComplete="postal-code" defaultValue={data.org.address.postcode} {...ep(fe, "address_postcode")} />
+      </Field>
+      {c.labels.county ? (
+        <Field label={c.labels.county} htmlFor="address_county" optional className="sm:col-span-2">
+          <Input id="address_county" name="address_county" defaultValue={data.org.address.county} placeholder="e.g. Travis County" />
+        </Field>
+      ) : null}
+    </div>
+  );
+}
+
+function AreaBuilder({ country, areas, setAreas, error }: { country: CountryCode; areas: AreaInput[]; setAreas: (fn: (cur: AreaInput[]) => AreaInput[]) => void; error?: string }) {
+  const c = COUNTRIES[country];
+  const set = (i: number, patch: Partial<AreaInput>) => setAreas((cur) => cur.map((x, j) => (j === i ? { ...x, ...patch } : x)));
+  return (
+    <div>
+      <p className="text-[13px] font-medium text-ink-2">Service areas</p>
+      <p className="text-[13px] text-ink-3">
+        Each area becomes its own local page for search. Add the {c.labels.region.toLowerCase()}, {c.labels.city.toLowerCase()}
+        {c.labels.suburb ? ` and ${c.labels.suburb.toLowerCase()}` : ""}, and a {c.labels.postcode} to match enquiries precisely.
+      </p>
+      {error ? (
+        <p className="mt-1 text-[13px] text-red-ink" role="alert">
+          {error}
+        </p>
+      ) : null}
+      <ul className="mt-3 grid gap-3">
+        {areas.map((a, i) => {
+          const preview = areaLabel({ country, ...a });
+          return (
+            <li key={i} className="rounded-xl border border-line p-3">
+              <div className={cn("grid gap-2", c.labels.county ? "sm:grid-cols-[1.1fr_1fr_1fr_1fr_110px_auto]" : "sm:grid-cols-[1.1fr_1fr_1fr_110px_auto]")}>
+                <Select aria-label={`${c.labels.region} for area ${i + 1}`} value={a.state} onChange={(e) => set(i, { state: e.target.value })}>
+                  <option value="">{c.labels.region}…</option>
+                  {c.regions.map((r) => (
+                    <option key={r.code} value={r.code}>
+                      {r.name}
+                    </option>
+                  ))}
+                </Select>
+                {c.labels.county ? <Input aria-label={`County for area ${i + 1}`} placeholder="County" value={a.county} onChange={(e) => set(i, { county: e.target.value })} /> : null}
+                <Input aria-label={`${c.labels.city} for area ${i + 1}`} placeholder={c.labels.city} value={a.city} onChange={(e) => set(i, { city: e.target.value })} />
+                {c.labels.suburb ? <Input aria-label={`${c.labels.suburb} for area ${i + 1}`} placeholder={`${c.labels.suburb} (optional)`} value={a.suburb} onChange={(e) => set(i, { suburb: e.target.value })} /> : null}
+                <Input aria-label={`${c.labels.postcode} for area ${i + 1}`} placeholder={c.labels.postcode} inputMode="numeric" value={a.postcode} onChange={(e) => set(i, { postcode: e.target.value })} />
+                <Button variant="ghost" className="w-10 px-0" aria-label={`Remove area ${i + 1}`} onClick={() => setAreas((cur) => (cur.length > 1 ? cur.filter((_, j) => j !== i) : [{ ...EMPTY_AREA }]))}>
+                  <Trash className="size-4" />
+                </Button>
+              </div>
+              {preview ? <p className="mt-2 text-[12px] text-ink-3">Shows as: {preview}</p> : null}
+            </li>
+          );
+        })}
+      </ul>
+      <Button variant="secondary" size="sm" className="mt-2" onClick={() => setAreas((cur) => [...cur, { ...EMPTY_AREA, state: cur[cur.length - 1]?.state ?? "" }])}>
+        <Plus className="size-4" aria-hidden /> Add area
+      </Button>
     </div>
   );
 }

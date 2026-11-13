@@ -16,7 +16,7 @@ const ACCENTS = {
  * A builder's public landing page (§7.1). Light, fast and mobile-first: the enquiry form sits
  * beside the hero on desktop and directly under it on phones. Only approved content is shown.
  */
-export function PublicLanding({ data, preview }: { data: PublicPageData; preview?: boolean }) {
+export function PublicLanding({ data, preview, local }: { data: PublicPageData; preview?: boolean; local?: { heading: string; intro: string; breadcrumb: { href: string; label: string }[] } }) {
   const c = data.content;
   const b = data.business;
   return (
@@ -47,8 +47,20 @@ export function PublicLanding({ data, preview }: { data: PublicPageData; preview
           <div aria-hidden className="grain pointer-events-none absolute inset-0 opacity-[0.07] mix-blend-overlay" />
           <div className="relative mx-auto grid max-w-[1120px] gap-10 px-4 pb-10 pt-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_440px] lg:pb-20 lg:pt-20">
             <div className="lg:pt-6">
-              <h1 className="max-w-[18ch] text-[38px] font-bold leading-[1.05] tracking-[-0.03em] sm:text-[54px]">{c.headline}</h1>
-              {c.subheadline ? <p className="mt-5 max-w-[52ch] text-[17px] leading-relaxed text-white/80">{c.subheadline}</p> : null}
+              {local ? (
+                <nav aria-label="Breadcrumb" className="mb-4 text-[13px] text-white/70">
+                  {local.breadcrumb.map((b, k) => (
+                    <span key={b.href}>
+                      {k ? " / " : ""}
+                      <a href={b.href} className="hover:text-white">
+                        {b.label}
+                      </a>
+                    </span>
+                  ))}
+                </nav>
+              ) : null}
+              <h1 className="max-w-[18ch] text-[38px] font-bold leading-[1.05] tracking-[-0.03em] sm:text-[54px]">{local?.heading ?? c.headline}</h1>
+              {local ? <p className="mt-5 max-w-[52ch] text-[17px] leading-relaxed text-white/80">{local.intro}</p> : c.subheadline ? <p className="mt-5 max-w-[52ch] text-[17px] leading-relaxed text-white/80">{c.subheadline}</p> : null}
               {c.highlights.length ? (
                 <ul className="mt-8 grid gap-3">
                   {c.highlights.filter(Boolean).map((h) => (
@@ -88,10 +100,19 @@ export function PublicLanding({ data, preview }: { data: PublicPageData; preview
                 <div>
                   <h2 className="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink-3">Areas we cover</h2>
                   <ul className="mt-4 flex flex-wrap gap-2">
-                    {data.areas.map((a) => (
-                      <li key={a} className="inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-4 py-2 text-[15px]">
-                        <MapPin className="size-4 text-ink-3" aria-hidden />
-                        {a}
+                    {(data.places.length ? data.places : data.areas.map((a) => ({ label: a, slug: null }))).map((a) => (
+                      <li key={a.label}>
+                        {a.slug && !preview ? (
+                          <a href={`/p/${data.slug}/${a.slug}`} className="inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-4 py-2 text-[15px] hover:bg-blue-soft hover:text-blue">
+                            <MapPin className="size-4 text-ink-3" aria-hidden />
+                            {a.label}
+                          </a>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-4 py-2 text-[15px]">
+                            <MapPin className="size-4 text-ink-3" aria-hidden />
+                            {a.label}
+                          </span>
+                        )}
                       </li>
                     ))}
                   </ul>
