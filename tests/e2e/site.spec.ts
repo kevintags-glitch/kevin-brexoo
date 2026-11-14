@@ -63,7 +63,9 @@ test("the first screen is the stairs film, followed by the CRM presentation", as
   // It plays by itself, with no click, and fills the first screen.
   await expect.poll(() => video.evaluate((v: HTMLVideoElement) => !v.paused && v.currentTime > 0.2), { timeout: 10_000 }).toBe(true);
   const box = (await hero.boundingBox())!;
-  expect(box.height).toBeGreaterThanOrEqual(900 - 1);
+  expect(box.height).toBeGreaterThanOrEqual(900 - 64 - 1);
+  // The film starts below the menu bar, never behind it.
+  expect(box.y).toBeGreaterThanOrEqual(63);
   for (const src of ["/media/brexoo-stairs.mp4", "/media/brexoo-stairs.webm", "/media/brexoo-stairs-poster.jpg", "/media/brexoo-stairs-tall.mp4", "/media/brexoo-stairs-tall.webm", "/media/brexoo-stairs-tall-poster.jpg"]) {
     expect((await page.request.get(src)).status()).toBe(200);
   }

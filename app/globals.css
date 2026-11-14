@@ -5,7 +5,8 @@
  * Growth Teal #06B6D4, Cloud White #E6F4FF; typeface Inter. Every colour is a token so light and
  * dark themes flip in one place.
  */
-:root {
+:root,
+.theme-light {
   --canvas: #ffffff;
   --page: #ffffff; /* marketing page background */
   --surface: #ffffff;
