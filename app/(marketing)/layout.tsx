@@ -6,10 +6,12 @@ import { SupportChat } from "@/components/marketing/SupportChat";
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
     <MotionProvider>
-      <SiteHeader />
-      <main id="main" className="overflow-x-clip">{children}</main>
-      <SiteFooter />
-      <SupportChat />
+      <div className="bg-page">
+        <SiteHeader />
+        <main id="main" className="overflow-x-clip">{children}</main>
+        <SiteFooter />
+        <SupportChat />
+      </div>
     </MotionProvider>
   );
 }

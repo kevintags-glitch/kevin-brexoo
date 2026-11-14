@@ -62,7 +62,7 @@ export default async function TradePage({ params }: { params: Promise<{ trade: s
           </div>
         </Container>
       </section>
-      <section className="bg-white py-16 sm:py-20">
+      <section className="bg-page py-16 sm:py-20">
         <Container>
           <Eyebrow>Cities</Eyebrow>
           <h2 className="type-section mt-4">{t.name} across three countries</h2>

@@ -49,27 +49,35 @@ test("each website page has its own title and headline", async ({ page }) => {
   }
 });
 
-test("the first screen is wordless: the logo mark and a live CRM demo", async ({ page }) => {
+test("the first screen is the stairs film, followed by the CRM presentation", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
   const hero = page.locator("section").first();
   await expect(hero.locator("h1")).toHaveClass(/sr-only/);
   await expect(hero.locator("h1")).toHaveText(/Brexoo/);
-  // Visible text in the hero comes only from the decorative product demo (aria-hidden).
-  await expect(hero.locator('[aria-hidden="true"]').getByText("Sarah Mitchell").first()).toBeVisible({ timeout: 8000 });
-  const visible = await hero.evaluate((el) => {
-    let text = "";
-    const walk = (n: Node) => {
-      if (n.nodeType === 3) {
-        const p = n.parentElement!;
-        if (!p.closest(".sr-only") && !p.closest('[aria-hidden="true"]') && getComputedStyle(p).visibility !== "hidden") text += n.textContent;
-      }
-      n.childNodes.forEach(walk);
-    };
-    walk(el);
-    return text.trim();
-  });
-  expect(visible).toBe("");
+  // The film carries the words; the page adds none of its own on the first screen.
+  const video = hero.locator("video");
+  await expect(video).toBeVisible();
+  await expect(video).toHaveAttribute("poster", "/media/brexoo-stairs-poster.jpg");
+  expect(await video.evaluate((v: HTMLVideoElement) => v.muted && v.loop && v.playsInline)).toBe(true);
+  for (const src of ["/media/brexoo-stairs.mp4", "/media/brexoo-stairs.webm", "/media/brexoo-stairs-poster.jpg"]) {
+    expect((await page.request.get(src)).status()).toBe(200);
+  }
+  await expect(hero.getByRole("button", { name: /animation/ })).toBeVisible();
+
+  // Second screen: real workspace screens in a tabbed presentation.
+  const ws = page.locator("#workspace");
+  await ws.scrollIntoViewIfNeeded();
+  const tabs = ws.getByRole("tab");
+  await expect(tabs).toHaveCount(8);
+  await ws.getByRole("tab", { name: "Pipeline" }).click();
+  await expect(ws.getByRole("tab", { name: "Pipeline" })).toHaveAttribute("aria-selected", "true");
+  await expect(ws.getByRole("img", { name: /Pipeline screen/ })).toBeVisible();
+  await page.keyboard.press("ArrowRight");
+  await expect(ws.getByRole("tab", { name: "Calendar" })).toHaveAttribute("aria-selected", "true");
+  for (const name of ["overview", "enquiries", "lead", "pipeline", "appointments", "discover", "clients", "reports"]) {
+    expect((await page.request.get(`/media/screens/${name}.webp`)).status()).toBe(200);
+  }
 });
 
 test("the home page never mentions AI", async ({ page }) => {

@@ -92,7 +92,7 @@ export function SiteHeader() {
     <header
       className={cn(
         "sticky top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-200",
-        scrolled || open ? "border-b border-line bg-canvas/80 backdrop-blur-xl backdrop-saturate-150" : "border-b border-transparent",
+        scrolled || open ? "border-b border-line bg-page/80 backdrop-blur-xl backdrop-saturate-150" : "border-b border-transparent",
       )}
     >
       <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-8 px-4 sm:px-6">

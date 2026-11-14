@@ -41,7 +41,7 @@ export default async function TradeCountryPage({ params }: { params: Promise<{ t
           Request a Demo
         </ButtonLink>
       </PageHero>
-      <section className="bg-white pb-24">
+      <section className="bg-page pb-24">
         <Container>
           <MarketsGrid trade={t} countries={[cc]} />
         </Container>

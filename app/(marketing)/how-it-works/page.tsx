@@ -52,7 +52,7 @@ export default function HowItWorksPage() {
       </PageHero>
 
       {/* A drawn line runs down the page; steps swing in from alternating sides. */}
-      <section className="relative bg-white py-16 sm:py-24">
+      <section className="relative bg-page py-16 sm:py-24">
         <DrawLine />
         <Container className="relative grid gap-28 sm:gap-40">
           {STEPS.map((s, i) => {
@@ -60,7 +60,7 @@ export default function HowItWorksPage() {
             return (
               <article key={s.id} id={s.id} className="grid scroll-mt-28 items-center gap-10 max-md:pl-10 md:grid-cols-2 md:gap-24">
                 <SlideIn from={flip ? "right" : "left"} className={cn(flip && "md:order-last")}>
-                  <BrandIcon name={STEP_ICON[s.id]!} className="mb-5 size-16" />
+                  <BrandIcon name={STEP_ICON[s.id]!} tone={(["navy", "blue", "teal", "cloud", "navy"] as const)[i]} className="mb-5 size-16" />
                   <p className="type-label flex items-center gap-3 uppercase tracking-[0.2em] text-blue">
                     <span className="text-ink-3 tabular">{String(i + 1).padStart(2, "0")}</span>
                     {s.kicker}
@@ -105,7 +105,7 @@ export default function HowItWorksPage() {
         </Container>
       </section>
 
-      <div className="bg-white pt-24">
+      <div className="bg-page pt-24">
         <CtaBand title="Walk through it with us." body="A 30-minute demo using your services and service area.">
           <ButtonLink href="/demo" variant="inverse" size="lg">
             Request a Demo

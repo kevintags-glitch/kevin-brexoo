@@ -49,7 +49,7 @@ export default function IndustriesPage() {
         </ButtonLink>
       </PageHero>
 
-      <section className="bg-white py-16 sm:py-24">
+      <section className="bg-page py-16 sm:py-24">
         <Container>
           <Eyebrow>Eight launch industries</Eyebrow>
           <h2 className="type-section mt-4 max-w-[20ch]">Start with the work you do.</h2>
@@ -86,7 +86,7 @@ export default function IndustriesPage() {
         </Marquee>
       </section>
 
-      <section className="bg-white py-16 sm:py-24">
+      <section className="bg-page py-16 sm:py-24">
         <Container>
           <Eyebrow>Every service we support</Eyebrow>
           <h2 className="type-section mt-4">{INDUSTRY_TEMPLATES.length} service templates, and growing.</h2>
@@ -112,7 +112,7 @@ export default function IndustriesPage() {
           </ul>
         </Container>
       </section>
-      <div className="bg-white pt-8">
+      <div className="bg-page pt-8">
         <CtaBand title="See Brexoo with your services." body="We'll set up a demo using your trade, your service area and your questions.">
           <ButtonLink href="/demo" variant="inverse" size="lg">
             Request a Demo

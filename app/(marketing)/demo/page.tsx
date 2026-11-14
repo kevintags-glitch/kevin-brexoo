@@ -13,7 +13,7 @@ const NEXT = [
 
 export default function DemoPage() {
   return (
-    <section className="relative overflow-hidden bg-white">
+    <section className="relative overflow-hidden bg-page">
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(45%_60%_at_0%_0%,rgb(6_182_212/0.08),transparent_70%),radial-gradient(40%_50%_at_100%_100%,rgb(59_130_246/0.07),transparent_70%)]" />
       <Container className="relative grid gap-14 py-16 sm:py-24 lg:grid-cols-[1fr_1.1fr]">
         <div>

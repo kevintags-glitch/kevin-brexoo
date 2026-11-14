@@ -1,5 +1,9 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
+import { MarkWatermark } from "@/components/brand/BrandMotif";
+import { BRAND_ICON_LABEL, BrandIcon, TONE_CYCLE, type BrandIconName } from "./brand-icons";
+
+const STRIP: BrandIconName[] = ["home", "bolt", "tap", "ac", "hammer", "leaf", "spray", "roof", "lead", "fit", "pipeline", "calendar", "client", "mappin", "shield", "won"];
 
 const COLUMNS = [
   {
@@ -40,8 +44,19 @@ const COLUMNS = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-line bg-surface">
-      <div className="mx-auto grid max-w-[1200px] gap-12 px-4 py-16 sm:px-6 md:grid-cols-[1.2fr_2fr]">
+    <footer className="relative overflow-hidden border-t border-line bg-surface">
+      <MarkWatermark className="absolute -bottom-32 -right-20 h-[420px] text-[#E6F4FF]" />
+      <div className="relative mx-auto max-w-[1200px] px-4 pt-12 sm:px-6">
+        <ul aria-label="What Brexoo covers" className="flex flex-wrap gap-3">
+          {STRIP.map((n, k) => (
+            <li key={n}>
+              <BrandIcon name={n} tone={TONE_CYCLE[k % TONE_CYCLE.length]} className="size-10" />
+              <span className="sr-only">{BRAND_ICON_LABEL[n]}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="relative mx-auto grid max-w-[1200px] gap-12 px-4 py-14 sm:px-6 md:grid-cols-[1.2fr_2fr]">
         <div className="max-w-xs">
           <Logo knockout="var(--surface)" />
           <p className="mt-4 text-[15px] font-medium leading-snug text-ink">The AI Growth Platform for Builders &amp; Home Services.</p>

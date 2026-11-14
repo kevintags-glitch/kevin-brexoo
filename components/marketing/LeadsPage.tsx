@@ -76,7 +76,7 @@ export function LocalLeads({ trade, city }: { trade: Trade; city: SeoCity }) {
 
   return (
     <>
-      <section className="bg-white py-16 sm:py-20">
+      <section className="bg-page py-16 sm:py-20">
         <Container className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <Eyebrow>Areas you can cover</Eyebrow>
@@ -155,7 +155,7 @@ export function LocalLeads({ trade, city }: { trade: Trade; city: SeoCity }) {
         </Container>
       </section>
 
-      <section className="bg-white py-16 sm:py-20">
+      <section className="bg-page py-16 sm:py-20">
         <Container className="grid gap-12 lg:grid-cols-[1fr_1.3fr]">
           <div>
             <Eyebrow>Questions</Eyebrow>
@@ -167,7 +167,7 @@ export function LocalLeads({ trade, city }: { trade: Trade; city: SeoCity }) {
         </Container>
       </section>
 
-      <section className="border-t border-line bg-white py-14">
+      <section className="border-t border-line bg-page py-14">
         <Container>
           <h2 className="type-card">More {country.name} cities</h2>
           <ul className="mt-4 flex flex-wrap gap-2">
@@ -182,7 +182,7 @@ export function LocalLeads({ trade, city }: { trade: Trade; city: SeoCity }) {
         </Container>
       </section>
 
-      <div className="bg-white pt-4">
+      <div className="bg-page pt-4">
         <CtaBand title={`Win more ${trade.plural.split(" and ")[0]} work in ${city.name}.`} body="See Brexoo set up with your services and service areas.">
           <ButtonLink href="/demo" variant="inverse" size="lg">
             Request a Demo
@@ -194,6 +194,6 @@ export function LocalLeads({ trade, city }: { trade: Trade; city: SeoCity }) {
 }
 
 export function TradeHeroIcon({ trade }: { trade: Trade }) {
-  return <Illustration name={trade.illustration} className="size-16" />;
+  return <Illustration name={trade.illustration} tone="navy" className="size-20" />;
 }
 

@@ -21,7 +21,7 @@ export default function ManagedServicesPage() {
           Discuss the service
         </ButtonLink>
       </PageHero>
-      <section className="border-y border-line bg-white py-16">
+      <section className="border-y border-line bg-page py-16">
         <Container className="grid grid-cols-2 gap-10 md:grid-cols-4">
           {[
             { to: 20, label: "Hours a month", sub: "Included in the Managed plan" },

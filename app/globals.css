@@ -7,6 +7,7 @@
  */
 :root {
   --canvas: #ffffff;
+  --page: #f3f9ff; /* marketing page tint (Cloud White, lighter) */
   --surface: #ffffff;
   --surface-2: #f4f7fb;
   --surface-3: #e9eff7;
@@ -46,6 +47,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --canvas: #0a1a2e;
+    --page: #0a1a2e;
     --surface: #0f2742;
     --surface-2: #15314f;
     --surface-3: #1b3a5c;
@@ -84,6 +86,7 @@
 
 :root[data-theme="dark"] {
   --canvas: #0a1a2e;
+  --page: #0a1a2e;
   --surface: #0f2742;
   --surface-2: #15314f;
   --surface-3: #1b3a5c;
@@ -121,6 +124,7 @@
 
 @theme inline {
   --color-canvas: var(--canvas);
+  --color-page: var(--page);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
   --color-surface-3: var(--surface-3);

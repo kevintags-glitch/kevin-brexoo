@@ -39,13 +39,13 @@ export default function ResourcesPage() {
     <>
       <PageHero eyebrow="Resources" title="Everything you need to know." accent={["know"]} body="Guides to how Brexoo works, what its AI does, how records are labelled, and the policies behind it." />
 
-      <section className="overflow-hidden bg-white pb-20">
+      <section className="overflow-hidden bg-page pb-20">
         <Container>
           <Eyebrow>Start here</Eyebrow>
           <SnapCarousel label="guides" className="-mt-4">
             {START.map(({ icon, title, body, href }) => (
               <Link key={href} href={href} className="group flex h-full min-h-[260px] flex-col rounded-[26px] border border-line bg-white p-7 shadow-xs transition-shadow hover:shadow-lg">
-                <BrandIcon name={icon} className="size-14 transition-transform duration-300 group-hover:-translate-y-1" />
+                <BrandIcon name={icon} tone="cloud" className="size-14 transition-transform duration-300 group-hover:-translate-y-1" />
                 <span className="type-subhead mt-8">{title}</span>
                 <span className="type-body mt-2 flex-1 text-ink-3">{body}</span>
                 <span className="mt-6 inline-flex items-center gap-1.5 text-[14px] font-medium text-blue">
@@ -64,7 +64,7 @@ export default function ResourcesPage() {
           <div className="mt-14 grid gap-px overflow-hidden rounded-[28px] bg-white/10 md:grid-cols-2">
             {RECORD_TYPES.map(({ icon, name, body }, i) => (
               <SlideIn key={name} from={i % 2 === 0 ? "left" : "right"} delay={Math.floor(i / 2) * 0.1} className="bg-[#0f2742] p-8 sm:p-10">
-                <span className="inline-grid rounded-2xl bg-white p-2"><BrandIcon name={icon} className="size-10" /></span>
+                <BrandIcon name={icon} tone={i % 2 ? "teal" : "blue"} className="size-12" />
                 <h3 className="type-subhead mt-6">{name}</h3>
                 <p className="type-body mt-3 text-white/70">{body}</p>
               </SlideIn>
@@ -73,7 +73,7 @@ export default function ResourcesPage() {
         </Container>
       </section>
 
-      <section id="guides" className="scroll-mt-24 bg-white py-20 sm:py-28">
+      <section id="guides" className="scroll-mt-24 bg-page py-20 sm:py-28">
         <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
           <div className="lg:sticky lg:top-28 lg:h-fit">
             <Eyebrow>Guides</Eyebrow>

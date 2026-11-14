@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { LogoMark } from "@/components/brand/Logo";
+import { LoopGlyph } from "@/components/brand/BrandMotif";
 import { Swoosh } from "./Swoosh";
 import { Reveal } from "./Reveal";
 
@@ -9,7 +10,12 @@ export function Container({ className, children }: { className?: string; childre
 }
 
 export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
-  return <p className={cn("type-label uppercase tracking-[0.12em] text-blue", className)}>{children}</p>;
+  return (
+    <p className={cn("type-label inline-flex items-center gap-2 uppercase tracking-[0.12em] text-blue", className)}>
+      <LoopGlyph />
+      {children}
+    </p>
+  );
 }
 
 export function SectionHeading({

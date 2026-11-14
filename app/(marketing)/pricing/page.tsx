@@ -45,7 +45,7 @@ export default function PricingPage() {
                 >
                   <span id={p.code} className="absolute -top-28" aria-hidden />
                   {featured ? <span className="absolute -top-3 left-7 rounded-full bg-blue px-2.5 py-1 text-[12px] font-medium text-on-blue">Most teams</span> : null}
-                  <BrandIcon name={p.code === "launch" ? "page" : p.code === "growth" ? "pipeline" : "team"} className="size-12" />
+                  <BrandIcon name={p.code === "launch" ? "page" : p.code === "growth" ? "pipeline" : "team"} tone={p.code === "launch" ? "cloud" : p.code === "growth" ? "blue" : "navy"} className="size-12" />
                   <h2 className="type-card mt-4">{p.name}</h2>
                   <p className="mt-2 min-h-12 text-[14px] leading-relaxed text-ink-3">{p.positioning}</p>
                   <p className="mt-6 flex items-baseline gap-1.5">

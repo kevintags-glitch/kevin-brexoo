@@ -63,7 +63,7 @@ export function ProductTabs({ tabs }: { tabs: ProductTab[] }) {
               i === active ? "border-ink/10 bg-white text-ink shadow-sm" : "border-transparent text-ink-3 hover:bg-surface-2 hover:text-ink",
             )}
           >
-            <Illustration name={t.icon} className="size-7" />
+            <Illustration name={t.icon} tone={i === active ? "navy" : "cloud"} className="size-8" />
             {t.label}
             {i === active && !reduce ? (
               <motion.span key={`${cycle}-${paused}`} aria-hidden className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-blue" initial={{ scaleX: 0 }} animate={{ scaleX: paused ? 0 : 1 }} transition={{ duration: paused ? 0 : DURATION / 1000, ease: "linear" }} />

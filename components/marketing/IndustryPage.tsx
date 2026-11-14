@@ -91,7 +91,7 @@ export function IndustryPage({
         </section>
       )}
 
-      <div className="bg-white pt-24">
+      <div className="bg-page pt-24">
         <CtaBand title="See it with your services." body="We'll set up a demo using your trade, your service area and your questions.">
           <ButtonLink href="/demo" variant="inverse" size="lg">
             Request a Demo
@@ -104,7 +104,7 @@ export function IndustryPage({
 
 function ZigzagServices({ codes }: { codes: string[] }) {
   return (
-    <section className="bg-white py-20 sm:py-28">
+    <section className="bg-page py-20 sm:py-28">
       <Container>
         <Eyebrow>Your services</Eyebrow>
         <h2 className="type-section mt-4 max-w-[20ch]">Questions that fit the work.</h2>
@@ -145,7 +145,7 @@ function ZigzagServices({ codes }: { codes: string[] }) {
 function TileServices({ codes }: { codes: string[] }) {
   const questions = codes.flatMap((c) => INDUSTRY_BY_CODE[c]!.questions.slice(0, 2).map((q) => q.label));
   return (
-    <section className="overflow-hidden bg-white py-20 sm:py-28">
+    <section className="overflow-hidden bg-page py-20 sm:py-28">
       <Container>
         <Eyebrow>Your services</Eyebrow>
         <h2 className="type-section mt-4 max-w-[20ch]">Every trade, its own questions.</h2>

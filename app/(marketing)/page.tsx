@@ -3,11 +3,13 @@ import Link from "next/link";
 import { ArrowDown, ArrowRight, ShieldCheck } from "lucide-react";
 import { PLANS } from "@/config/plans";
 import { ButtonLink } from "@/components/ui";
-import { AnimatedMark } from "@/components/brand/AnimatedMark";
-import { HeroDemo } from "@/components/marketing/HeroDemo";
+import { CrmShowcase } from "@/components/marketing/CrmShowcase";
+import { StairsFilm } from "@/components/marketing/StairsFilm";
 import { IconWall } from "@/components/marketing/IconWall";
+import { BrandIcon, TONE_CYCLE, type BrandIconName } from "@/components/marketing/brand-icons";
+import { LoopDivider, MarkOutline } from "@/components/brand/BrandMotif";
 import { BookingMock, CalendarMock, DiscoverMock, FitCardMock, PipelineMock } from "@/components/marketing/mocks";
-import { Illustration, type IllustrationName } from "@/components/marketing/illustrations";
+import { Illustration } from "@/components/marketing/illustrations";
 import { ProductTabs, type ProductTab } from "@/components/marketing/ProductTabs";
 import { COUNTRIES, findRegion } from "@/config/locations";
 import { SAMPLE_BY_KEY } from "@/config/samples";
@@ -38,13 +40,15 @@ const TABS: ProductTab[] = [
   { id: "calendar", label: "Calendar", icon: "calendar", title: "Bookings without the back-and-forth.", body: "Visitors request a free time on your page; you confirm it, and it lands on your calendar and dashboard.", points: ["Your days, hours, meeting length and buffers", "Always in your business's time zone"], href: "/how-it-works#book", visual: <CalendarMock /> },
 ];
 
-const FEATURES: { icon: IllustrationName; title: string; body: string; href: string }[] = [
-  { icon: "chat", title: "Landing pages that capture", body: "A mobile-first page per business with a short enquiry form, chat and time requests.", href: "/how-it-works#discover" },
-  { icon: "magnifier", title: "Discover projects", body: "Import project records from approved sources, with provenance and contact permissions.", href: "/how-it-works#discover" },
-  { icon: "chart", title: "Fit and buying intent", body: "Explainable scores that show their factors, and intent that's always labelled inferred.", href: "/how-it-works#qualify" },
-  { icon: "calendar", title: "Calendar and bookings", body: "A weekly view on your dashboard, booking requests from your page and reminders.", href: "/how-it-works#book" },
-  { icon: "chart", title: "Clients & repeat work", body: "Every won job becomes a client record, with lifetime value and the next project to chase.", href: "/how-it-works#grow" },
-  { icon: "bolt", title: "Notifications & Make.com", body: "In-app alerts and signed webhooks to Slack, SMS or email through your Make scenarios.", href: "/resources#guides" },
+const SERVICES: { icon: BrandIconName; title: string; body: string; href: string }[] = [
+  { icon: "page", title: "Landing pages that capture", body: "A mobile-first page per business with a short enquiry form, chat and time requests.", href: "/how-it-works#discover" },
+  { icon: "discover", title: "Discover projects", body: "Project records from approved sources, with provenance and contact permissions.", href: "/how-it-works#discover" },
+  { icon: "fit", title: "Fit and buying intent", body: "Scores that show their factors, and intent that's always labelled inferred.", href: "/how-it-works#qualify" },
+  { icon: "pipeline", title: "Pipeline and follow-ups", body: "A task the moment an enquiry arrives, and a board from new to won.", href: "/how-it-works#win" },
+  { icon: "calendar", title: "Calendar and bookings", body: "Visitors request a free time; you confirm it and it lands on your dashboard.", href: "/how-it-works#book" },
+  { icon: "client", title: "Clients and repeat work", body: "Every won job becomes a client record with lifetime value.", href: "/how-it-works#grow" },
+  { icon: "mappin", title: "Local area pages", body: "Pages for the suburbs, cities and ZIP codes you serve, built for local search.", href: "/leads" },
+  { icon: "webhook", title: "Notifications and Make.com", body: "In-app alerts and signed webhooks to Slack, SMS or email.", href: "/resources#guides" },
 ];
 
 const TRUST = [
@@ -65,22 +69,64 @@ export default function HomePage() {
   return (
     <>
       <JsonLd data={ORG_LD} />
-      {/* 1 — First screen: no words. The logo mark draws itself beside a live CRM demo. */}
-      <section aria-labelledby="home-title" className="relative overflow-hidden bg-white">
+      {/* 1 — First screen: the film. The logo shapes climb five service steps and become the Brexoo logo. */}
+      <section aria-labelledby="home-title" className="relative overflow-hidden bg-page">
         <h1 id="home-title" className="sr-only">
           Brexoo: find, qualify and win local projects
         </h1>
-        <Container className="grid min-h-[calc(100dvh-4rem)] items-center gap-10 py-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
-          <AnimatedMark className="mx-auto w-full max-w-[260px] sm:max-w-[340px] lg:max-w-[420px]" />
-          <HeroDemo className="w-full" />
-        </Container>
-        <a href="#promise" aria-label="Scroll to learn more" className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 text-ink-3 hover:text-ink sm:block">
+        <div className="mx-auto flex max-w-[1400px] items-center px-0 py-6 sm:min-h-[calc(100dvh-4rem)] sm:px-6 sm:pb-14 sm:pt-2">
+          <StairsFilm className="w-full" />
+        </div>
+        <a href="#workspace" aria-label="Scroll to see the workspace" className="absolute bottom-5 left-1/2 hidden -translate-x-1/2 text-ink-3 hover:text-ink sm:block">
           <ArrowDown className="size-5 motion-safe:animate-bounce" aria-hidden />
         </a>
       </section>
 
+      {/* 2 — The customer workspace, presented with real screens, then every Brexoo service. */}
+      <section id="workspace" aria-labelledby="workspace-title" className="relative scroll-mt-16 overflow-hidden bg-page pb-24 pt-16 sm:pt-20">
+        <MarkOutline className="absolute -left-40 top-24 hidden h-[520px] text-[#E6F4FF] lg:block" strokeWidth={30} />
+        <Container className="relative">
+          <div className="mx-auto max-w-[760px] text-center">
+            <Eyebrow className="justify-center">The Brexoo workspace</Eyebrow>
+            <h2 id="workspace-title" className="type-section mt-4">See the workspace your team will use.</h2>
+            <p className="type-body mx-auto mt-4 max-w-[60ch] text-ink-2">Real screens from Coastline Homes, a sample builder in Newcastle, NSW: leads, fit, pipeline, calendar, clients and reports in one place.</p>
+          </div>
+          <div className="mt-10">
+            <CrmShowcase />
+          </div>
+
+          <div className="mt-24">
+            <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+              <div>
+                <Eyebrow>Services</Eyebrow>
+                <h2 className="type-section mt-4 max-w-[20ch]">Everything Brexoo does for your business.</h2>
+              </div>
+              <ButtonLink href="/how-it-works" variant="outline">
+                See how it works <ArrowRight className="size-4" aria-hidden />
+              </ButtonLink>
+            </div>
+            <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {SERVICES.map((f, k) => (
+                <li key={f.title}>
+                  <Reveal delay={(k % 4) * 0.05} className="h-full">
+                    <Link href={f.href} className="group flex h-full flex-col rounded-[22px] border border-line bg-white p-6 transition-shadow hover:shadow-lg">
+                      <BrandIcon name={f.icon} tone={TONE_CYCLE[k % TONE_CYCLE.length]} className="size-14 transition-transform duration-300 group-hover:-translate-y-0.5" />
+                      <p className="type-card mt-5">{f.title}</p>
+                      <p className="type-body mt-1.5 flex-1 text-ink-2">{f.body}</p>
+                      <span className="mt-4 inline-flex items-center gap-1 text-[13px] font-medium text-blue group-hover:gap-2">
+                        Learn more <ArrowRight className="size-3.5" aria-hidden />
+                      </span>
+                    </Link>
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Container>
+      </section>
+
       {/* 1b — The promise and the primary call to action. */}
-      <section id="promise" className="scroll-mt-16 bg-white pb-24 pt-8 sm:pt-12">
+      <section id="promise" className="scroll-mt-16 border-t border-line bg-page py-24">
         <Container>
           <Eyebrow>For builders &amp; home services · USA · Australia · New Zealand</Eyebrow>
           <WordsReveal text="Turn local demand into your next project." accent={["next", "project."]} className="type-promo mt-5 max-w-[16ch] text-ink" />
@@ -102,15 +148,19 @@ export default function HomePage() {
         </Container>
       </section>
 
+      <Container>
+        <LoopDivider />
+      </Container>
+
       {/* 2 — Who it's for: launch industries, each with its own illustration. */}
-      <section aria-label="Industries" className="border-y border-line bg-white py-8">
+      <section aria-label="Industries" className="border-y border-line bg-page py-8">
         <Container>
           <p className="text-[14px] text-ink-3">Built for builders and home-service businesses in the United States, Australia and New Zealand</p>
           <ul className="mt-5 grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4 lg:grid-cols-8">
             {TRADES.map((t) => (
               <li key={t.slug}>
                 <Link href={`/leads/${t.slug}`} className="group flex items-center gap-2.5 text-[14px] font-medium text-ink-2 hover:text-ink">
-                  <Illustration name={t.illustration} className="size-9 transition-transform duration-300 group-hover:-translate-y-0.5" />
+                  <Illustration name={t.illustration} tone={TONE_CYCLE[TRADES.indexOf(t) % TONE_CYCLE.length]} className="size-11 transition-transform duration-300 group-hover:-translate-y-0.5" />
                   <span className="leading-tight">{t.name}</span>
                 </Link>
               </li>
@@ -120,7 +170,7 @@ export default function HomePage() {
       </section>
 
       {/* 3 — Product tour in tabs. */}
-      <section id="engines" className="scroll-mt-20 bg-white py-24 sm:py-28">
+      <section id="engines" className="scroll-mt-20 bg-page py-24 sm:py-28">
         <Container>
           <Eyebrow>Discover · Qualify · Win</Eyebrow>
           <WordsReveal text="Everything between the first enquiry and the signed job." accent={["signed", "job."]} className="type-section mt-4 max-w-[20ch]" />
@@ -153,7 +203,7 @@ export default function HomePage() {
                   <TiltIn delay={(k % 4) * 0.06} className="h-full">
                     <Link href={`/leads/${t.slug}`} className="group flex h-full flex-col rounded-[22px] border border-line bg-white p-5 transition-shadow hover:shadow-lg">
                       <div className="flex items-start justify-between">
-                        <Illustration name={t.illustration} className="size-12" />
+                        <Illustration name={t.illustration} tone="navy" className="size-12" />
                         <span className="rounded-full bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-ink-3">{COUNTRIES[b.country].name}</span>
                       </div>
                       <p className="mt-4 text-[13px] font-medium text-blue">{t.name}</p>
@@ -187,7 +237,7 @@ export default function HomePage() {
       </section>
 
       {/* 4b — Everything Brexoo covers, as a drifting wall of brand icons. */}
-      <section aria-labelledby="covers" className="overflow-hidden bg-white py-20">
+      <section aria-labelledby="covers" className="overflow-hidden bg-page py-20">
         <Container className="mb-10">
           <Eyebrow>One platform</Eyebrow>
           <h2 id="covers" className="type-section mt-4 max-w-[22ch]">Every trade, every step, every place you work.</h2>
@@ -195,48 +245,33 @@ export default function HomePage() {
         <IconWall />
       </section>
 
-      {/* 5 — Facts that count up. */}
-      <section className="border-y border-line bg-white py-20">
-        <Container className="grid grid-cols-2 gap-10 md:grid-cols-4">
+      {/* 5 — Brand band: the logo's outline behind the numbers that define Brexoo. */}
+      <section className="relative overflow-hidden bg-[#0F2742] py-20 text-white sm:py-24">
+        <MarkOutline className="absolute -right-24 top-1/2 h-[150%] -translate-y-1/2 text-white/[0.07]" strokeWidth={26} />
+        <MarkOutline className="absolute -left-40 -top-24 h-[80%] text-[#06B6D4]/[0.12]" strokeWidth={22} />
+        <Container className="relative grid grid-cols-2 gap-10 md:grid-cols-4">
           {[
-            { to: 3, label: "Launch markets", sub: "USA · Australia · New Zealand" },
-            { to: 15, label: "Service templates", sub: "Questions tuned per trade" },
-            { to: 9, label: "Pipeline stages", sub: "New to won, with reasons" },
-            { to: 100, suffix: "%", label: "Records with a source", sub: "Every lead shows where it came from" },
+            { to: 3, label: "Launch markets", sub: "USA · Australia · New Zealand", icon: "us" as const, tone: "blue" as const },
+            { to: 15, label: "Service templates", sub: "Questions tuned per trade", icon: "form" as const, tone: "teal" as const },
+            { to: 9, label: "Pipeline stages", sub: "New to won, with reasons", icon: "pipeline" as const, tone: "cloud" as const },
+            { to: 100, suffix: "%", label: "Records with a source", sub: "Every lead shows where it came from", icon: "source" as const, tone: "blue" as const },
           ].map((s, i) => (
             <Reveal key={s.label} delay={i * 0.08}>
-              <CountUp to={s.to} suffix={s.suffix} className="block text-[56px] leading-none tracking-[-0.035em] text-ink sm:text-[72px] font-light" />
+              <BrandIcon name={s.icon} tone={s.tone} className="size-12" />
+              <CountUp to={s.to} suffix={s.suffix} className="mt-6 block text-[56px] leading-none tracking-[-0.035em] text-white sm:text-[72px] font-light" />
               <p className="mt-3 text-[15px] font-medium">{s.label}</p>
-              <p className="text-[14px] text-ink-3">{s.sub}</p>
+              <p className="text-[14px] text-white/65">{s.sub}</p>
             </Reveal>
           ))}
         </Container>
       </section>
 
       {/* 6 — Features with line illustrations, then the trust principles. */}
-      <section className="bg-white py-24 sm:py-28">
+      <section className="bg-page py-24 sm:py-28">
         <Container>
-          <Eyebrow>Everything in one place</Eyebrow>
-          <WordsReveal text="Less admin. More of the right jobs." accent={["right", "jobs."]} className="type-section mt-4 max-w-[18ch]" />
-          <ul className="mt-12 grid gap-px overflow-hidden rounded-[24px] border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
-            {FEATURES.map((f, k) => (
-              <li key={f.title} className="bg-white">
-                <Reveal delay={(k % 3) * 0.05} className="h-full">
-                  <Link href={f.href} className="group flex h-full flex-col p-7 hover:bg-surface-2/40">
-                    <Illustration name={f.icon} className="size-14" />
-                    <p className="type-card mt-5">{f.title}</p>
-                    <p className="type-body mt-1.5 flex-1 text-ink-2">{f.body}</p>
-                    <span className="mt-4 inline-flex items-center gap-1 text-[13px] font-medium text-blue group-hover:gap-2">
-                      Learn more <ArrowRight className="size-3.5" aria-hidden />
-                    </span>
-                  </Link>
-                </Reveal>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-16 grid gap-10 rounded-[28px] bg-[#0f2742] p-8 text-white sm:p-12 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="grid gap-10 rounded-[28px] bg-[#0f2742] p-8 text-white sm:p-12 lg:grid-cols-[0.9fr_1.1fr]">
             <div>
-              <Illustration name="shield" className="size-14 [--ink:white]" />
+              <Illustration name="shield" tone="teal" className="size-14" />
               <h2 className="type-section mt-5">Honest about data. Careful with people.</h2>
               <p className="type-body mt-4 text-white/70">A predicted opportunity is never shown as a confirmed request. Verified projects, direct enquiries, business prospects and inferred intent stay clearly apart.</p>
               <ButtonLink href="/resources#record-types" variant="inverse" className="mt-7">
@@ -256,7 +291,7 @@ export default function HomePage() {
       </section>
 
       {/* 8 — Calendar: visitors request, you confirm. */}
-      <section id="calendar" className="scroll-mt-20 bg-white py-24 sm:py-28">
+      <section id="calendar" className="scroll-mt-20 bg-page py-24 sm:py-28">
         <Container>
           <Eyebrow>Bookings &amp; calendar</Eyebrow>
           <WordsReveal text="Visitors pick a time. You confirm with one click." accent={["one", "click."]} className="type-section mt-4 max-w-[20ch]" />
@@ -272,8 +307,12 @@ export default function HomePage() {
         </Container>
       </section>
 
+      <Container>
+        <LoopDivider className="mb-20" />
+      </Container>
+
       {/* 8 — Plans tilt up. */}
-      <section className="bg-white pb-24">
+      <section className="bg-page pb-24">
         <Container>
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div>
@@ -304,7 +343,7 @@ export default function HomePage() {
       </section>
 
       {/* 9 — Markets. */}
-      <section id="markets" className="scroll-mt-20 border-t border-line bg-white py-24">
+      <section id="markets" className="scroll-mt-20 border-t border-line bg-page py-24">
         <Container className="grid items-center gap-12 lg:grid-cols-2">
           <SlideIn from="left">
             <Eyebrow>Where we launch</Eyebrow>
@@ -327,7 +366,7 @@ export default function HomePage() {
       </section>
 
       {/* 10 — FAQ. */}
-      <section className="bg-white pb-24">
+      <section className="bg-page pb-24">
         <Container className="grid gap-12 lg:grid-cols-[1fr_1.4fr]">
           <div>
             <Eyebrow>Questions</Eyebrow>

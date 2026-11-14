@@ -9,7 +9,7 @@ export const metadata: Metadata = { alternates: { canonical: "/workspace-preview
 /** Shown for sign-in and workspace routes when this deployment has no database connected. */
 export default function WorkspacePreviewPage() {
   return (
-    <section className="bg-white">
+    <section className="bg-page">
       <Container className="flex min-h-[70dvh] flex-col items-center justify-center py-24 text-center">
         <LogoMark className="size-14 text-[#0f2742]" />
         <h1 className="type-section mt-8 max-w-[18ch]">The Brexoo workspace isn&apos;t connected in this preview.</h1>
