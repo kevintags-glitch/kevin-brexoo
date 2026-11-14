@@ -317,7 +317,7 @@ export function TaskList({
       </ul>
       <form
         hidden={hideAdd}
-        className="mt-3 grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] gap-2"
+        className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
         onSubmit={(e) => {
           e.preventDefault();
           run(() => addTask({ title, due_date: date || undefined, assignee_id: assignee, opportunity_id: oppId, contact_id: contactId }), () => {
@@ -326,7 +326,7 @@ export function TaskList({
           });
         }}
       >
-        <Input aria-label="New task" placeholder="Add a follow-up task" value={title} onChange={(e) => setTitle(e.target.value)} className="col-span-3" />
+        <Input aria-label="New task" placeholder="Add a follow-up task" value={title} onChange={(e) => setTitle(e.target.value)} className="col-span-2 sm:col-span-3" />
         <Input aria-label="Due date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
         <Select aria-label="Assign to" value={assignee} onChange={(e) => setAssignee(e.target.value)}>
           <option value="">Me</option>
@@ -336,7 +336,7 @@ export function TaskList({
             </option>
           ))}
         </Select>
-        <Button type="submit" variant="secondary" pending={pending} disabled={title.trim().length < 2}>
+        <Button type="submit" variant="secondary" pending={pending} disabled={title.trim().length < 2} className="col-span-2 sm:col-span-1">
           Add
         </Button>
       </form>

@@ -41,7 +41,7 @@ export function FitCard({ fit, confidence }: { fit: FitResult; confidence: Confi
         </p>
       ) : null}
       <details className="mt-3 text-[12px] text-ink-3">
-        <summary className="cursor-pointer">Why this confidence?</summary>
+        <summary className="-my-1 cursor-pointer py-2.5">Why this confidence?</summary>
         <ul className="mt-1.5 grid gap-1 pl-4">
           {confidence.reasons.map((r) => (
             <li key={r} className="list-disc">

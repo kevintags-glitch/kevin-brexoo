@@ -33,7 +33,7 @@ export function ProductVideo({ src, poster, label, transcript, className }: { sr
         </button>
       </div>
       <details className="mt-3 text-[14px] text-ink-3">
-        <summary className="cursor-pointer select-none font-medium hover:text-ink">Read what happens in the video</summary>
+        <summary className="cursor-pointer select-none py-2.5 font-medium hover:text-ink">Read what happens in the video</summary>
         <ol className="mt-2 grid list-decimal gap-1 pl-5">
           {transcript.map((t) => (
             <li key={t}>{t}</li>

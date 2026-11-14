@@ -80,7 +80,7 @@ export default function ResourcesPage() {
             <h2 className="type-section mt-4">Practical habits that win work.</h2>
             <nav aria-label="Guides" className="mt-8 grid gap-2">
               {GUIDES.map((g) => (
-                <a key={g.id} href={`#${g.id}`} className="type-body text-ink-3 hover:text-blue">
+                <a key={g.id} href={`#${g.id}`} className="type-body block py-2.5 text-ink-3 hover:text-blue lg:py-1">
                   {g.title}
                 </a>
               ))}

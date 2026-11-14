@@ -132,7 +132,7 @@ export function ProjectSources({ detailed = false }: { detailed?: boolean }) {
         ))}
       </div>
       {detailed ? null : (
-        <Link href="/how-it-works#sources" className="mt-6 inline-flex items-center gap-1.5 text-[15px] font-medium text-blue hover:gap-2.5">
+        <Link href="/how-it-works#sources" className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-[15px] font-medium text-blue hover:gap-2.5">
           The full sourcing rules <ArrowRight className="size-4" aria-hidden />
         </Link>
       )}

@@ -34,7 +34,7 @@ export function WeekCalendar({ appts, tasks, requests, timezone, now }: { appts:
           const asked = requests.filter((r) => r.requested_start && day(r.requested_start) === d.key).length;
           return (
             <li key={d.key} className={cn("flex min-h-[176px] flex-col gap-1.5 p-2.5", i === 0 && "bg-blue-soft/30")}>
-              <Link href={`/app/appointments?m=${d.key.slice(0, 7)}&d=${d.key}`} className="mb-1 flex items-baseline gap-1.5 rounded-md px-1 hover:bg-surface-2">
+              <Link href={`/app/appointments?m=${d.key.slice(0, 7)}&d=${d.key}`} className="mb-1 flex min-h-9 items-center gap-1.5 rounded-md px-1 hover:bg-surface-2">
                 <span className="text-[11px] font-medium uppercase tracking-wide text-ink-3">{i === 0 ? "Today" : wd.format(new Date(d.iso))}</span>
                 <span className={cn("text-[15px] font-medium tabular", i === 0 && "text-blue")}>{dn.format(new Date(d.iso))}</span>
               </Link>

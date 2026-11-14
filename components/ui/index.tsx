@@ -136,7 +136,7 @@ export function Checkbox({ className, ...props }: ComponentProps<"input">) {
     <input
       type="checkbox"
       className={cn(
-        "mt-0.5 size-[18px] shrink-0 cursor-pointer appearance-none rounded-[5px] border border-line-strong bg-surface transition-colors checked:border-blue checked:bg-blue checked:bg-[url(\"data:image/svg+xml,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")] focus-visible:outline-2 focus-visible:outline-offset-2",
+        "mt-0.5 size-[18px] shrink-0 cursor-pointer pointer-coarse:size-6 appearance-none rounded-[5px] border border-line-strong bg-surface transition-colors checked:border-blue checked:bg-blue checked:bg-[url(\"data:image/svg+xml,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")] focus-visible:outline-2 focus-visible:outline-offset-2",
         className,
       )}
       {...props}

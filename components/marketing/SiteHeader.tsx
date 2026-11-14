@@ -96,10 +96,10 @@ export function SiteHeader() {
       )}
     >
       <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-8 px-4 sm:px-6">
-        <Link href="/" className="rounded-lg" aria-label="Brexoo home">
+        <Link href="/" className="flex h-11 items-center rounded-lg" aria-label="Brexoo home">
           <Logo tone="white" />
         </Link>
-        <nav aria-label="Main" className="hidden flex-1 items-center gap-1 md:flex">
+        <nav aria-label="Main" className="hidden flex-1 items-center gap-1 lg:flex">
           <Menu label="Product" active={["/how-it-works", "/ai", "/managed-services"].includes(pathname)}>
             <div className="grid w-[300px] gap-0.5">
               {PRODUCT_MENU.map((m) => (
@@ -134,7 +134,7 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <div className="ml-auto hidden items-center gap-2 md:flex">
+        <div className="ml-auto hidden items-center gap-2 lg:flex">
           <Link href="/login" className="type-button inline-flex h-9 items-center rounded-lg border border-white/40 px-4 text-white transition-colors hover:border-white hover:bg-white/10">
             Log in
           </Link>
@@ -144,7 +144,7 @@ export function SiteHeader() {
         </div>
         <button
           type="button"
-          className="pressable -mr-2 ml-auto grid size-11 place-items-center rounded-lg text-white md:hidden"
+          className="pressable -mr-2 ml-auto grid size-11 place-items-center rounded-lg text-white lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -156,7 +156,7 @@ export function SiteHeader() {
       <div
         id="mobile-nav"
         hidden={!open}
-        className="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/10 bg-white text-ink px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-2 md:hidden"
+        className="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/10 bg-white text-ink px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-2 lg:hidden"
       >
         <nav aria-label="Mobile" className="grid" onClick={(e) => (e.target as HTMLElement).closest("a") && setOpen(false)}>
           {NAV.map((item) => (

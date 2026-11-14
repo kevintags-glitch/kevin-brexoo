@@ -62,7 +62,7 @@ export default function HowItWorksPage() {
           {STEPS.map((s, i) => {
             const flip = i % 2 === 1;
             return (
-              <article key={s.id} id={s.id} className="grid scroll-mt-28 items-center gap-10 max-md:pl-10 md:grid-cols-2 md:gap-24">
+              <article key={s.id} id={s.id} className="grid scroll-mt-28 grid-cols-[minmax(0,1fr)] items-center gap-10 max-md:pl-10 md:grid-cols-2 md:gap-24">
                 <SlideIn from={flip ? "right" : "left"} className={cn(flip && "md:order-last")}>
                   <BrandIcon name={STEP_ICON[s.id]!} tone={(["navy", "blue", "teal", "cloud", "navy"] as const)[i]} className="mb-5 size-16" />
                   <p className="type-label flex items-center gap-3 uppercase tracking-[0.2em] text-blue">

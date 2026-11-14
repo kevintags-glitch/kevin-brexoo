@@ -37,7 +37,7 @@ export default async function OpportunityPage({ params }: { params: Promise<{ id
   return (
     <Page wide>
       <div className="mb-6 text-[13px] text-ink-3">
-        <Link href="/app/enquiries" className="hover:text-ink">
+        <Link href="/app/enquiries" className="inline-flex min-h-10 items-center hover:text-ink">
           Enquiries
         </Link>{" "}
         / <span className="text-ink-2">{enquiry?.reference ?? "Opportunity"}</span>
@@ -134,7 +134,7 @@ export default async function OpportunityPage({ params }: { params: Promise<{ id
                 ))}
                 <div>
                   <dt className="text-[12px] text-ink-3">Location</dt>
-                  <dd className="text-[14px]">{[project?.location_text, project?.postcode].filter(Boolean).join(" ") || <span className="italic text-ink-3">Not recorded</span>}</dd>
+                  <dd className="text-[14px]">{(project?.postcode && project?.location_text?.includes(project.postcode) ? project.location_text : [project?.location_text, project?.postcode].filter(Boolean).join(" ")) || <span className="italic text-ink-3">Not recorded</span>}</dd>
                 </div>
               </dl>
               {enquiry?.consent_at ? (
@@ -223,7 +223,7 @@ export default async function OpportunityPage({ params }: { params: Promise<{ id
                 </a>
               ) : null}
               {contact.phone ? (
-                <a href={contact.do_not_contact ? undefined : `tel:${contact.phone_normalized ?? contact.phone}`} className="flex items-center gap-2.5 text-ink hover:text-blue">
+                <a href={contact.do_not_contact ? undefined : `tel:${contact.phone_normalized ?? contact.phone}`} className="flex min-h-10 items-center gap-2.5 text-ink hover:text-blue">
                   <Phone className="size-4 shrink-0 text-ink-3" aria-hidden /> {contact.phone}
                 </a>
               ) : null}
@@ -233,7 +233,7 @@ export default async function OpportunityPage({ params }: { params: Promise<{ id
                 </p>
               ) : null}
               {contact.preferred_contact ? <p className="text-[13px] text-ink-3">Prefers {contact.preferred_contact === "any" ? "any channel" : contact.preferred_contact}</p> : null}
-              <Link href={`/app/contacts/${contact.id}`} className="text-[13px] font-medium text-blue hover:underline">
+              <Link href={`/app/contacts/${contact.id}`} className="inline-flex min-h-10 items-center text-[13px] font-medium text-blue hover:underline">
                 View contact
               </Link>
               <DoNotContact contactId={contact.id} value={contact.do_not_contact} note={contact.restriction_note} />

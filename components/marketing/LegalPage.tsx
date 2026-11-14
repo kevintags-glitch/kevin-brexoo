@@ -20,7 +20,7 @@ export function LegalPage({ title, updated, children }: { title: string; updated
           <p className="text-[12px] font-medium uppercase tracking-[0.2em] text-ink-3">Policies</p>
           <nav aria-label="Policies" className="mt-4 flex gap-4 lg:grid lg:gap-2">
             {DOCS.map((d) => (
-              <Link key={d.href} href={d.href} className="type-body text-ink-2 hover:text-blue aria-[current=page]:font-normal aria-[current=page]:text-blue" aria-current={d.label.startsWith(title.split(" ")[0]!) ? "page" : undefined}>
+              <Link key={d.href} href={d.href} className="type-body inline-flex min-h-11 items-center text-ink-2 hover:text-blue lg:min-h-0 aria-[current=page]:font-normal aria-[current=page]:text-blue" aria-current={d.label.startsWith(title.split(" ")[0]!) ? "page" : undefined}>
                 {d.label}
               </Link>
             ))}

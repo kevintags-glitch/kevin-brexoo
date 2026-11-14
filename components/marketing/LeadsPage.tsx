@@ -30,7 +30,7 @@ export function MarketsGrid({ trade, countries }: { trade: Trade; countries: Cou
         return (
           <section key={cc} aria-labelledby={`m-${cc}`}>
             <h3 id={`m-${cc}`} className="type-card">
-              <Link href={`/leads/${trade.slug}/${countrySlug(cc)}`} className="hover:text-blue">
+              <Link href={`/leads/${trade.slug}/${countrySlug(cc)}`} className="inline-flex min-h-11 items-center hover:text-blue">
                 {COUNTRIES[cc].name}
               </Link>
             </h3>
@@ -127,7 +127,7 @@ export function LocalLeads({ trade, city }: { trade: Trade; city: SeoCity }) {
       </section>
 
       <section className="border-y border-line bg-surface-2/40 py-16 sm:py-20">
-        <Container className="grid gap-12 lg:grid-cols-2">
+        <Container className="grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-2">
           <div>
             <Eyebrow>{trade.name}</Eyebrow>
             <h2 className="type-section mt-4">What {city.name} customers ask for</h2>

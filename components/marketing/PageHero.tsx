@@ -32,7 +32,7 @@ export function PageHero({
     <section className="relative overflow-hidden bg-page">
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_60%_at_100%_0%,rgb(6_182_212/0.07),transparent_70%)]" />
       {variant === "left" ? <MarkOutline className="absolute -right-16 top-1/2 hidden h-[115%] -translate-y-1/2 text-[#E6F4FF] lg:block" strokeWidth={30} /> : null}
-      <Container className={cn("relative py-20 sm:py-28", variant === "split" && "grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]")}>
+      <Container className={cn("relative pb-10 pt-14 sm:py-28", variant === "split" && "grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]")}>
         <div>
           <Reveal>
             <Eyebrow>{eyebrow}</Eyebrow>

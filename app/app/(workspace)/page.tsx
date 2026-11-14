@@ -210,7 +210,7 @@ export default async function OverviewPage() {
           <ul className="flex flex-1 flex-wrap gap-2 sm:justify-end">
             {checklist.map((c) => (
               <li key={c.id}>
-                <Link href={c.href} className={c.done ? "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] text-ink-3" : "inline-flex items-center gap-1.5 rounded-full border border-line-strong px-2.5 py-1 text-[12px] text-ink hover:bg-surface-2"}>
+                <Link href={c.href} className={c.done ? "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] text-ink-3 pointer-coarse:min-h-9" : "inline-flex items-center gap-1.5 rounded-full border border-line-strong px-2.5 py-1 text-[12px] text-ink hover:bg-surface-2 pointer-coarse:min-h-9"}>
                   {c.done ? <CircleCheck className="size-3.5 text-teal-ink" aria-label="Done" /> : <Circle className="size-3.5 text-ink-3" aria-label="To do" />}
                   {c.label}
                 </Link>
@@ -426,7 +426,7 @@ export default async function OverviewPage() {
           title={(weekAppts.data ?? []).filter((a) => ["scheduled", "confirmed", "rescheduled"].includes(a.status)).length}
           icon={<CalendarDays />}
           badge={<span className="text-[12px] text-ink-3">bookings · {(weekReqs.data ?? []).length} requested · {(weekTasks.data ?? []).length} follow-ups</span>}
-          action={<Link href="/app/appointments" className="text-[13px] font-medium text-blue hover:underline">Open calendar</Link>}
+          action={<Link href="/app/appointments" className="inline-flex min-h-10 items-center text-[13px] font-medium text-blue hover:underline">Open calendar</Link>}
         />
         <div className="mt-3">
           <WeekCalendar appts={weekAppts.data ?? []} tasks={weekTasks.data ?? []} requests={weekReqs.data ?? []} timezone={tz} now={now} />
@@ -435,7 +435,7 @@ export default async function OverviewPage() {
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Panel>
-          <PanelHeader eyebrow="Your follow-ups" title={dueTasks.data?.length ?? 0} badge={<span className="text-[12px] text-ink-3">due by tomorrow</span>} action={<Link href="/app/tasks" className="text-[13px] font-medium text-blue hover:underline">All tasks</Link>} />
+          <PanelHeader eyebrow="Your follow-ups" title={dueTasks.data?.length ?? 0} badge={<span className="text-[12px] text-ink-3">due by tomorrow</span>} action={<Link href="/app/tasks" className="inline-flex min-h-10 items-center text-[13px] font-medium text-blue hover:underline">All tasks</Link>} />
           <ul className="mt-3 divide-y divide-line border-t border-line">
             {(dueTasks.data ?? []).length === 0 ? <li className="px-5 py-4 text-[14px] text-ink-3">Nothing due. You&apos;re on top of it.</li> : null}
             {(dueTasks.data ?? []).map((t) => {
@@ -452,7 +452,7 @@ export default async function OverviewPage() {
           </ul>
         </Panel>
         <Panel>
-          <PanelHeader eyebrow="Coming up" title={upcoming.length} badge={<span className="text-[12px] text-ink-3">{plural(upcoming.length, "appointment")}</span>} action={<Link href="/app/appointments" className="text-[13px] font-medium text-blue hover:underline">Calendar</Link>} />
+          <PanelHeader eyebrow="Coming up" title={upcoming.length} badge={<span className="text-[12px] text-ink-3">{plural(upcoming.length, "appointment")}</span>} action={<Link href="/app/appointments" className="inline-flex min-h-10 items-center text-[13px] font-medium text-blue hover:underline">Calendar</Link>} />
           <ul className="mt-3 divide-y divide-line border-t border-line">
             {upcoming.length === 0 ? <li className="px-5 py-4 text-[14px] text-ink-3">No appointments booked.</li> : null}
             {upcoming.slice(0, 5).map((a) => (

@@ -86,7 +86,7 @@ export default async function HomePage() {
         <h1 id="home-title" className="sr-only">
           Brexoo: find, qualify and win local projects
         </h1>
-        <StairsFilm className="absolute inset-0" />
+        <StairsFilm className="absolute inset-x-0 bottom-14 top-0" />
         <a href="#workspace" aria-label="Scroll to see the workspace" className="absolute bottom-5 left-1/2 grid size-10 -translate-x-1/2 place-items-center rounded-full text-ink-3 hover:text-ink">
           <ArrowDown className="size-5 motion-safe:animate-bounce" aria-hidden />
         </a>
@@ -115,15 +115,15 @@ export default async function HomePage() {
                 See how it works <ArrowRight className="size-4" aria-hidden />
               </ButtonLink>
             </div>
-            <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="mt-10 grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
               {SERVICES.map((f, k) => (
                 <li key={f.title}>
                   <Reveal delay={(k % 4) * 0.05} className="h-full">
-                    <Link href={f.href} className="group flex h-full flex-col rounded-[22px] border border-line bg-white p-6 transition-shadow hover:shadow-lg">
-                      <BrandIcon name={f.icon} tone={TONE_CYCLE[k % TONE_CYCLE.length]} className="size-14 transition-transform duration-300 group-hover:-translate-y-0.5" />
-                      <p className="type-card mt-5">{f.title}</p>
-                      <p className="type-body mt-1.5 flex-1 text-ink-2">{f.body}</p>
-                      <span className="mt-4 inline-flex items-center gap-1 text-[13px] font-medium text-blue group-hover:gap-2">
+                    <Link href={f.href} className="group grid h-full grid-cols-[auto_minmax(0,1fr)] items-start gap-x-4 rounded-[20px] border border-line bg-white p-4 transition-shadow hover:shadow-lg sm:flex sm:flex-col sm:rounded-[22px] sm:p-6">
+                      <BrandIcon name={f.icon} tone={TONE_CYCLE[k % TONE_CYCLE.length]} className="row-span-2 size-11 transition-transform duration-300 group-hover:-translate-y-0.5 sm:size-14" />
+                      <p className="type-card sm:mt-5">{f.title}</p>
+                      <p className="type-body mt-0.5 flex-1 text-ink-2 sm:mt-1.5">{f.body}</p>
+                      <span className="mt-4 hidden items-center gap-1 text-[13px] font-medium text-blue group-hover:gap-2 sm:inline-flex">
                         Learn more <ArrowRight className="size-3.5" aria-hidden />
                       </span>
                     </Link>
@@ -255,13 +255,13 @@ export default async function HomePage() {
               All industries <ArrowRight className="size-4" aria-hidden />
             </ButtonLink>
           </div>
-          <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <ul aria-label="Example workspaces" className="scrollbar-none -mx-4 mt-10 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:mt-12 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">
             {TRADES.map((t, k) => {
               const b = SAMPLE_BY_KEY[t.sample];
               const featured = t.slug === FOCUS_TRADE.slug;
               const leads = b.leads.filter((l) => l.stage !== "won" && l.stage !== "lost").slice(0, featured ? 4 : 2);
               return (
-                <li key={t.slug} className={featured ? "sm:col-span-2 lg:row-span-2" : undefined}>
+                <li key={t.slug} className={featured ? "w-[86%] shrink-0 snap-start sm:w-auto sm:col-span-2 lg:row-span-2" : "w-[78%] shrink-0 snap-start sm:w-auto"}>
                   <TiltIn delay={(k % 4) * 0.06} className="h-full">
                     <Link href={`/leads/${t.slug}`} className={featured ? "group flex h-full flex-col rounded-[22px] border-2 border-[#0F2742] bg-white p-6 transition-shadow hover:shadow-lg" : "group flex h-full flex-col rounded-[22px] border border-line bg-white p-5 transition-shadow hover:shadow-lg"}>
                       <div className="flex items-start justify-between">
@@ -299,6 +299,7 @@ export default async function HomePage() {
               );
             })}
           </ul>
+          <p className="mt-2 text-[13px] text-ink-3 sm:hidden" aria-hidden>Swipe to see every trade →</p>
         </Container>
       </section>
 
@@ -423,7 +424,7 @@ export default async function HomePage() {
               { c: "Australia", d: "AUD · Sydney, Brisbane, Perth and more" },
               { c: "New Zealand", d: "NZD · Auckland time" },
             ].map((m) => (
-              <div key={m.c} className="flex items-center justify-between rounded-2xl border border-line px-6 py-5">
+              <div key={m.c} className="flex flex-col gap-0.5 rounded-2xl border border-line px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5">
                 <span className="type-body">{m.c}</span>
                 <span className="text-[14px] text-ink-3">{m.d}</span>
               </div>

@@ -105,7 +105,7 @@ export function OverviewMock({ className, business = BUILDERS }: { className?: s
               </div>
             ))}
           </div>
-          <div className="mt-4 overflow-hidden rounded-xl border border-line">
+          <div className="@container mt-4 overflow-hidden rounded-xl border border-line">
             <div className="flex items-center justify-between border-b border-line px-3 py-2">
               <p className="text-[12px] font-medium">Newest enquiries</p>
               <p className="text-[11px] text-ink-3">Sorted by received</p>
@@ -123,10 +123,10 @@ export function OverviewMock({ className, business = BUILDERS }: { className?: s
                       {e.project} · {e.where}
                     </p>
                   </div>
-                  <Badge tone={e.tone} className="max-sm:hidden">
+                  <Badge tone={e.tone} className="shrink-0 max-sm:hidden @max-[24rem]:hidden">
                     {e.fit}
                   </Badge>
-                  <span className="w-16 text-right text-[11px] text-ink-3 tabular">{e.when}</span>
+                  <span className="min-w-14 shrink-0 whitespace-nowrap text-right text-[11px] text-ink-3 tabular">{e.when}</span>
                 </li>
               ))}
             </ul>

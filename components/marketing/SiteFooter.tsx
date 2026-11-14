@@ -66,10 +66,10 @@ export function SiteFooter() {
           {COLUMNS.map((col) => (
             <div key={col.title}>
               <h2 className="font-sans text-[13px] font-medium tracking-normal text-ink">{col.title}</h2>
-              <ul className="mt-3 grid gap-2">
+              <ul className="mt-3 grid gap-0.5 sm:gap-2">
                 {col.links.map((l) => (
                   <li key={l.href}>
-                    <Link href={l.href} className="text-sm text-ink-3 transition-colors hover:text-ink">
+                    <Link href={l.href} className="inline-flex min-h-10 items-center text-sm text-ink-3 transition-colors hover:text-ink sm:min-h-0">
                       {l.label}
                     </Link>
                   </li>
@@ -79,7 +79,7 @@ export function SiteFooter() {
           ))}
         </div>
       </div>
-      <div className="border-t border-line">
+      <div className="relative border-t border-line">
         <div className="mx-auto flex max-w-[1200px] flex-col gap-2 px-4 py-6 text-xs text-ink-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <p>© {new Date().getFullYear()} Brexoo. All rights reserved.</p>
           <p>Brexoo helps you find and follow up opportunities. It does not guarantee leads, appointments or revenue.</p>

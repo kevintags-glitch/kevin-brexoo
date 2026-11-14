@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description:
     "Find project leads. Qualify opportunities. Book more jobs. Project enquiries, AI-assisted qualification and follow-up for builders, trades and home service businesses.",
   icons: { icon: "/icon.svg" },
+  appleWebApp: { capable: true, title: "Brexoo", statusBarStyle: "default" },
+  formatDetection: { telephone: false },
   openGraph: { siteName: "Brexoo", type: "website" },
 };
 
@@ -16,10 +18,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a1a2e" },
-  ],
+  // Matches the navy menu bar, so the phone's browser bar blends into it.
+  themeColor: "#0F2742",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

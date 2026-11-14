@@ -52,7 +52,7 @@ export function PublicLanding({ data, preview, local }: { data: PublicPageData; 
                   {local.breadcrumb.map((b, k) => (
                     <span key={b.href}>
                       {k ? " / " : ""}
-                      <a href={b.href} className="hover:text-white">
+                      <a href={b.href} className="inline-flex min-h-10 items-center hover:text-white">
                         {b.label}
                       </a>
                     </span>
@@ -189,7 +189,7 @@ export function PublicLanding({ data, preview, local }: { data: PublicPageData; 
               Privacy
             </a>
           </p>
-          <Link href="/" className="inline-flex items-center gap-1.5 hover:text-ink">
+          <Link href="/" className="inline-flex min-h-10 items-center gap-1.5 hover:text-ink">
             <LogoMark className="h-4 w-auto" knockout="var(--surface)" /> Powered by Brexoo
           </Link>
         </div>

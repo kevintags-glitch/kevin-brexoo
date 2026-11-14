@@ -38,7 +38,7 @@ export function SampleBanner({ count, isOwner }: { count: number; isOwner: boole
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-xl border border-amber-ink/20 bg-amber-soft px-4 py-2.5 text-[13px] text-amber-ink" role="status">
       <FlaskConical className="size-4 shrink-0" aria-hidden />
-      <span className="flex-1">
+      <span className="min-w-[min(100%,16rem)] flex-1">
         You&apos;re viewing <strong className="font-medium">{count} sample leads</strong>. They&apos;re examples, not real customers, and are never sent to integrations.
       </span>
       {state.error ? <span className="text-red-ink">{state.error}</span> : null}

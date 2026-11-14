@@ -182,3 +182,36 @@ test("support chat answers from approved content and links onward", async ({ pag
   await expect(page).toHaveURL(/\/demo$/);
   await page.keyboard.press("Escape");
 });
+
+test("every page fits phones, tablets, laptops and desktops without sideways scrolling", async ({ browser }) => {
+  const sizes: [string, number, number][] = [["phone", 375, 667], ["tablet", 768, 1024], ["tablet landscape", 1024, 768], ["laptop", 1366, 768], ["desktop", 1920, 1080]];
+  const pages = ["/", "/how-it-works", "/industries", "/builders", "/trades", "/pricing", "/resources", "/ai", "/managed-services", "/demo", "/leads/builders", "/leads/builders/au/new-south-wales/sydney", "/legal/privacy", "/login"];
+  for (const [label, width, height] of sizes) {
+    const ctx = await browser.newContext({ viewport: { width, height }, reducedMotion: "reduce", hasTouch: width <= 1024, isMobile: width < 768 });
+    const page = await ctx.newPage();
+    for (const path of pages) {
+      await page.goto(path);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      expect(overflow, `${path} scrolls sideways on ${label} (${width}px)`).toBeLessThanOrEqual(1);
+    }
+    // Phones and portrait tablets get the menu button; landscape tablets and up get the full menu bar.
+    await page.goto("/pricing");
+    const header = page.locator("header");
+    if (width < 1024) {
+      await expect(header.getByRole("button", { name: "Open menu" })).toBeVisible();
+      await expect(header.getByRole("link", { name: "Request a Demo" })).toBeHidden();
+    } else {
+      await expect(header.getByRole("link", { name: "Request a Demo" })).toBeInViewport();
+    }
+    await ctx.close();
+  }
+});
+
+test("the site can be added to a phone's home screen", async ({ request }) => {
+  const res = await request.get("/manifest.webmanifest");
+  expect(res.status()).toBe(200);
+  const m = await res.json();
+  expect(m.name).toBe("Brexoo");
+  expect(m.theme_color).toBe("#0F2742");
+  for (const icon of m.icons) expect((await request.get(icon.src)).status()).toBe(200);
+});

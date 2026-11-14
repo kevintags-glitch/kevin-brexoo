@@ -117,7 +117,7 @@ export function Shell({ orgName, orgs, activeOrgId, userName, userEmail, team, t
     return (
       <div className="flex h-full flex-col text-white/75" onClick={(e) => mobile && (e.target as HTMLElement).closest("a") && setOpen(false)}>
         <div className={cn("flex h-16 shrink-0 items-center border-b border-white/10", compact ? "justify-center px-2" : "justify-between px-5")}>
-          <Link href="/app" aria-label="Brexoo overview">
+          <Link href="/app" aria-label="Brexoo overview" className="flex h-11 items-center">
             {compact ? <LogoMark className="h-7 w-auto" color="#fff" /> : <Logo tone="white" size="sm" />}
           </Link>
           {mobile ? (

@@ -44,7 +44,7 @@ export default function AiPage() {
       </section>
 
       <section className="py-20 sm:py-28">
-        <Container className="grid items-center gap-14 lg:grid-cols-2">
+        <Container className="grid grid-cols-[minmax(0,1fr)] items-center gap-14 lg:grid-cols-2">
           <div>
             <SectionHeading eyebrow="Brex AI" title="Your assistant inside Brexoo." body="Brex AI reads your own records, read-only, through a short list of allowed tools. Every answer points back to the record it came from." />
             <div className="mt-10 grid gap-8 sm:grid-cols-2">

@@ -87,7 +87,7 @@ export function PipelineBoard({ cards, currency }: { cards: BoardCard[]; currenc
                       }}
                       className="group relative cursor-grab rounded-xl border border-line bg-surface p-3 shadow-xs transition-shadow hover:shadow-sm active:cursor-grabbing"
                     >
-                      <Link href={`/app/opportunities/${c.id}`} className="block text-[14px] font-medium leading-snug hover:text-blue">
+                      <Link href={`/app/opportunities/${c.id}`} className="-my-2 block py-2 text-[14px] font-medium leading-snug hover:text-blue">
                         {c.contact}
                       </Link>
                       <p className="mt-0.5 truncate text-[12px] text-ink-3">

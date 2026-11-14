@@ -114,7 +114,7 @@ function ZigzagServices({ codes }: { codes: string[] }) {
             const Icon = INDUSTRY_ICON[code]!;
             const flip = i % 2 === 1;
             return (
-              <div key={code} className="grid items-center gap-10 md:grid-cols-2 md:gap-20">
+              <div key={code} className="grid grid-cols-[minmax(0,1fr)] items-center gap-10 md:grid-cols-2 md:gap-20">
                 <SlideIn from={flip ? "right" : "left"} className={cn(flip && "md:order-last")}>
                   <Icon className="size-10 text-blue" strokeWidth={1.2} aria-hidden />
                   <h3 className="mt-5 text-[40px] leading-none tracking-[-0.025em] sm:text-[56px] font-light">{t.name}</h3>

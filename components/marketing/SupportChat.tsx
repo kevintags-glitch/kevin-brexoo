@@ -93,7 +93,7 @@ export function SupportChat() {
             exit={reduce ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.97 }}
             transition={{ type: "spring", duration: 0.35, bounce: 0.12 }}
             style={{ transformOrigin: "bottom right" }}
-            className="fixed bottom-24 right-4 z-[70] flex h-[min(560px,calc(100dvh-8rem))] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-[24px] border border-line bg-white shadow-[0_24px_60px_-12px_rgb(15_39_66/0.28)] sm:right-6"
+            className="fixed bottom-[calc(6rem+env(safe-area-inset-bottom))] right-4 z-[70] flex h-[min(560px,calc(100dvh-8rem-env(safe-area-inset-bottom)))] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-[24px] border border-line bg-white shadow-[0_24px_60px_-12px_rgb(15_39_66/0.28)] sm:right-6"
           >
             <div className="relative flex items-center gap-3 overflow-hidden bg-[#0F2742] px-5 py-4 text-white">
               <MarkOutline className="absolute -right-6 -top-10 h-36 text-white/[0.07]" strokeWidth={40} />
@@ -195,7 +195,7 @@ export function SupportChat() {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-label={open ? "Close help chat" : "Chat with Brexoo"}
-        className="pressable fixed bottom-5 right-4 z-[70] grid size-14 place-items-center rounded-[30%] bg-[#0F2742] text-white shadow-[0_14px_32px_-8px_rgb(15_39_66/0.55)] ring-1 ring-white/10 transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-[#183A60] sm:right-6"
+        className="pressable fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-4 z-[70] grid size-14 place-items-center rounded-[30%] bg-[#0F2742] text-white shadow-[0_14px_32px_-8px_rgb(15_39_66/0.55)] ring-1 ring-white/10 transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-[#183A60] sm:right-6"
       >
         <span aria-hidden className="absolute inset-0 rounded-[30%] bg-[#06B6D4]/35 motion-safe:animate-ping [animation-duration:2.8s]" hidden={open} />
         <AnimatePresence initial={false} mode="wait">

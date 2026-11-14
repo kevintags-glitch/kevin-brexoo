@@ -59,7 +59,7 @@ export default async function PricingPage({ searchParams }: { searchParams: Prom
                   <h2 className="type-card mt-4">{p.name}</h2>
                   <p className="mt-2 min-h-12 text-[14px] leading-relaxed text-ink-3">{p.positioning}</p>
                   <p className="mt-6 flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
-                    <span className="whitespace-nowrap text-[44px] leading-none tracking-[-0.035em] tabular font-light xl:text-[50px]">{formatPrice(price.monthly, currency)}</span>
+                    <span className="whitespace-nowrap text-[44px] leading-none tracking-[-0.035em] tabular font-light lg:text-[38px] xl:text-[50px]">{formatPrice(price.monthly, currency)}</span>
                     <span className="whitespace-nowrap text-ink-3">/ month</span>
                   </p>
                   <p className="mt-1 text-[13px] text-ink-3">
@@ -87,7 +87,27 @@ export default async function PricingPage({ searchParams }: { searchParams: Prom
       <section className="border-y border-line bg-surface py-16 sm:py-24">
         <Container>
           <SectionHeading eyebrow="Compare" title="Plan limits" />
-          <div className="mt-10 overflow-x-auto rounded-2xl border border-line">
+          {/* Phones: one card per plan. Wider screens: the comparison table. */}
+          <div className="mt-8 grid gap-4 md:hidden">
+            {PLANS.map((p) => (
+              <section key={p.code} aria-label={`${p.name} limits`} className="rounded-2xl border border-line bg-white">
+                <h3 className="type-card border-b border-line px-5 py-3.5">{p.name}</h3>
+                <dl className="divide-y divide-line text-[14px]">
+                  {ROWS.map((r) => (
+                    <div key={r.key} className="flex items-center justify-between gap-4 px-5 py-3">
+                      <dt className="text-ink-2">{r.label}</dt>
+                      <dd className="shrink-0 text-right tabular">{cell(p.entitlements[r.key], r.unit)}</dd>
+                    </div>
+                  ))}
+                  <div className="flex items-start gap-2.5 px-5 py-3 text-ink-2">
+                    <Check className="mt-0.5 size-4 shrink-0 text-teal-ink" aria-hidden />
+                    Enquiry capture, CRM, fit scores, consent records and audit log
+                  </div>
+                </dl>
+              </section>
+            ))}
+          </div>
+          <div className="mt-10 hidden overflow-x-auto rounded-2xl border border-line md:block">
             <table className="w-full min-w-[640px] text-left text-[14px]">
               <caption className="sr-only">Limits by plan</caption>
               <thead className="bg-surface-2/60">
