@@ -27,10 +27,10 @@ export default function ManagedServicesPage() {
             { to: 20, label: "Hours a month", sub: "Included in the Managed plan" },
             { to: 4, label: "Things agreed in writing", sub: "Channels, hours, brief, service levels" },
             { to: 6, label: "Steps per handoff", sub: "Every one on the record" },
-            { to: 0, label: "Guaranteed outcomes", sub: "We guarantee effort, not results" },
+            { to: 0, text: "None", label: "Guaranteed outcomes", sub: "We guarantee effort, not results" },
           ].map((s) => (
             <div key={s.label}>
-              <CountUp to={s.to} className="block text-[60px] leading-none tracking-[-0.025em] font-light" />
+              {"text" in s ? <span className="block text-[60px] leading-none tracking-[-0.025em] font-light">{s.text}</span> : <CountUp to={s.to} className="block text-[60px] leading-none tracking-[-0.025em] font-light" />}
               <p className="mt-3 text-[15px] font-medium">{s.label}</p>
               <p className="text-[14px] text-ink-3">{s.sub}</p>
             </div>

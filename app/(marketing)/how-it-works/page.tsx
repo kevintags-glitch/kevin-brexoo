@@ -5,6 +5,7 @@ import { BrexMock, CalendarMock, DiscoverMock, FitCardMock, PipelineMock } from 
 import { DrawLine, ScrollMarquee, SlideIn, SnapCarousel } from "@/components/marketing/motion";
 import { BrandIcon, type BrandIconName } from "@/components/marketing/brand-icons";
 import { PageHero } from "@/components/marketing/PageHero";
+import { ProjectSources } from "@/components/marketing/ProjectSources";
 import { Container, CtaBand, Eyebrow } from "@/components/marketing/Section";
 import { cn } from "@/lib/cn";
 
@@ -49,6 +50,9 @@ export default function HowItWorksPage() {
         <ButtonLink href="#discover" size="lg" variant="outline">
           Start the tour
         </ButtonLink>
+        <ButtonLink href="#sources" size="lg" variant="ghost">
+          Where projects come from
+        </ButtonLink>
       </PageHero>
 
       {/* A drawn line runs down the page; steps swing in from alternating sides. */}
@@ -82,6 +86,20 @@ export default function HowItWorksPage() {
               </article>
             );
           })}
+        </Container>
+      </section>
+
+      {/* Exactly where projects come from, how they're checked and scored, and who sees them. */}
+      <section id="sources" aria-labelledby="sources-title" className="scroll-mt-24 border-t border-line bg-[#F6F9FC] py-20 sm:py-28">
+        <Container>
+          <Eyebrow>Sourcing rules</Eyebrow>
+          <h2 id="sources-title" className="type-section mt-4 max-w-[22ch]">How Brexoo finds projects, in full.</h2>
+          <p className="type-body mt-5 max-w-[64ch] text-ink-2">
+            The same rules the product enforces: where an opportunity may come from, what has to be true before it&apos;s labelled verified, how intent is scored, and why your leads are never shared.
+          </p>
+          <div className="mt-12">
+            <ProjectSources detailed />
+          </div>
         </Container>
       </section>
 

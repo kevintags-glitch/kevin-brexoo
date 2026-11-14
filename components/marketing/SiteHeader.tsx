@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu as MenuIcon, X } from "lucide-react";
-import { TRADES } from "@/config/trades";
+import { FOCUS_TRADE, OTHER_TRADES } from "@/config/trades";
 import { Illustration, type IllustrationName } from "./illustrations";
 import { Logo } from "@/components/brand/Logo";
 import { ButtonLink } from "@/components/ui";
@@ -108,10 +108,16 @@ export function SiteHeader() {
             </div>
           </Menu>
           <Menu label="Industries" active={pathname.startsWith("/leads") || ["/industries", "/builders", "/trades"].includes(pathname)}>
-            <div className="grid w-[540px] grid-cols-2 gap-0.5">
-              {TRADES.map((t) => (
-                <MenuItem key={t.slug} href={`/leads/${t.slug}`} label={t.name} icon={t.illustration} />
-              ))}
+            <div className="w-[540px]">
+              <div className="rounded-xl bg-[#F3F9FF]">
+                <MenuItem href={`/leads/${FOCUS_TRADE.slug}`} label={`${FOCUS_TRADE.name}: our focus`} body="Small builders and construction companies, 1–15 people" icon={FOCUS_TRADE.illustration} />
+              </div>
+              <p className="px-3 pb-1 pt-3 text-[11px] font-medium uppercase tracking-[0.12em] text-ink-3">Also for</p>
+              <div className="grid grid-cols-2 gap-0.5">
+                {OTHER_TRADES.map((t) => (
+                  <MenuItem key={t.slug} href={`/leads/${t.slug}`} label={t.name} icon={t.illustration} />
+                ))}
+              </div>
             </div>
             <Link href="/industries" className="mt-1 flex items-center justify-between rounded-xl border-t border-line px-3 pb-1.5 pt-3 text-[13px] font-medium text-blue hover:underline">
               All industries and service templates <span aria-hidden>→</span>
@@ -161,9 +167,14 @@ export function SiteHeader() {
           <Link href="/ai" className="type-subhead border-b border-line py-4 text-ink">
             Brex AI
           </Link>
-          <p className="pt-5 text-[12px] font-medium uppercase tracking-[0.12em] text-ink-3">Industries</p>
+          <p className="pt-5 text-[12px] font-medium uppercase tracking-[0.12em] text-ink-3">Built for</p>
+          <Link href={`/leads/${FOCUS_TRADE.slug}`} className="type-body mt-2 flex items-center gap-2.5 rounded-xl bg-[#F3F9FF] p-2.5 font-medium text-ink">
+            <Illustration name={FOCUS_TRADE.illustration} className="size-8" />
+            Small builders &amp; construction
+          </Link>
+          <p className="pt-4 text-[12px] font-medium uppercase tracking-[0.12em] text-ink-3">Also for</p>
           <div className="grid grid-cols-2 gap-1 py-2">
-            {TRADES.map((t) => (
+            {OTHER_TRADES.map((t) => (
               <Link key={t.slug} href={`/leads/${t.slug}`} className="type-body flex items-center gap-2 rounded-lg py-2 text-ink-2">
                 <Illustration name={t.illustration} className="size-7" />
                 {t.name}

@@ -29,3 +29,8 @@ export const TRADES: Trade[] = [
 ];
 
 export const TRADE_BY_SLUG = Object.fromEntries(TRADES.map((t) => [t.slug, t])) as Record<string, Trade>;
+
+/** Brexoo's primary customer: small builders and construction companies (1–15 people). */
+export const FOCUS_TRADE = TRADES[0]!;
+/** Trades Brexoo also works for, shown after the builder focus. */
+export const OTHER_TRADES = TRADES.slice(1);

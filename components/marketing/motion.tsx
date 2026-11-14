@@ -174,9 +174,22 @@ export function CountUp({ to, suffix = "", className, duration = 1.6 }: { to: nu
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
   const reduce = useReducedMotion();
-  const [n, setN] = useState(0);
+  // The real value is what the server renders and what shows without JavaScript, so a crawler,
+  // screenshot or slow connection never sees "0". The count-up only runs for numbers that start
+  // below the fold once the page is interactive.
+  const [n, setN] = useState(to);
+  const armed = useRef(false);
   useEffect(() => {
-    if (!inView || reduce) return;
+    const el = ref.current;
+    if (reduce || !el) return;
+    if (el.getBoundingClientRect().top > window.innerHeight) {
+      armed.current = true;
+      setN(0);
+    }
+  }, [reduce]);
+  useEffect(() => {
+    if (!inView || !armed.current) return;
+    armed.current = false;
     let raf = 0;
     const start = performance.now();
     const tick = (t: number) => {
@@ -186,10 +199,10 @@ export function CountUp({ to, suffix = "", className, duration = 1.6 }: { to: nu
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [inView, to, duration, reduce]);
+  }, [inView, to, duration]);
   return (
     <span ref={ref} className={cn("tabular", className)}>
-      {(reduce ? to : n).toLocaleString("en-US")}
+      {n.toLocaleString("en-US")}
       {suffix}
     </span>
   );

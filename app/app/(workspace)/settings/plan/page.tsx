@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Card, CardHeader, Notice } from "@/components/ui";
-import { PLAN_BY_CODE } from "@/config/plans";
+import { PLAN_BY_CODE, priceFor } from "@/config/plans";
+import { currencyForCountry, formatPrice, isCurrency } from "@/lib/currency";
 import { requireOrg } from "@/lib/auth/session";
-import { formatMoney } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Plan & usage" };
 
@@ -31,14 +31,17 @@ export default async function PlanPage() {
     brex_ai_requests_month: (brex.data ?? []).reduce((s, r) => s + r.quantity, 0),
   };
   const plan = PLAN_BY_CODE[org.plan_code as keyof typeof PLAN_BY_CODE];
+  // Prices follow the business's own currency (USD, AUD or NZD).
+  const cur = isCurrency(org.currency) ? org.currency : currencyForCountry(org.country);
+  const price = plan ? priceFor(plan, cur) : null;
   return (
     <div className="grid gap-6">
       <Card className="p-5">
         <p className="text-[13px] text-ink-3">Current plan</p>
         <p className="type-subhead mt-1">{plan?.name ?? org.plan_code}</p>
-        {plan ? (
+        {price ? (
           <p className="text-[14px] text-ink-3">
-            {formatMoney(plan.monthlyPriceMinor, plan.currency)} / month · {formatMoney(plan.setupFeeMinor, plan.currency)} setup (illustrative)
+            {formatPrice(price.monthly, cur)} / month · {formatPrice(price.setup, cur)} setup (illustrative)
           </p>
         ) : null}
         <Notice tone="blue" className="mt-4">

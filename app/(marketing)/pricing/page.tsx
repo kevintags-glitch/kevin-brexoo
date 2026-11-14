@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import { Check, Minus } from "lucide-react";
-import { PLANS, type EntitlementKey } from "@/config/plans";
+import { PLANS, priceFor, type EntitlementKey } from "@/config/plans";
 import { ButtonLink, Notice } from "@/components/ui";
 import { PageHero } from "@/components/marketing/PageHero";
 import { BrandIcon } from "@/components/marketing/brand-icons";
 import { HoverTilt, TiltIn } from "@/components/marketing/motion";
 import { Container, Faq, SectionHeading } from "@/components/marketing/Section";
 import { cn } from "@/lib/cn";
-import { formatMoney } from "@/lib/format";
+import { CurrencySwitcher } from "@/components/marketing/CurrencySwitcher";
+import { CURRENCY_NAME, formatPrice, TAX_NOTE } from "@/lib/currency";
+import { visitorCurrency } from "@/lib/currency.server";
 
-export const metadata: Metadata = { alternates: { canonical: "/pricing" }, title: "Pricing", description: "Brexoo plans with clear limits, setup fees and billing terms." };
+export const metadata: Metadata = { alternates: { canonical: "/pricing" }, title: "Pricing", description: "Brexoo plans for small builders and home-service businesses, in US, Australian or New Zealand dollars, with clear limits, setup fees and billing terms." };
 
 const ROWS: { key: EntitlementKey; label: string; unit?: string }[] = [
   { key: "published_pages", label: "Published landing pages" },
@@ -26,18 +28,26 @@ function cell(v: number | null, unit?: string) {
   return `${v.toLocaleString("en-AU")}${unit ? ` ${unit}` : ""}`;
 }
 
-export default function PricingPage() {
+export default async function PricingPage({ searchParams }: { searchParams: Promise<{ currency?: string | string[] }> }) {
+  const currency = await visitorCurrency((await searchParams).currency);
   return (
     <>
-      <PageHero eyebrow="Pricing" title="Clear plans. Limits you can see." accent={["see"]} body="Every plan includes the full enquiry-to-outcome workflow. Plans differ in pages, seats, AI usage and optional human-managed services." />
+      <PageHero eyebrow="Pricing" title="Clear plans. Limits you can see." accent={["see"]} body="Built for builders and construction teams of 1–15 people. Every plan includes the full enquiry-to-outcome workflow; plans differ in pages, seats, Brex AI usage and optional human-managed services." />
       <section className="py-16 sm:py-24">
         <Container>
-          <Notice tone="amber" title="Illustrative pricing" className="max-w-3xl">
-            These are working figures for our pilot, shown in US dollars before tax. We launch in the USA, Australia and New Zealand, and your final price, currency (USD, AUD or NZD), taxes and terms are confirmed in writing before you're billed.
-          </Notice>
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+            <Notice tone="amber" title="Illustrative pricing" className="max-w-3xl">
+              Pilot prices, shown in {CURRENCY_NAME[currency]} {TAX_NOTE[currency]}. We set local prices for the USA (USD), Australia (AUD) and New Zealand (NZD), and your final price, taxes and terms are confirmed in writing before you&apos;re billed.
+            </Notice>
+            <div className="shrink-0">
+              <p className="mb-2 text-[12px] font-medium text-ink-3">Show prices in</p>
+              <CurrencySwitcher current={currency} />
+            </div>
+          </div>
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
             {PLANS.map((p, i) => {
               const featured = p.code === "growth";
+              const price = priceFor(p, currency);
               return (
                 <TiltIn key={p.code} delay={i * 0.12} className="h-full">
                 <HoverTilt
@@ -48,11 +58,13 @@ export default function PricingPage() {
                   <BrandIcon name={p.code === "launch" ? "page" : p.code === "growth" ? "pipeline" : "team"} tone={p.code === "launch" ? "cloud" : p.code === "growth" ? "blue" : "navy"} className="size-12" />
                   <h2 className="type-card mt-4">{p.name}</h2>
                   <p className="mt-2 min-h-12 text-[14px] leading-relaxed text-ink-3">{p.positioning}</p>
-                  <p className="mt-6 flex items-baseline gap-1.5">
-                    <span className="text-[60px] leading-none tracking-[-0.035em] tabular font-light">{formatMoney(p.monthlyPriceMinor, p.currency)}</span>
-                    <span className="text-ink-3">/ month</span>
+                  <p className="mt-6 flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
+                    <span className="whitespace-nowrap text-[44px] leading-none tracking-[-0.035em] tabular font-light xl:text-[50px]">{formatPrice(price.monthly, currency)}</span>
+                    <span className="whitespace-nowrap text-ink-3">/ month</span>
                   </p>
-                  <p className="mt-1 text-[13px] text-ink-3">plus {formatMoney(p.setupFeeMinor, p.currency)} one-off setup</p>
+                  <p className="mt-1 text-[13px] text-ink-3">
+                    plus {formatPrice(price.setup, currency)} one-off setup · {TAX_NOTE[currency]}
+                  </p>
                   <ButtonLink href={`/signup?plan=${p.code}`} variant={featured ? "primary" : "secondary"} size="lg" className="mt-7">
                     Choose {p.name}
                   </ButtonLink>

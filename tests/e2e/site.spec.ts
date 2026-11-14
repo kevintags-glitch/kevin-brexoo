@@ -91,10 +91,67 @@ test("the first screen is the stairs film, followed by the CRM presentation", as
   }
 });
 
-test("the home page never mentions AI", async ({ page }) => {
+test("the home page shows Brex AI qualifying a sample enquiry, with approval required", async ({ page }) => {
+  await page.goto("/");
+  const ai = page.locator("#brex-ai");
+  await expect(ai.getByRole("heading", { name: "Watch Brex AI qualify a real enquiry." })).toBeVisible();
+  await expect(ai.getByText("Sample record", { exact: true })).toBeVisible();
+  await expect(ai.getByText(/Strong fit · 100\/100/)).toBeVisible();
+  await expect(ai.getByText(/inferred/).first()).toBeVisible();
+  await expect(ai.getByText("Recommended next action")).toBeVisible();
+  await expect(ai.getByText(/waiting for your approval/)).toBeVisible();
+  await expect(ai.getByText(/Never sends, books or deletes anything/)).toBeVisible();
+});
+
+test("the home page explains exactly how Brexoo finds projects", async ({ page }) => {
+  await page.goto("/");
+  const src = page.locator("#sources");
+  for (const q of ["Where do opportunities come from?", "How are projects verified?", "How are homeowner enquiries identified?", "How is buying intent calculated?", "Are leads shared with other builders?", "How do I receive and respond?"]) {
+    await expect(src.getByRole("heading", { name: q })).toBeVisible();
+  }
+  await expect(src.getByText(/doesn't sell, share or auction leads/)).toBeVisible();
+  await src.getByRole("link", { name: "The full sourcing rules" }).click();
+  await expect(page).toHaveURL(/\/how-it-works#sources$/);
+  await expect(page.locator("#sources").getByRole("heading", { name: "How Brexoo finds projects, in full." })).toBeVisible();
+});
+
+test("statistics show real figures even without JavaScript", async ({ browser }) => {
+  const ctx = await browser.newContext({ javaScriptEnabled: false });
+  const page = await ctx.newPage();
   await page.goto("/");
   const text = await page.locator("main").innerText();
-  expect(text).not.toMatch(/\bAI\b/);
+  for (const [n, label] of [["3", "Launch markets"], ["15", "Service templates"], ["9", "Pipeline stages"], ["100%", "Records with a source"]]) {
+    expect(text).toMatch(new RegExp(`(^|\\n)${n}\\s+${label}`));
+  }
+  expect(text).not.toMatch(/(^|\n)0%?\s+(Launch markets|Service templates|Pipeline stages|Records with a source)/);
+  await page.goto("/managed-services");
+  expect(await page.locator("main").innerText()).toMatch(/None\s+Guaranteed outcomes/);
+  await ctx.close();
+});
+
+test("pricing is shown in the visitor's local currency, and can be switched", async ({ browser }) => {
+  const cases: [string, string, string][] = [["AU", "A$449", "A$749"], ["NZ", "NZ$499", "NZ$829"], ["US", "US$299", "US$499"], ["GB", "US$299", "US$499"]];
+  for (const [country, price, setup] of cases) {
+    const ctx = await browser.newContext({ extraHTTPHeaders: { "x-vercel-ip-country": country } });
+    const page = await ctx.newPage();
+    await page.goto("/pricing");
+    await expect(page.getByText(price, { exact: true }).first()).toBeVisible();
+    await expect(page.getByText(new RegExp(`plus ${setup.replace("$", "\\$")} one-off setup`)).first()).toBeVisible();
+    await ctx.close();
+  }
+  const ctx = await browser.newContext({ extraHTTPHeaders: { "x-vercel-ip-country": "AU" } });
+  const page = await ctx.newPage();
+  await page.goto("/pricing?currency=NZD");
+  await expect(page.getByText("NZ$499", { exact: true }).first()).toBeVisible();
+  await page.goto("/pricing");
+  await expect(page.getByText(/Australian dollars excl\. GST/)).toBeVisible();
+  await page.getByRole("radio", { name: /USD/ }).click();
+  await expect(page.getByText("US$299", { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole("radio", { name: /USD/ })).toHaveAttribute("aria-checked", "true");
+  // The choice is remembered on the home page too.
+  await page.goto("/");
+  await expect(page.getByText("US$299", { exact: true }).first()).toBeVisible();
+  await ctx.close();
 });
 
 test("Inter is the only typeface and the type scale is applied", async ({ page }) => {

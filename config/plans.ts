@@ -99,4 +99,22 @@ export const PLANS: Plan[] = [
   },
 ];
 
+export type Currency = "USD" | "AUD" | "NZD";
+export const CURRENCIES: Currency[] = ["USD", "AUD", "NZD"];
+
+/**
+ * Local price points per currency (minor units). Set per market and rounded, not converted daily,
+ * so prices stay stable. USD matches `monthlyPriceMinor` / `setupFeeMinor` above.
+ */
+export const PRICES: Record<Plan["code"], Record<Currency, { monthly: number; setup: number }>> = {
+  launch: { USD: { monthly: 29900, setup: 49900 }, AUD: { monthly: 44900, setup: 74900 }, NZD: { monthly: 49900, setup: 82900 } },
+  growth: { USD: { monthly: 69900, setup: 79900 }, AUD: { monthly: 104900, setup: 119900 }, NZD: { monthly: 114900, setup: 129900 } },
+  managed: { USD: { monthly: 199900, setup: 149900 }, AUD: { monthly: 299900, setup: 224900 }, NZD: { monthly: 329900, setup: 249900 } },
+};
+
+/** The plan's monthly price and setup fee in the given currency. */
+export function priceFor(plan: Pick<Plan, "code">, currency: Currency) {
+  return PRICES[plan.code][currency];
+}
+
 export const PLAN_BY_CODE = Object.fromEntries(PLANS.map((p) => [p.code, p])) as Record<Plan["code"], Plan>;
