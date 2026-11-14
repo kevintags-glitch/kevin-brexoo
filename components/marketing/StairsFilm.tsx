@@ -86,7 +86,7 @@ export function StairsFilm({ className }: { className?: string }) {
         </video>
       ) : null}
       <p className="sr-only">
-        Animation: the Brexoo shapes climb five steps, {STAIR_STEPS.map(([w, s]) => `${w} (${s.toLowerCase()})`).join(", ")}, and form the Brexoo logo.
+        Animation: the Brexoo shapes climb five steps, {STAIR_STEPS.map(([w, s]) => `${w} (${s.toLowerCase()})`).join(", ")}, and form the Brexoo logo, with the tagline “Intelligence. Into Opportunity.”
       </p>
       <button
         type="button"
