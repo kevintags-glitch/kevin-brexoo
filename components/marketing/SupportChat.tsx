@@ -1,15 +1,34 @@
 "use client";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { MessageCircle, SendHorizontal, Sparkles, X } from "lucide-react";
+import { ArrowUp, X } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { SUPPORT_SUGGESTIONS, supportAnswer, type SupportLink } from "@/features/support/answer";
-import { cn } from "@/lib/cn";
+import { LogoMark } from "@/components/brand/Logo";
+import { LoopGlyph, MarkOutline } from "@/components/brand/BrandMotif";
+import { BrandIcon, type BrandIconName } from "./brand-icons";
 
-type Msg = { from: "user" | "ai"; text: string; links?: SupportLink[] };
+type Msg = { from: "user" | "bot"; text: string; links?: SupportLink[] };
+
+/** Starter questions, each shown as a card with its brand icon. */
+const TOPIC_ICON: Record<string, BrandIconName> = {
+  "What is Brexoo?": "brand",
+  "How much does it cost?": "money",
+  "Which countries?": "mappin",
+  "Will you email my customers?": "email",
+};
+
+/** The Brexoo mark on a Cloud White tile: the assistant's avatar. */
+function BotAvatar() {
+  return (
+    <span aria-hidden className="grid size-7 shrink-0 place-items-center rounded-[30%] bg-[#E6F4FF]">
+      <LogoMark className="size-4" color="#02336A" />
+    </span>
+  );
+}
 
 const GREETING: Msg = {
-  from: "ai",
+  from: "bot",
   text: "Hi! Ask me anything about Brexoo: features, pricing, industries or where we launch.",
 };
 
@@ -50,7 +69,7 @@ export function SupportChat() {
     const reply = supportAnswer(question);
     window.setTimeout(
       () => {
-        setMsgs((m) => [...m, { from: "ai", text: reply.text, links: reply.links }]);
+        setMsgs((m) => [...m, { from: "bot", text: reply.text, links: reply.links }]);
         setTyping(false);
       },
       reduce ? 0 : 550,
@@ -76,13 +95,17 @@ export function SupportChat() {
             style={{ transformOrigin: "bottom right" }}
             className="fixed bottom-24 right-4 z-[70] flex h-[min(560px,calc(100dvh-8rem))] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-[24px] border border-line bg-white shadow-[0_24px_60px_-12px_rgb(15_39_66/0.28)] sm:right-6"
           >
-            <div className="flex items-center gap-3 bg-[#0f2742] px-5 py-4 text-white">
-              <span className="grid size-9 place-items-center rounded-xl bg-white/10">
-                <Sparkles className="size-4 text-[#5fd4ea]" aria-hidden />
+            <div className="relative flex items-center gap-3 overflow-hidden bg-[#0F2742] px-5 py-4 text-white">
+              <MarkOutline className="absolute -right-6 -top-10 h-36 text-white/[0.07]" strokeWidth={40} />
+              <span className="relative grid size-11 place-items-center rounded-[30%] bg-white/10 ring-1 ring-white/15">
+                <LogoMark className="size-6" color="#ffffff" />
+                <span aria-hidden className="absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-[#0F2742] bg-[#06B6D4]" />
               </span>
-              <div className="flex-1">
-                <p className="text-[15px] font-medium">Brexoo help</p>
-                <p className="text-[12px] text-white/60">Answers from Brexoo&apos;s own guides</p>
+              <div className="relative flex-1">
+                <p className="flex items-center gap-2 text-[15px] font-medium">
+                  Brexoo help <LoopGlyph className="h-3" />
+                </p>
+                <p className="text-[12px] text-white/65">Answers from Brexoo&apos;s own guides</p>
               </div>
               <button
                 type="button"
@@ -91,37 +114,51 @@ export function SupportChat() {
                   buttonRef.current?.focus();
                 }}
                 aria-label="Close chat"
-                className="grid size-9 place-items-center rounded-full hover:bg-white/10"
+                className="relative grid size-9 place-items-center rounded-full hover:bg-white/10"
               >
                 <X className="size-4" aria-hidden />
               </button>
             </div>
+            <div aria-hidden className="h-1 bg-[linear-gradient(90deg,#0F2742,#3B82F6_50%,#06B6D4)]" />
             <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-5" aria-live="polite">
-              {msgs.map((m, i) => (
-                <div key={i} className={cn("max-w-[88%] rounded-2xl px-4 py-2.5 text-[14px] leading-relaxed", m.from === "user" ? "ml-auto rounded-br-md bg-blue text-white" : "rounded-bl-md bg-surface-2 text-ink-2")}>
-                  {m.text}
-                  {m.links?.length ? (
-                    <span className="mt-2 flex flex-wrap gap-1.5">
-                      {m.links.map((l) => (
-                        <Link key={l.href} href={l.href} onClick={() => setOpen(false)} className="rounded-full border border-blue/30 bg-white px-3 py-1 text-[12px] font-medium text-blue hover:bg-blue hover:text-white">
-                          {l.label}
-                        </Link>
-                      ))}
-                    </span>
-                  ) : null}
-                </div>
-              ))}
+              {msgs.map((m, i) =>
+                m.from === "user" ? (
+                  <div key={i} className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-[#3B82F6] px-4 py-2.5 text-[14px] leading-relaxed text-white">
+                    {m.text}
+                  </div>
+                ) : (
+                  <div key={i} className="flex max-w-[92%] items-end gap-2">
+                    <BotAvatar />
+                    <div className="rounded-2xl rounded-bl-md border border-[#D6EBFF] bg-[#F3F9FF] px-4 py-2.5 text-[14px] leading-relaxed text-[#0F2742]">
+                      {m.text}
+                      {m.links?.length ? (
+                        <span className="mt-2 flex flex-wrap gap-1.5">
+                          {m.links.map((l) => (
+                            <Link key={l.href} href={l.href} onClick={() => setOpen(false)} className="rounded-full border border-[#3B82F6]/30 bg-white px-3 py-1 text-[12px] font-medium text-[#2F6FE4] hover:bg-[#0F2742] hover:text-white">
+                              {l.label}
+                            </Link>
+                          ))}
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                ),
+              )}
               {typing ? (
-                <div className="flex w-fit gap-1 rounded-2xl rounded-bl-md bg-surface-2 px-4 py-3" aria-label="Typing">
-                  {[0, 1, 2].map((d) => (
-                    <span key={d} className="size-1.5 rounded-full bg-ink-3 motion-safe:animate-bounce" style={{ animationDelay: `${d * 120}ms` }} />
-                  ))}
+                <div className="flex items-end gap-2">
+                  <BotAvatar />
+                  <div className="flex w-fit gap-1 rounded-2xl rounded-bl-md border border-[#D6EBFF] bg-[#F3F9FF] px-4 py-3" aria-label="Typing">
+                    {["#0F2742", "#3B82F6", "#06B6D4"].map((c, d) => (
+                      <span key={c} className="size-1.5 rounded-full motion-safe:animate-bounce" style={{ background: c, animationDelay: `${d * 120}ms` }} />
+                    ))}
+                  </div>
                 </div>
               ) : null}
               {msgs.length === 1 ? (
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {SUPPORT_SUGGESTIONS.map((s) => (
-                    <button key={s} type="button" onClick={() => ask(s)} className="rounded-full border border-line px-3 py-1.5 text-[12px] text-ink-2 hover:border-blue/40 hover:text-blue">
+                <div className="grid grid-cols-2 gap-2 pt-2">
+                  {SUPPORT_SUGGESTIONS.map((s, k) => (
+                    <button key={s} type="button" onClick={() => ask(s)} className="group flex flex-col items-start gap-2.5 rounded-2xl border border-line bg-white p-3 text-left text-[13px] font-medium leading-snug text-[#0F2742] transition-[border-color,box-shadow] hover:border-[#3B82F6]/50 hover:shadow-sm">
+                      <BrandIcon name={TOPIC_ICON[s] ?? "chat"} tone={(["navy", "blue", "teal", "cloud"] as const)[k % 4]} className="size-9 transition-transform duration-300 group-hover:-translate-y-0.5" />
                       {s}
                     </button>
                   ))}
@@ -140,10 +177,10 @@ export function SupportChat() {
                 placeholder="Ask about Brexoo…"
                 maxLength={300}
                 autoComplete="off"
-                className="h-11 flex-1 rounded-full border border-line bg-surface-2/60 px-4 text-[14px] outline-none focus:border-blue"
+                className="h-11 flex-1 rounded-full border border-line bg-[#F3F9FF] px-4 text-[14px] text-[#0F2742] outline-none placeholder:text-ink-3 focus:border-[#3B82F6]"
               />
-              <button type="submit" aria-label="Send" disabled={!text.trim() || typing} className="pressable grid size-11 place-items-center rounded-full bg-blue text-white disabled:opacity-40">
-                <SendHorizontal className="size-4" aria-hidden />
+              <button type="submit" aria-label="Send" disabled={!text.trim() || typing} className="pressable grid size-11 place-items-center rounded-[30%] bg-[#0F2742] text-white transition-colors hover:bg-[#3B82F6] disabled:opacity-40">
+                <ArrowUp className="size-4" aria-hidden />
               </button>
             </form>
             <p className="px-4 pb-3 text-center text-[11px] text-ink-3">
@@ -158,14 +195,15 @@ export function SupportChat() {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-label={open ? "Close help chat" : "Chat with Brexoo"}
-        className="pressable fixed bottom-5 right-4 z-[70] grid size-14 place-items-center rounded-full bg-blue text-white shadow-[0_12px_30px_-6px_rgb(47_111_228/0.6)] transition-colors hover:bg-blue-hover sm:right-6"
+        className="pressable fixed bottom-5 right-4 z-[70] grid size-14 place-items-center rounded-[30%] bg-[#0F2742] text-white shadow-[0_14px_32px_-8px_rgb(15_39_66/0.55)] ring-1 ring-white/10 transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-[#183A60] sm:right-6"
       >
-        <span aria-hidden className="absolute inset-0 rounded-full bg-blue/40 motion-safe:animate-ping [animation-duration:2.6s]" hidden={open} />
+        <span aria-hidden className="absolute inset-0 rounded-[30%] bg-[#06B6D4]/35 motion-safe:animate-ping [animation-duration:2.8s]" hidden={open} />
         <AnimatePresence initial={false} mode="wait">
-          <motion.span key={open ? "x" : "chat"} initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }} className="relative">
-            {open ? <X className="size-6" aria-hidden /> : <MessageCircle className="size-6" aria-hidden />}
+          <motion.span key={open ? "x" : "mark"} initial={{ rotate: -90, opacity: 0, scale: 0.6 }} animate={{ rotate: 0, opacity: 1, scale: 1 }} exit={{ rotate: 90, opacity: 0, scale: 0.6 }} transition={{ duration: 0.18 }} className="relative">
+            {open ? <X className="size-6" aria-hidden /> : <LogoMark className="size-7" color="#ffffff" />}
           </motion.span>
         </AnimatePresence>
+        {open ? null : <span aria-hidden className="absolute -right-0.5 -top-0.5 size-3.5 rounded-full border-2 border-white bg-[#06B6D4]" />}
       </button>
     </>
   );
