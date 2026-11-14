@@ -39,7 +39,7 @@ function Menu({ label, active, children }: { label: string; active: boolean; chi
   }, [open]);
   return (
     <div ref={ref} className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
-      <button type="button" aria-expanded={open} onClick={() => setOpen((o) => !o)} className={cn("type-nav flex items-center gap-1 rounded-lg px-3 py-2 transition-colors hover:text-blue", active ? "text-blue" : "text-ink")}>
+      <button type="button" aria-expanded={open} onClick={() => setOpen((o) => !o)} className={cn("type-nav flex items-center gap-1 rounded-lg px-3 py-2 transition-colors hover:text-white", active ? "text-[#5FD4EA]" : "text-white/85")}>
         {label}
         <ChevronDown className={cn("size-3.5 transition-transform", open && "rotate-180")} aria-hidden />
       </button>
@@ -91,13 +91,13 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-200",
-        scrolled || open ? "border-b border-line bg-page/80 backdrop-blur-xl backdrop-saturate-150" : "border-b border-transparent",
+        "sticky top-0 z-50 border-b border-white/10 bg-[#0F2742] text-white transition-shadow duration-200",
+        scrolled || open ? "shadow-[0_6px_24px_rgb(15_39_66/0.25)]" : "",
       )}
     >
       <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-8 px-4 sm:px-6">
         <Link href="/" className="rounded-lg" aria-label="Brexoo home">
-          <Logo knockout="var(--canvas)" />
+          <Logo tone="white" />
         </Link>
         <nav aria-label="Main" className="hidden flex-1 items-center gap-1 md:flex">
           <Menu label="Product" active={["/how-it-works", "/ai", "/managed-services"].includes(pathname)}>
@@ -122,23 +122,23 @@ export function SiteHeader() {
               key={item.href}
               href={item.href}
               aria-current={pathname === item.href ? "page" : undefined}
-              className="type-nav rounded-lg px-3 py-2 text-ink transition-colors hover:text-blue aria-[current=page]:text-blue"
+              className="type-nav rounded-lg px-3 py-2 text-white/85 transition-colors hover:text-white aria-[current=page]:text-[#5FD4EA]"
             >
               {item.label}
             </Link>
           ))}
         </nav>
         <div className="ml-auto hidden items-center gap-2 md:flex">
-          <ButtonLink href="/login" variant="outline" size="sm" className="px-4 font-medium">
+          <Link href="/login" className="type-button inline-flex h-9 items-center rounded-lg border border-white/40 px-4 text-white transition-colors hover:border-white hover:bg-white/10">
             Log in
-          </ButtonLink>
-          <ButtonLink href="/demo" size="sm" className="px-4 font-medium">
+          </Link>
+          <ButtonLink href="/demo" variant="inverse" size="sm" className="px-4 font-medium">
             Request a Demo
           </ButtonLink>
         </div>
         <button
           type="button"
-          className="pressable -mr-2 ml-auto grid size-11 place-items-center rounded-lg text-ink md:hidden"
+          className="pressable -mr-2 ml-auto grid size-11 place-items-center rounded-lg text-white md:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -150,7 +150,7 @@ export function SiteHeader() {
       <div
         id="mobile-nav"
         hidden={!open}
-        className="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-canvas px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-2 md:hidden"
+        className="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/10 bg-white text-ink px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-2 md:hidden"
       >
         <nav aria-label="Mobile" className="grid" onClick={(e) => (e.target as HTMLElement).closest("a") && setOpen(false)}>
           {NAV.map((item) => (
