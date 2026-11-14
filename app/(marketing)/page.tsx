@@ -70,7 +70,7 @@ export default function HomePage() {
     <>
       <JsonLd data={ORG_LD} />
       {/* 1 — First screen: the film. The logo shapes climb five service steps and become the Brexoo logo. */}
-      <section aria-labelledby="home-title" className="relative h-[calc(100svh-4rem)] min-h-[520px] overflow-hidden bg-white">
+      <section aria-labelledby="home-title" className="relative h-[100svh] min-h-[520px] overflow-hidden bg-white">
         <h1 id="home-title" className="sr-only">
           Brexoo: find, qualify and win local projects
         </h1>
