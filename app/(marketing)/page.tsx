@@ -70,14 +70,12 @@ export default function HomePage() {
     <>
       <JsonLd data={ORG_LD} />
       {/* 1 — First screen: the film. The logo shapes climb five service steps and become the Brexoo logo. */}
-      <section aria-labelledby="home-title" className="relative overflow-hidden bg-page">
+      <section aria-labelledby="home-title" className="relative -mt-16 h-[100svh] min-h-[560px] overflow-hidden bg-white">
         <h1 id="home-title" className="sr-only">
           Brexoo: find, qualify and win local projects
         </h1>
-        <div className="mx-auto flex max-w-[1400px] items-center px-0 py-6 sm:min-h-[calc(100dvh-4rem)] sm:px-6 sm:pb-14 sm:pt-2">
-          <StairsFilm className="w-full" />
-        </div>
-        <a href="#workspace" aria-label="Scroll to see the workspace" className="absolute bottom-5 left-1/2 hidden -translate-x-1/2 text-ink-3 hover:text-ink sm:block">
+        <StairsFilm className="absolute inset-0" />
+        <a href="#workspace" aria-label="Scroll to see the workspace" className="absolute bottom-5 left-1/2 grid size-10 -translate-x-1/2 place-items-center rounded-full text-ink-3 hover:text-ink">
           <ArrowDown className="size-5 motion-safe:animate-bounce" aria-hidden />
         </a>
       </section>

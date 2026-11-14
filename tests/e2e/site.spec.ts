@@ -59,8 +59,12 @@ test("the first screen is the stairs film, followed by the CRM presentation", as
   const video = hero.locator("video");
   await expect(video).toBeVisible();
   await expect(video).toHaveAttribute("poster", "/media/brexoo-stairs-poster.jpg");
-  expect(await video.evaluate((v: HTMLVideoElement) => v.muted && v.loop && v.playsInline)).toBe(true);
-  for (const src of ["/media/brexoo-stairs.mp4", "/media/brexoo-stairs.webm", "/media/brexoo-stairs-poster.jpg"]) {
+  expect(await video.evaluate((v: HTMLVideoElement) => v.muted && v.loop && v.playsInline && v.autoplay)).toBe(true);
+  // It plays by itself, with no click, and fills the first screen.
+  await expect.poll(() => video.evaluate((v: HTMLVideoElement) => !v.paused && v.currentTime > 0.2), { timeout: 10_000 }).toBe(true);
+  const box = (await hero.boundingBox())!;
+  expect(box.height).toBeGreaterThanOrEqual(900 - 1);
+  for (const src of ["/media/brexoo-stairs.mp4", "/media/brexoo-stairs.webm", "/media/brexoo-stairs-poster.jpg", "/media/brexoo-stairs-tall.mp4", "/media/brexoo-stairs-tall.webm", "/media/brexoo-stairs-tall-poster.jpg"]) {
     expect((await page.request.get(src)).status()).toBe(200);
   }
   await expect(hero.getByRole("button", { name: /animation/ })).toBeVisible();
