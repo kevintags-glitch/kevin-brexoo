@@ -1,0 +1,27 @@
+[
+ {
+  "id": "3456789",
+  "permit_": "101234567",
+  "permit_type": "PERMIT - RENOVATION/ALTERATION",
+  "work_description": "INTERIOR REMODEL OF KITCHEN AND BATHROOM IN SINGLE FAMILY HOME",
+  "issue_date": "2026-11-09T00:00:00.000",
+  "street_number": "1234",
+  "street_direction": "N",
+  "street_name": "SAMPLE",
+  "reported_cost": "65000",
+  "permit_status": "ACTIVE",
+  "contact_1_name": "SAM EXAMPLE",
+  "contact_1_phone": "3125550100"
+ },
+ {
+  "id": "3456790",
+  "permit_": "101234568",
+  "permit_type": "PERMIT - SIGNS",
+  "work_description": "INSTALL ONE ILLUMINATED SIGN",
+  "issue_date": "2026-11-10T00:00:00.000",
+  "street_number": "500",
+  "street_direction": "W",
+  "street_name": "EXAMPLE",
+  "reported_cost": "2500"
+ }
+]

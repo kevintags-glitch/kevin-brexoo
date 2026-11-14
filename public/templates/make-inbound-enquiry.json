@@ -1,0 +1,35 @@
+{
+  "name": "Brexoo · Send leads to Brexoo",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": { "hook": null, "maxResults": 1 },
+      "mapper": {},
+      "metadata": { "designer": { "x": 0, "y": 0, "name": "Your lead source (replace with Facebook Lead Ads, Google Forms…)" } }
+    },
+    {
+      "id": 2,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": { "handleErrors": true, "useNewZLibDeCompress": true },
+      "mapper": {
+        "url": "PASTE_YOUR_BREXOO_INBOUND_LINK",
+        "method": "post",
+        "headers": [],
+        "qs": [],
+        "bodyType": "raw",
+        "contentType": "application/json",
+        "parseResponse": true,
+        "data": "{\n  \"name\": \"{{1.name}}\",\n  \"email\": \"{{1.email}}\",\n  \"phone\": \"{{1.phone}}\",\n  \"message\": \"{{1.message}}\",\n  \"suburb\": \"{{1.suburb}}\",\n  \"postcode\": \"{{1.postcode}}\",\n  \"consent\": true,\n  \"consent_text\": \"{{1.consent_text}}\",\n  \"channel\": \"Website form\"\n}"
+      },
+      "metadata": { "designer": { "x": 300, "y": 0, "name": "Send to Brexoo" } }
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "scenario": { "roundtrips": 1, "maxErrors": 3, "autoCommit": true, "autoCommitTriggerLast": true, "sequential": false, "confidential": false, "dataloss": false, "dlq": false },
+    "designer": { "orphans": [] }
+  }
+}

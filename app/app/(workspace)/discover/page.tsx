@@ -4,6 +4,7 @@ import { CalendarClock, Download, MapPin, Search, ShieldCheck, Upload } from "lu
 import { Page } from "@/components/app/PageHeader";
 import { Pagination, StatusPill } from "@/components/app/dash";
 import { FilterBar } from "@/components/app/dash/FilterBar";
+import { BrexooSources } from "@/components/app/discover/BrexooSources";
 import { RecordActions } from "@/components/app/discover/RecordActions";
 import { INDUSTRY_ICON } from "@/components/marketing/industry-icons";
 import { ButtonLink, EmptyState } from "@/components/ui";
@@ -11,7 +12,7 @@ import { BUDGET_ORDER } from "@/features/crm/fit";
 import { getFitContext } from "@/features/crm/queries";
 import { budgetBucket, freshness, matchRecord } from "@/features/discovery/match";
 import { requireOrg } from "@/lib/auth/session";
-import { formatDate, formatMoney } from "@/lib/format";
+import { formatDate, formatDateTime, formatMoney } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Discover projects" };
 
@@ -35,7 +36,12 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Pro
   if (sp.source) query = query.eq("source_id", sp.source);
   const q = (sp.q ?? "").trim().slice(0, 80).replace(/[%,()]/g, " ");
   if (q) query = query.or(`title.ilike.%${q}%,description.ilike.%${q}%,location_text.ilike.%${q}%`);
-  const [{ data }, fc, sources] = await Promise.all([query, getFitContext(ctx), supabase.from("discovery_sources").select("id, name").eq("organization_id", org.id).order("name")]);
+  const [{ data }, fc, sources, platform] = await Promise.all([
+    query,
+    getFitContext(ctx),
+    supabase.from("discovery_sources").select("id, name").eq("organization_id", org.id).order("name"),
+    supabase.rpc("my_platform_sources", { p_org: org.id }),
+  ]);
 
   let rows = (data ?? []).map((r) => ({ ...r, fit: matchRecord(fc, r), fresh: freshness(r.observed_at) }));
   if (sp.location) rows = rows.filter((r) => (r.fit.factors.find((f) => f.key === "location")?.detail ?? "").includes(sp.location!));
@@ -56,7 +62,7 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Pro
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="type-subhead">Discover Projects</h1>
-          <p className="max-w-2xl text-[14px] text-ink-3">Project opportunities from sources you&apos;ve approved, ranked by how well they match your services, areas and ideal work. Every record shows where it came from and when.</p>
+          <p className="max-w-2xl text-[14px] text-ink-3">Project opportunities from official public sources and sources you&apos;ve approved, ranked by how well they match your services, areas and ideal work. Every record shows where it came from and when.</p>
         </div>
         {isOwner ? (
           <ButtonLink href="/app/discover/import">
@@ -78,6 +84,13 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Pro
           ]}
         />
       </section>
+
+      {platform.data?.length ? (
+        <BrexooSources
+          isOwner={isOwner}
+          sources={platform.data.map((s) => ({ ...s, records: Number(s.records), lastRun: s.last_run_at ? formatDateTime(s.last_run_at, org.timezone) : null }))}
+        />
+      ) : null}
 
       {shown.length ? (
         <section className="overflow-hidden rounded-2xl border border-line bg-surface shadow-xs">
@@ -167,7 +180,7 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Pro
         </section>
       )}
       <p className="text-[12px] text-ink-3">
-        Match % is the same explainable fit used on enquiries: service, location, timing and stated value. Hover a match to see its factors. Brexoo only searches sources you&apos;ve registered; it doesn&apos;t scrape or buy data on your behalf.{" "}
+        Match % is the same explainable fit used on enquiries: service, location, timing and stated value. Hover a match to see its factors. Projects come from official public data feeds Brexoo collects for you and from sources you&apos;ve registered; Brexoo doesn&apos;t scrape websites or buy data on your behalf.{" "}
         <Link href="/app/discover/import" className="text-blue hover:underline">
           Manage sources
         </Link>

@@ -1,0 +1,28 @@
+{
+ "PageSize": 500,
+ "PageNumber": 1,
+ "TotalPages": 1,
+ "CDC": [
+  {
+   "PlanningPortalApplicationNumber": "PAN-490010",
+   "ApplicationType": "Complying Development Certificate",
+   "ApplicationStatus": "Determined",
+   "LodgementDate": "2026-11-09",
+   "CostOfDevelopment": 72000,
+   "DevelopmentDescription": "In-ground swimming pool and pool fence",
+   "DevelopmentType": [
+    {
+     "DevelopmentType": "Swimming pool"
+    }
+   ],
+   "Location": [
+    {
+     "FullAddress": "21 MOCK AVENUE WALLSEND 2287",
+     "Suburb": "WALLSEND",
+     "Postcode": "2287",
+     "LGA": "NEWCASTLE"
+    }
+   ]
+  }
+ ]
+}

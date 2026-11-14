@@ -1,0 +1,19 @@
+[
+ {
+  "job_filing_number": "B00123456-I1",
+  "work_permit": "B00123456-I1-PL",
+  "work_type": "Plumbing",
+  "job_description": "Replace domestic water piping and fixtures",
+  "issued_date": "2026-11-10T00:00:00.000",
+  "house_no": "100",
+  "street_name": "EXAMPLE STREET",
+  "borough": "BROOKLYN",
+  "zip_code": "11201",
+  "estimated_job_costs": "18000",
+  "permit_status": "Permit Issued",
+  "applicant_first_name": "Pat",
+  "applicant_last_name": "Example",
+  "owner_business_name": "Example LLC",
+  "filing_representative_first_name": "Lee"
+ }
+]

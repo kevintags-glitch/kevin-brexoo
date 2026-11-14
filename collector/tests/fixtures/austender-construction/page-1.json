@@ -1,0 +1,181 @@
+{
+ "releases": [
+  {
+   "ocid": "ocds-xyz-CN4100001",
+   "id": "CN4100001-1",
+   "date": "2026-11-08T02:00:00Z",
+   "parties": [
+    {
+     "id": "b1",
+     "name": "Department of Defence",
+     "roles": [
+      "procuringEntity"
+     ],
+     "address": {
+      "region": "NSW",
+      "locality": "Williamtown",
+      "postalCode": "2318",
+      "countryName": "Australia"
+     },
+     "contactPoint": {
+      "name": "Procurement Officer",
+      "email": "procure@example.gov.au",
+      "telephone": "02 6200 0000"
+     }
+    },
+    {
+     "id": "s1",
+     "name": "Example Constructions Pty Ltd",
+     "roles": [
+      "supplier"
+     ],
+     "address": {
+      "region": "NSW"
+     }
+    }
+   ],
+   "contracts": [
+    {
+     "id": "CN4100001",
+     "description": "Base amenities refurbishment works",
+     "dateSigned": "2026-11-08",
+     "value": {
+      "amount": "1250000.00",
+      "currency": "AUD"
+     },
+     "period": {
+      "startDate": "2026-11-08",
+      "endDate": "2027-06-30"
+     },
+     "items": [
+      {
+       "classification": {
+        "scheme": "UNSPSC",
+        "id": "72121400"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "ocid": "ocds-xyz-CN4100002",
+   "id": "CN4100002-1",
+   "date": "2026-11-09T02:00:00Z",
+   "parties": [
+    {
+     "id": "b1",
+     "name": "Services Australia",
+     "roles": [
+      "procuringEntity"
+     ],
+     "address": {
+      "region": "ACT",
+      "locality": "Canberra",
+      "postalCode": "2600",
+      "countryName": "Australia"
+     },
+     "contactPoint": {
+      "name": "Procurement Officer",
+      "email": "procure@example.gov.au",
+      "telephone": "02 6200 0000"
+     }
+    },
+    {
+     "id": "s1",
+     "name": "Sample Electrical Pty Ltd",
+     "roles": [
+      "supplier"
+     ],
+     "address": {
+      "region": "NSW"
+     }
+    }
+   ],
+   "contracts": [
+    {
+     "id": "CN4100002",
+     "description": "Electrical services upgrade",
+     "dateSigned": "2026-11-09",
+     "value": {
+      "amount": "310000",
+      "currency": "AUD"
+     },
+     "period": {
+      "startDate": "2026-11-09",
+      "endDate": "2027-06-30"
+     },
+     "items": [
+      {
+       "classification": {
+        "scheme": "UNSPSC",
+        "id": "72151500"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "ocid": "ocds-xyz-CN4100003",
+   "id": "CN4100003-1",
+   "date": "2026-11-09T02:00:00Z",
+   "parties": [
+    {
+     "id": "b1",
+     "name": "Department of Finance",
+     "roles": [
+      "procuringEntity"
+     ],
+     "address": {
+      "region": "ACT",
+      "locality": "Canberra",
+      "postalCode": "2600",
+      "countryName": "Australia"
+     },
+     "contactPoint": {
+      "name": "Procurement Officer",
+      "email": "procure@example.gov.au",
+      "telephone": "02 6200 0000"
+     }
+    },
+    {
+     "id": "s1",
+     "name": "Example IT Pty Ltd",
+     "roles": [
+      "supplier"
+     ],
+     "address": {
+      "region": "NSW"
+     }
+    }
+   ],
+   "contracts": [
+    {
+     "id": "CN4100003",
+     "description": "ICT managed services",
+     "dateSigned": "2026-11-09",
+     "value": {
+      "amount": "900000",
+      "currency": "AUD"
+     },
+     "period": {
+      "startDate": "2026-11-09",
+      "endDate": "2027-06-30"
+     },
+     "items": [
+      {
+       "classification": {
+        "scheme": "UNSPSC",
+        "id": "81112200"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "links": {
+  "next": null
+ }
+}

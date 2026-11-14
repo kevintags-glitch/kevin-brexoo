@@ -1,0 +1,102 @@
+{
+ "PageSize": 500,
+ "PageNumber": 1,
+ "TotalPages": 1,
+ "Application": [
+  {
+   "PlanningPortalApplicationNumber": "PAN-482101",
+   "ApplicationType": "Development Application",
+   "ApplicationStatus": "Under Assessment",
+   "LodgementDate": "2026-11-10",
+   "CostOfDevelopment": 865000,
+   "DevelopmentDescription": "Construction of a new two-storey dwelling with attached garage",
+   "DevelopmentType": [
+    {
+     "DevelopmentType": "Dwelling house"
+    }
+   ],
+   "ApplicantName": "Jordan Smith",
+   "ApplicantEmail": "jordan@example.com",
+   "Location": [
+    {
+     "FullAddress": "12 EXAMPLE STREET MEREWETHER 2291",
+     "Suburb": "MEREWETHER",
+     "Postcode": "2291",
+     "LGA": "NEWCASTLE",
+     "OwnerName": "J Smith"
+    }
+   ]
+  },
+  {
+   "PlanningPortalApplicationNumber": "PAN-482102",
+   "ApplicationType": "Development Application",
+   "ApplicationStatus": "Lodged",
+   "LodgementDate": "2026-11-11",
+   "CostOfDevelopment": "$2,400,000.00",
+   "DevelopmentDescription": "Demolition of existing structures and construction of a dual occupancy with Torrens title subdivision",
+   "DevelopmentType": [
+    {
+     "DevelopmentType": "Dual occupancy"
+    },
+    {
+     "DevelopmentType": "Subdivision"
+    }
+   ],
+   "Location": [
+    {
+     "FullAddress": "4 SAMPLE ROAD ADAMSTOWN 2289",
+     "Suburb": "ADAMSTOWN",
+     "Postcode": "2289",
+     "LGA": "NEWCASTLE"
+    }
+   ]
+  },
+  {
+   "PlanningPortalApplicationNumber": "PAN-482103",
+   "ApplicationType": "Development Application",
+   "ApplicationStatus": "Under Assessment",
+   "LodgementDate": "2026-11-12",
+   "CostOfDevelopment": 145000,
+   "DevelopmentDescription": "Alterations and additions to existing dwelling including new kitchen and rear deck. Contact applicant on 0400 123 456",
+   "DevelopmentType": [
+    {
+     "DevelopmentType": "Alterations and additions to residential development"
+    }
+   ],
+   "Location": [
+    {
+     "FullAddress": "88 TEST PARADE HAMILTON 2303",
+     "Suburb": "HAMILTON",
+     "Postcode": "2303",
+     "LGA": "NEWCASTLE"
+    }
+   ]
+  },
+  {
+   "PlanningPortalApplicationNumber": "PAN-482104",
+   "ApplicationType": "Development Application",
+   "ApplicationStatus": "Lodged",
+   "LodgementDate": "2026-11-12",
+   "CostOfDevelopment": 38000,
+   "DevelopmentDescription": "Rooftop solar and switchboard upgrade to heritage item",
+   "DevelopmentType": [
+    {
+     "DevelopmentType": "Alterations to heritage item"
+    }
+   ],
+   "Location": [
+    {
+     "FullAddress": "3 DEMO LANE BONDI 2026",
+     "Suburb": "BONDI",
+     "Postcode": "2026",
+     "LGA": "WAVERLEY"
+    }
+   ]
+  },
+  {
+   "ApplicationType": "Development Application",
+   "LodgementDate": "2026-11-12",
+   "DevelopmentDescription": "Record with no number is skipped"
+  }
+ ]
+}

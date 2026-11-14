@@ -1,0 +1,35 @@
+[
+ {
+  "permit_number": "2026-112233 BP",
+  "permit_type_desc": "Building Permit",
+  "permit_class_mapped": "Residential",
+  "work_class": "New",
+  "description": "New single family residence, 2 story, attached garage",
+  "issue_date": "2026-11-10T00:00:00.000",
+  "original_address1": "1200 SAMPLE ST",
+  "original_zip": "78704",
+  "total_job_valuation": "420000",
+  "status_current": "Active",
+  "contractor_company_name": "Example Homes LLC",
+  "contractor_full_name": "Alex Example",
+  "contractor_phone": "5125550100",
+  "link": {
+   "url": "https://abc.austintexas.gov/web/permit/public-search-other?t_detail=1&t_selected_folderrsn=1"
+  }
+ },
+ {
+  "permit_number": "2026-112234 EP",
+  "permit_type_desc": "Electrical Permit",
+  "work_class": "Remodel",
+  "description": "Panel upgrade to 200A and EV charger",
+  "issue_date": "2026-11-11T00:00:00.000",
+  "original_address1": "45 DEMO AVE",
+  "original_zip": "78745",
+  "status_current": "Active"
+ },
+ {
+  "permit_type_desc": "Building Permit",
+  "description": "Row without a permit number is skipped",
+  "issue_date": "2026-11-11T00:00:00.000"
+ }
+]

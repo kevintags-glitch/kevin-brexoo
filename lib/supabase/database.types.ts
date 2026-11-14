@@ -113,6 +113,52 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"collected_projects": {
+                  Row: {
+                    "address": string | null,"category_code": string | null,"city": string | null,"closes_at": string | null,"content_hash": string,"country": string,"currency": string | null,"description": string | null,"estimated_value_minor": number | null,"external_id": string,"first_seen_at": string,"id": string,"last_seen_at": string,"observed_at": string | null,"postcode": string | null,"region": string | null,"scope": string,"source_id": string,"source_url": string | null,"stage": string | null,"status": string,"suburb": string | null,"title": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "address"?: string | null,"category_code"?: string | null,"city"?: string | null,"closes_at"?: string | null,"content_hash": string,"country": string,"currency"?: string | null,"description"?: string | null,"estimated_value_minor"?: number | null,"external_id": string,"first_seen_at"?: string,"id"?: string,"last_seen_at"?: string,"observed_at"?: string | null,"postcode"?: string | null,"region"?: string | null,"scope"?: string,"source_id": string,"source_url"?: string | null,"stage"?: string | null,"status"?: string,"suburb"?: string | null,"title": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "address"?: string | null,"category_code"?: string | null,"city"?: string | null,"closes_at"?: string | null,"content_hash"?: string,"country"?: string,"currency"?: string | null,"description"?: string | null,"estimated_value_minor"?: number | null,"external_id"?: string,"first_seen_at"?: string,"id"?: string,"last_seen_at"?: string,"observed_at"?: string | null,"postcode"?: string | null,"region"?: string | null,"scope"?: string,"source_id"?: string,"source_url"?: string | null,"stage"?: string | null,"status"?: string,"suburb"?: string | null,"title"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "collected_projects_category_code_fkey"
+      columns: ["category_code"]
+isOneToOne: false
+      referencedRelation: "service_categories"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "collected_projects_source_id_fkey"
+      columns: ["source_id"]
+isOneToOne: false
+      referencedRelation: "platform_sources"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"collector_runs": {
+                  Row: {
+                    "cursor": string | null,"distributed": number,"errors": NonNullable<Json>,"fetched": number,"finished_at": string,"id": number,"inserted": number,"rejected": number,"source_id": string,"started_at": string | null,"unchanged": number,"updated": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cursor"?: string | null,"distributed"?: number,"errors"?: NonNullable<Json>,"fetched"?: number,"finished_at"?: string,"id"?: never,"inserted"?: number,"rejected"?: number,"source_id": string,"started_at"?: string | null,"unchanged"?: number,"updated"?: number
+                  }
+                  Update: {
+                    "cursor"?: string | null,"distributed"?: number,"errors"?: NonNullable<Json>,"fetched"?: number,"finished_at"?: string,"id"?: never,"inserted"?: number,"rejected"?: number,"source_id"?: string,"started_at"?: string | null,"unchanged"?: number,"updated"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "collector_runs_source_id_fkey"
+      columns: ["source_id"]
+isOneToOne: false
+      referencedRelation: "platform_sources"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"contacts": {
                   Row: {
                     "company": string | null,"created_at": string,"do_not_contact": boolean,"email": string | null,"full_name": string,"id": string,"is_sample": boolean,"merged_into": string | null,"opted_out_at": string | null,"organization_id": string,"owner_id": string | null,"phone": string | null,"phone_normalized": string | null,"preferred_contact": string | null,"restriction_note": string | null,"source": string,"updated_at": string
@@ -167,14 +213,14 @@ isOneToOne: false
                   ]
                 },"discovery_sources": {
                   Row: {
-                    "attribution_url": string | null,"created_at": string,"created_by": string | null,"id": string,"is_sample": boolean,"limitations": string | null,"name": string,"organization_id": string,"permitted_use": string,"provider": string | null,"refresh_note": string | null,"source_type": string
+                    "attribution_url": string | null,"created_at": string,"created_by": string | null,"id": string,"is_sample": boolean,"limitations": string | null,"name": string,"organization_id": string,"permitted_use": string,"platform_source_id": string | null,"provider": string | null,"refresh_note": string | null,"source_type": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "attribution_url"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_sample"?: boolean,"limitations"?: string | null,"name": string,"organization_id": string,"permitted_use": string,"provider"?: string | null,"refresh_note"?: string | null,"source_type": string
+                    "attribution_url"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_sample"?: boolean,"limitations"?: string | null,"name": string,"organization_id": string,"permitted_use": string,"platform_source_id"?: string | null,"provider"?: string | null,"refresh_note"?: string | null,"source_type": string
                   }
                   Update: {
-                    "attribution_url"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_sample"?: boolean,"limitations"?: string | null,"name"?: string,"organization_id"?: string,"permitted_use"?: string,"provider"?: string | null,"refresh_note"?: string | null,"source_type"?: string
+                    "attribution_url"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_sample"?: boolean,"limitations"?: string | null,"name"?: string,"organization_id"?: string,"permitted_use"?: string,"platform_source_id"?: string | null,"provider"?: string | null,"refresh_note"?: string | null,"source_type"?: string
                   }
                   Relationships: [
                     {
@@ -189,18 +235,24 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "organizations"
       referencedColumns: ["id"]
+    },{
+      foreignKeyName: "discovery_sources_platform_source_id_fkey"
+      columns: ["platform_source_id"]
+isOneToOne: false
+      referencedRelation: "platform_sources"
+      referencedColumns: ["id"]
     }
                   ]
                 },"enquiries": {
                   Row: {
-                    "answers": NonNullable<Json>,"booking_status": string | null,"consent_at": string | null,"consent_text": string | null,"contact_id": string,"created_at": string,"dedupe_hash": string | null,"duplicate_count": number,"first_response_at": string | null,"id": string,"landing_page_id": string | null,"message": string | null,"organization_id": string,"project_id": string | null,"received_at": string,"reference": string,"requested_start": string | null,"requested_type": Database["public"]['Enums']["appt_type"] | null,"source": string,"status": Database["public"]['Enums']["qual_status"]
+                    "answers": NonNullable<Json>,"booking_status": string | null,"channel": string | null,"consent_at": string | null,"consent_text": string | null,"contact_id": string,"created_at": string,"dedupe_hash": string | null,"duplicate_count": number,"first_response_at": string | null,"id": string,"landing_page_id": string | null,"message": string | null,"organization_id": string,"project_id": string | null,"received_at": string,"reference": string,"requested_start": string | null,"requested_type": Database["public"]['Enums']["appt_type"] | null,"source": string,"status": Database["public"]['Enums']["qual_status"]
                   }
                   ComputedFields: never
                   Insert: {
-                    "answers"?: NonNullable<Json>,"booking_status"?: string | null,"consent_at"?: string | null,"consent_text"?: string | null,"contact_id": string,"created_at"?: string,"dedupe_hash"?: string | null,"duplicate_count"?: number,"first_response_at"?: string | null,"id"?: string,"landing_page_id"?: string | null,"message"?: string | null,"organization_id": string,"project_id"?: string | null,"received_at"?: string,"reference"?: string,"requested_start"?: string | null,"requested_type"?: Database["public"]['Enums']["appt_type"] | null,"source"?: string,"status"?: Database["public"]['Enums']["qual_status"]
+                    "answers"?: NonNullable<Json>,"booking_status"?: string | null,"channel"?: string | null,"consent_at"?: string | null,"consent_text"?: string | null,"contact_id": string,"created_at"?: string,"dedupe_hash"?: string | null,"duplicate_count"?: number,"first_response_at"?: string | null,"id"?: string,"landing_page_id"?: string | null,"message"?: string | null,"organization_id": string,"project_id"?: string | null,"received_at"?: string,"reference"?: string,"requested_start"?: string | null,"requested_type"?: Database["public"]['Enums']["appt_type"] | null,"source"?: string,"status"?: Database["public"]['Enums']["qual_status"]
                   }
                   Update: {
-                    "answers"?: NonNullable<Json>,"booking_status"?: string | null,"consent_at"?: string | null,"consent_text"?: string | null,"contact_id"?: string,"created_at"?: string,"dedupe_hash"?: string | null,"duplicate_count"?: number,"first_response_at"?: string | null,"id"?: string,"landing_page_id"?: string | null,"message"?: string | null,"organization_id"?: string,"project_id"?: string | null,"received_at"?: string,"reference"?: string,"requested_start"?: string | null,"requested_type"?: Database["public"]['Enums']["appt_type"] | null,"source"?: string,"status"?: Database["public"]['Enums']["qual_status"]
+                    "answers"?: NonNullable<Json>,"booking_status"?: string | null,"channel"?: string | null,"consent_at"?: string | null,"consent_text"?: string | null,"contact_id"?: string,"created_at"?: string,"dedupe_hash"?: string | null,"duplicate_count"?: number,"first_response_at"?: string | null,"id"?: string,"landing_page_id"?: string | null,"message"?: string | null,"organization_id"?: string,"project_id"?: string | null,"received_at"?: string,"reference"?: string,"requested_start"?: string | null,"requested_type"?: Database["public"]['Enums']["appt_type"] | null,"source"?: string,"status"?: Database["public"]['Enums']["qual_status"]
                   }
                   Relationships: [
                     {
@@ -227,6 +279,32 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "projects"
       referencedColumns: ["id","organization_id"]
+    }
+                  ]
+                },"inbound_keys": {
+                  Row: {
+                    "created_at": string,"created_by": string | null,"id": string,"key_hash": string,"key_hint": string,"label": string,"last_used_at": string | null,"organization_id": string,"revoked_at": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"created_by"?: string | null,"id"?: string,"key_hash": string,"key_hint": string,"label"?: string,"last_used_at"?: string | null,"organization_id": string,"revoked_at"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string | null,"id"?: string,"key_hash"?: string,"key_hint"?: string,"label"?: string,"last_used_at"?: string | null,"organization_id"?: string,"revoked_at"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "inbound_keys_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inbound_keys_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
     }
                   ]
                 },"industry_templates": {
@@ -645,6 +723,20 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"platform_sources": {
+                  Row: {
+                    "attribution_url": string | null,"country": string,"created_at": string,"cursor": string | null,"default_contact_permission": string,"disabled_reason": string | null,"enabled": boolean,"id": string,"key": string,"kind": string,"last_run_at": string | null,"licence": string,"limitations": string | null,"name": string,"permitted_use": string,"provider": string,"region": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "attribution_url"?: string | null,"country": string,"created_at"?: string,"cursor"?: string | null,"default_contact_permission"?: string,"disabled_reason"?: string | null,"enabled"?: boolean,"id"?: string,"key": string,"kind": string,"last_run_at"?: string | null,"licence": string,"limitations"?: string | null,"name": string,"permitted_use": string,"provider": string,"region"?: string | null
+                  }
+                  Update: {
+                    "attribution_url"?: string | null,"country"?: string,"created_at"?: string,"cursor"?: string | null,"default_contact_permission"?: string,"disabled_reason"?: string | null,"enabled"?: boolean,"id"?: string,"key"?: string,"kind"?: string,"last_run_at"?: string | null,"licence"?: string,"limitations"?: string | null,"name"?: string,"permitted_use"?: string,"provider"?: string,"region"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"profiles": {
                   Row: {
                     "active_organization_id": string | null,"created_at": string,"email": string | null,"full_name": string | null,"id": string,"notifications_seen_at": string | null,"timezone": string,"updated_at": string
@@ -667,14 +759,14 @@ isOneToOne: false
                   ]
                 },"project_records": {
                   Row: {
-                    "category_code": string | null,"contact_email": string | null,"contact_name": string | null,"contact_permission": string,"contact_phone": string | null,"currency": string | null,"description": string | null,"estimated_value_minor": number | null,"external_id": string,"id": string,"imported_at": string,"last_verified_at": string | null,"location_text": string | null,"observed_at": string | null,"organization_id": string,"postcode": string | null,"project_stage": string | null,"saved_at": string | null,"saved_opportunity_id": string | null,"saved_project_id": string | null,"source_id": string,"source_url": string | null,"status": string,"timeline": string | null,"title": string
+                    "category_code": string | null,"collected_project_id": string | null,"contact_email": string | null,"contact_name": string | null,"contact_permission": string,"contact_phone": string | null,"currency": string | null,"description": string | null,"estimated_value_minor": number | null,"external_id": string,"id": string,"imported_at": string,"last_verified_at": string | null,"location_text": string | null,"observed_at": string | null,"organization_id": string,"postcode": string | null,"project_stage": string | null,"saved_at": string | null,"saved_opportunity_id": string | null,"saved_project_id": string | null,"source_id": string,"source_url": string | null,"status": string,"timeline": string | null,"title": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "category_code"?: string | null,"contact_email"?: string | null,"contact_name"?: string | null,"contact_permission"?: string,"contact_phone"?: string | null,"currency"?: string | null,"description"?: string | null,"estimated_value_minor"?: number | null,"external_id": string,"id"?: string,"imported_at"?: string,"last_verified_at"?: string | null,"location_text"?: string | null,"observed_at"?: string | null,"organization_id": string,"postcode"?: string | null,"project_stage"?: string | null,"saved_at"?: string | null,"saved_opportunity_id"?: string | null,"saved_project_id"?: string | null,"source_id": string,"source_url"?: string | null,"status"?: string,"timeline"?: string | null,"title": string
+                    "category_code"?: string | null,"collected_project_id"?: string | null,"contact_email"?: string | null,"contact_name"?: string | null,"contact_permission"?: string,"contact_phone"?: string | null,"currency"?: string | null,"description"?: string | null,"estimated_value_minor"?: number | null,"external_id": string,"id"?: string,"imported_at"?: string,"last_verified_at"?: string | null,"location_text"?: string | null,"observed_at"?: string | null,"organization_id": string,"postcode"?: string | null,"project_stage"?: string | null,"saved_at"?: string | null,"saved_opportunity_id"?: string | null,"saved_project_id"?: string | null,"source_id": string,"source_url"?: string | null,"status"?: string,"timeline"?: string | null,"title": string
                   }
                   Update: {
-                    "category_code"?: string | null,"contact_email"?: string | null,"contact_name"?: string | null,"contact_permission"?: string,"contact_phone"?: string | null,"currency"?: string | null,"description"?: string | null,"estimated_value_minor"?: number | null,"external_id"?: string,"id"?: string,"imported_at"?: string,"last_verified_at"?: string | null,"location_text"?: string | null,"observed_at"?: string | null,"organization_id"?: string,"postcode"?: string | null,"project_stage"?: string | null,"saved_at"?: string | null,"saved_opportunity_id"?: string | null,"saved_project_id"?: string | null,"source_id"?: string,"source_url"?: string | null,"status"?: string,"timeline"?: string | null,"title"?: string
+                    "category_code"?: string | null,"collected_project_id"?: string | null,"contact_email"?: string | null,"contact_name"?: string | null,"contact_permission"?: string,"contact_phone"?: string | null,"currency"?: string | null,"description"?: string | null,"estimated_value_minor"?: number | null,"external_id"?: string,"id"?: string,"imported_at"?: string,"last_verified_at"?: string | null,"location_text"?: string | null,"observed_at"?: string | null,"organization_id"?: string,"postcode"?: string | null,"project_stage"?: string | null,"saved_at"?: string | null,"saved_opportunity_id"?: string | null,"saved_project_id"?: string | null,"source_id"?: string,"source_url"?: string | null,"status"?: string,"timeline"?: string | null,"title"?: string
                   }
                   Relationships: [
                     {
@@ -683,6 +775,12 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "service_categories"
       referencedColumns: ["code"]
+    },{
+      foreignKeyName: "project_records_collected_project_id_fkey"
+      columns: ["collected_project_id"]
+isOneToOne: false
+      referencedRelation: "collected_projects"
+      referencedColumns: ["id"]
     },{
       foreignKeyName: "project_records_organization_id_fkey"
       columns: ["organization_id"]
@@ -940,11 +1038,20 @@ isOneToOne: false
 "clear_sample_data":
 { Args: { "p_org": string }; Returns: Json
                            },
+"create_enquiry":
+{ Args: { "p": Json,"p_channel": string,"p_org": string,"p_page": string,"p_source": string,"p_strict_category": boolean }; Returns: Json
+                           },
 "create_organization":
 { Args: { "p_country"?: string,"p_currency"?: string,"p_name": string,"p_slug": string,"p_timezone"?: string }; Returns: string
                            },
+"distribute_collected_projects":
+{ Args: { "p_ids": (string)[] }; Returns: number
+                           },
 "enqueue_integration_event":
 { Args: { "p_data": Json,"p_event": string,"p_key": string,"p_org": string }; Returns: undefined
+                           },
+"enquiry_payload_error":
+{ Args: { "p": Json }; Returns: string
                            },
 "finish_notification":
 { Args: { "p_error"?: string,"p_id": string,"p_ok": boolean,"p_skipped"?: boolean }; Returns: undefined
@@ -957,6 +1064,9 @@ isOneToOne: false
                            },
 "hit_rate_limit":
 { Args: { "p_key": string,"p_max": number,"p_window": string }; Returns: boolean
+                           },
+"ingest_collected_projects":
+{ Args: { "p_records": Json,"p_run"?: Json,"p_source_key": string }; Returns: Json
                            },
 "is_loading_samples":
 { Args: Record<PropertyKey, never>; Returns: boolean
@@ -980,6 +1090,11 @@ isOneToOne: false
                            },
 "move_onboarding":
 { Args: { "p_actor_kind"?: string,"p_note"?: string,"p_org": string,"p_to": Database["public"]['Enums']["onboarding_status"] }; Returns: Database["public"]['Enums']["onboarding_status"]
+                           },
+"my_platform_sources":
+{ Args: { "p_org": string }; Returns: {
+              "attribution_url": string,"country": string,"disabled_reason": string,"enabled": boolean,"key": string,"kind": string,"last_run_at": string,"licence": string,"name": string,"provider": string,"records": number,"region": string,"switched_off": boolean
+            }[]
                            },
 "onboarding_can_move":
 { Args: { "from_s": Database["public"]['Enums']["onboarding_status"],"to_s": Database["public"]['Enums']["onboarding_status"] }; Returns: boolean
@@ -1008,6 +1123,9 @@ isOneToOne: false
 "set_landing_page_paused":
 { Args: { "p_page": string,"p_paused": boolean }; Returns: undefined
                            },
+"set_platform_source_enabled":
+{ Args: { "p_enabled": boolean,"p_key": string,"p_org": string }; Returns: undefined
+                           },
 "set_project_record_status":
 { Args: { "p_record": string,"p_status": string }; Returns: undefined
                            },
@@ -1019,6 +1137,9 @@ isOneToOne: false
                            },
 "submit_demo_request":
 { Args: { "p": Json,"p_fingerprint": string }; Returns: Json
+                           },
+"submit_inbound_enquiry":
+{ Args: { "p": Json,"p_key_hash": string }; Returns: Json
                            },
 "submit_landing_page":
 { Args: { "p_page": string }; Returns: string

@@ -23,6 +23,21 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci
 
+  collector:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: collector/pyproject.toml
+      - run: pip install "./collector[dev]"
+      - name: Collector tests (every source, privacy, client)
+        run: pytest -q collector/tests
+      - name: Dry run against saved responses
+        run: python -m brexoo_collector run --all --dry-run --fixtures collector/tests/fixtures
+
   database-and-e2e:
     runs-on: ubuntu-latest
     steps:
@@ -38,10 +53,14 @@ jobs:
       - run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector,realtime,postgres-meta,supavisor
       - name: Database tests (RLS, tenant isolation, workflows)
         run: bash scripts/db-test.sh
+      - name: Demo workspaces for the end-to-end tests
+        run: psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -q -v ON_ERROR_STOP=1 -f scripts/seed-demo.sql
       - name: Build against the local stack
         run: |
           eval "$(supabase status -o env | sed 's/^/export /')"
-          printf "NEXT_PUBLIC_SUPABASE_URL=%s\nNEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=%s\nNEXT_PUBLIC_SITE_URL=http://localhost:3000\nRATE_LIMIT_SALT=ci\n" "$API_URL" "$PUBLISHABLE_KEY" > .env.local
+          printf "NEXT_PUBLIC_SUPABASE_URL=%s\nNEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=%s\nNEXT_PUBLIC_SITE_URL=http://localhost:3000\nRATE_LIMIT_SALT=ci\nSUPABASE_SECRET_KEY=%s\nCOLLECTOR_TOKEN=ci-collector-token\n" "$API_URL" "$PUBLISHABLE_KEY" "$SECRET_KEY" > .env.local
           npm run build
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
+        env:
+          COLLECTOR_TOKEN: ci-collector-token

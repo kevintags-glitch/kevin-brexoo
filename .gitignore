@@ -10,3 +10,9 @@ test-results
 supabase/.temp
 supabase/.branches
 .DS_Store
+
+# Python (collector)
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
