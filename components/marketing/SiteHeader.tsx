@@ -67,26 +67,14 @@ function MenuItem({ href, label, body, icon }: { href: string; label: string; bo
 export function SiteHeader() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-  const [pastFilm, setPastFilm] = useState(false);
   const [open, setOpen] = useState(false);
-  // On the home page the first screen is the film alone: the bar stays out of the way until the
-  // visitor scrolls past it (or tabs into it).
-  const home = pathname === "/";
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 8);
-      setPastFilm(window.scrollY > window.innerHeight * 0.85);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
-  const hidden = home && !pastFilm && !open;
 
   // Close the sheet on navigation and on Escape; lock page scroll while it's open.
   useEffect(() => {
@@ -102,11 +90,8 @@ export function SiteHeader() {
 
   return (
     <header
-      data-hidden={hidden || undefined}
       className={cn(
-        "top-0 z-50 border-b border-white/10 bg-[#0F2742] text-white transition-[transform,box-shadow] duration-300 ease-out",
-        home ? "fixed inset-x-0" : "sticky",
-        hidden ? "-translate-y-full focus-within:translate-y-0" : "translate-y-0",
+        "sticky top-0 z-50 border-b border-white/10 bg-[#0F2742] text-white transition-shadow duration-200",
         scrolled || open ? "shadow-[0_6px_24px_rgb(15_39_66/0.25)]" : "",
       )}
     >

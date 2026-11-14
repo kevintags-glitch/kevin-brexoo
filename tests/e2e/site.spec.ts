@@ -63,11 +63,13 @@ test("the first screen is the stairs film, followed by the CRM presentation", as
   // It plays by itself, with no click, and fills the first screen.
   await expect.poll(() => video.evaluate((v: HTMLVideoElement) => !v.paused && v.currentTime > 0.2), { timeout: 10_000 }).toBe(true);
   const box = (await hero.boundingBox())!;
-  expect(box.height).toBeGreaterThanOrEqual(900 - 1);
-  // The first screen is the film alone: the menu bar is out of view until the visitor scrolls.
+  expect(box.height).toBeGreaterThanOrEqual(900 - 64 - 1);
+  // The navy menu bar with the logo is visible from the first moment, and the film sits below it.
   const header = page.locator("header");
-  await expect(header).toHaveAttribute("data-hidden", "true");
-  expect((await header.boundingBox())!.y + (await header.boundingBox())!.height).toBeLessThanOrEqual(1);
+  await expect(header.getByRole("link", { name: "Brexoo home" })).toBeInViewport();
+  await expect(header.getByRole("link", { name: "Request a Demo" })).toBeInViewport();
+  expect(await header.evaluate((h) => getComputedStyle(h).backgroundColor)).toBe("rgb(15, 39, 66)");
+  expect(box.y).toBeGreaterThanOrEqual(63);
   for (const src of ["/media/brexoo-stairs.mp4", "/media/brexoo-stairs.webm", "/media/brexoo-stairs-poster.jpg", "/media/brexoo-stairs-tall.mp4", "/media/brexoo-stairs-tall.webm", "/media/brexoo-stairs-tall-poster.jpg"]) {
     expect((await page.request.get(src)).status()).toBe(200);
   }
@@ -76,7 +78,6 @@ test("the first screen is the stairs film, followed by the CRM presentation", as
   // Second screen: real workspace screens in a tabbed presentation.
   const ws = page.locator("#workspace");
   await ws.scrollIntoViewIfNeeded();
-  await expect(header).not.toHaveAttribute("data-hidden", "true");
   await expect(header.getByRole("link", { name: "Brexoo home" })).toBeInViewport();
   const tabs = ws.getByRole("tab");
   await expect(tabs).toHaveCount(8);
